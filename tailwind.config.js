@@ -5,4 +5,9 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  theme: {
+    fontFamily: {
+      sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'sans-serif'],
+    },
+  },
 };
