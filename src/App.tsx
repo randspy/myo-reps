@@ -1,1 +1,7 @@
-export const App = () => <h1 className="text-5xl">Hello React</h1>;
+import { Button } from '@/components/ui/button';
+
+export const App = () => (
+  <div className="h-dvh">
+    <Button> Hello </Button>
+  </div>
+);
