@@ -1,6 +1,25 @@
 import { App } from '@/App';
 import { Navigate } from 'react-router-dom';
-import Workouts from './workouts/Workouts';
+import { Workouts } from './workouts/Workouts';
+import { Exercises } from './exercises/Exercises';
+import Sessions from './sessions/Sessions';
+
+export type RouteType = Record<string, { title: string; element: JSX.Element }>;
+
+export const routePaths: RouteType = {
+  '/workouts': {
+    title: 'Workouts',
+    element: <Workouts />,
+  },
+  '/exercises': {
+    title: 'Exercises',
+    element: <Exercises />,
+  },
+  '/sessions': {
+    title: 'Sessions',
+    element: <Sessions />,
+  },
+};
 
 export const routes = [
   {
@@ -11,14 +30,10 @@ export const routes = [
         path: '/',
         element: <Navigate to="/workouts" />,
       },
-      {
-        path: '/workouts',
-        element: <Workouts />,
-      },
+      ...Object.keys(routePaths).map((key) => ({
+        path: key,
+        element: routePaths[key].element,
+      })),
     ],
   },
 ];
-
-export const routeNames: Record<string, string> = {
-  '/workouts': 'Workouts',
-};

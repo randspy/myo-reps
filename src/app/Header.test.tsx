@@ -11,7 +11,7 @@ describe('Header', () => {
   test('renders the header component', () => {
     render(
       <MemoryRouter>
-        <Header />
+        <Header title="title" />
       </MemoryRouter>,
     );
 
@@ -20,20 +20,16 @@ describe('Header', () => {
   });
 
   test('renders the correct route name', () => {
-    render(
-      <MemoryRouter initialEntries={['/workouts']}>
-        <Header />
-      </MemoryRouter>,
-    );
+    render(<Header title="title" />);
 
-    const routeNameElement = screen.getByText('Workouts');
+    const routeNameElement = screen.getByText('title');
     expect(routeNameElement).toBeInTheDocument();
   });
 
   test('renders the mocked mode toggle component', () => {
     render(
       <MemoryRouter>
-        <Header />
+        <Header title="title" />
       </MemoryRouter>,
     );
 
