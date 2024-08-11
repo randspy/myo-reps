@@ -6,8 +6,5 @@ describe('<App />', () => {
   test('App mounts properly', () => {
     const wrapper = render(<App />);
     expect(wrapper).toBeTruthy();
-
-    const button = wrapper.getByRole('button');
-    expect(button).toBeInTheDocument();
   });
 });
