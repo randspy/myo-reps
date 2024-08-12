@@ -25,7 +25,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
             <Link to={key} className="block w-full" onClick={() => close()}>
               <div
                 className={cn(
-                  'px-4 py-3',
+                  'mr-4 rounded-sm px-4 py-3',
                   activeTab?.title === tabs[key]?.title &&
                     'bg-primary text-primary-foreground',
                 )}
