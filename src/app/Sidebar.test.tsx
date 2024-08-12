@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { routePaths } from './routes';
@@ -9,7 +9,7 @@ describe('Sidebar', () => {
   it('renders the sidebar with correct tabs', () => {
     render(
       <MemoryRouter initialEntries={[path]}>
-        <Sidebar tabs={routePaths} path={path} />
+        <Sidebar tabs={routePaths} path={path} close={() => true} />
       </MemoryRouter>,
     );
 
@@ -29,5 +29,22 @@ describe('Sidebar', () => {
     expect(tabElements[2].childNodes[0]).not.toHaveClass(
       'bg-primary text-primary-foreground',
     );
+  });
+
+  test('clicking on a tab calls the close function', () => {
+    const close = vi.fn();
+
+    render(
+      <MemoryRouter initialEntries={[path]}>
+        <Sidebar tabs={routePaths} path={path} close={close} />
+      </MemoryRouter>,
+    );
+
+    const tabElements = screen.getAllByRole('link');
+    act(() => {
+      tabElements[1].click();
+    });
+
+    expect(close).toHaveBeenCalled();
   });
 });
