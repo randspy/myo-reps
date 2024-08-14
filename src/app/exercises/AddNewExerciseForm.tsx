@@ -12,7 +12,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { defaultValues, formSchema, NewExerciseFormValues } from './schema';
+import {
+  defaultValues,
+  formSchema,
+  NewExerciseFormValues,
+} from '@/features/exercises/exercises-schema';
 
 export function AddNewExerciseForm({
   onSubmit,

@@ -7,15 +7,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { AddNewExerciseForm } from './AddNewExerciseForm';
-import { NewExerciseFormValues } from './schema';
+import { AddNewExerciseForm } from '@/app/exercises/AddNewExerciseForm';
+import { NewExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
 
-export function AddNewExerciseDialog() {
+export function AddNewExerciseDialog({
+  onSubmit,
+}: {
+  onSubmit: (values: NewExerciseFormValues) => void;
+}) {
   const [open, setOpen] = useState(false);
 
-  const onSubmit = (values: NewExerciseFormValues) => {
-    console.log('submitted', values);
+  const submit = (values: NewExerciseFormValues) => {
+    onSubmit(values);
     setOpen(false);
   };
 
@@ -30,7 +34,7 @@ export function AddNewExerciseDialog() {
             <DialogTitle>Add New Exercise</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <AddNewExerciseForm onSubmit={onSubmit} />
+          <AddNewExerciseForm onSubmit={submit} />
         </DialogContent>
       </Dialog>
     </div>
