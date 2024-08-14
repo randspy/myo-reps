@@ -1,23 +1,23 @@
 import { App } from '@/App';
 import { Navigate } from 'react-router-dom';
-import { Workouts } from './workouts/Workouts';
-import { ExercisePage } from './exercises/ExercisePage';
-import Sessions from './sessions/Sessions';
+import { WorkoutsPage } from './workouts/WorkoutsPage';
+import { ExercisesPage } from './exercises/ExercisesPage';
+import { SessionsPage } from './sessions/SessionsPage';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
 
 export const routePaths: RouteType = {
   '/workouts': {
     title: 'Workouts',
-    element: <Workouts />,
+    element: <WorkoutsPage />,
   },
   '/exercises': {
     title: 'Exercises',
-    element: <ExercisePage />,
+    element: <ExercisesPage />,
   },
   '/sessions': {
     title: 'Sessions',
-    element: <Sessions />,
+    element: <SessionsPage />,
   },
 };
 

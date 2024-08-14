@@ -1,5 +1,5 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { ExercisePage } from '@/app/exercises/ExercisePage';
+import { ExercisesPage } from '@/app/exercises/ExercisesPage';
 import {
   ExerciseValue,
   NewExerciseFormValues,
@@ -20,7 +20,7 @@ describe('ExercisePage', () => {
   test('renders ExerciseList component', () => {
     render(
       <Provider store={store}>
-        <ExercisePage />
+        <ExercisesPage />
       </Provider>,
     );
 
@@ -31,7 +31,7 @@ describe('ExercisePage', () => {
   test('renders AddNewExerciseDialog component', () => {
     render(
       <Provider store={store}>
-        <ExercisePage />
+        <ExercisesPage />
       </Provider>,
     );
     const addNewExerciseDialogElement = screen.getByText('Add New Exercise');
@@ -41,7 +41,7 @@ describe('ExercisePage', () => {
   test('Sets the props of ExerciseList component', async () => {
     render(
       <Provider store={store}>
-        <ExercisePage />
+        <ExercisesPage />
       </Provider>,
     );
 

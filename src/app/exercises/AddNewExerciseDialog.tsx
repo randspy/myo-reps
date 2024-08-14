@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { addExercise } from '@/features/exercises/exercises-slice';
 import { useAppDispatch } from '@/app/hooks';
 
-export function AddNewExerciseDialog() {
+export const AddNewExerciseDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -36,4 +36,4 @@ export function AddNewExerciseDialog() {
       </DialogContent>
     </Dialog>
   );
-}
+};

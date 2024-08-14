@@ -18,11 +18,9 @@ import {
   NewExerciseFormValues,
 } from '@/features/exercises/exercises-schema';
 
-export function AddNewExerciseForm({
-  onSubmit,
-}: {
+export const AddNewExerciseForm: React.FC<{
   onSubmit: (values: NewExerciseFormValues) => void;
-}) {
+}> = ({ onSubmit }) => {
   const form = useForm<NewExerciseFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
@@ -68,4 +66,4 @@ export function AddNewExerciseForm({
       </form>
     </Form>
   );
-}
+};

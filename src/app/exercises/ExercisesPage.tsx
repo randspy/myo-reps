@@ -3,7 +3,7 @@ import { useAppSelector } from '@/app/hooks';
 import { ExerciseList } from '@/app/exercises/ExerciseList';
 import { cn } from '@/lib/utils';
 
-export function ExercisePage() {
+export const ExercisesPage = () => {
   const exercises = useAppSelector((state) => state.exercises.values);
 
   return (
@@ -19,4 +19,4 @@ export function ExercisePage() {
       </div>
     </div>
   );
-}
+};
