@@ -36,7 +36,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: var(--light-grey);
     --input: var(--black);
-    --ring: var(--dark-grey);
+    --ring: var(--light-purple);
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;

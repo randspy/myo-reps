@@ -22,10 +22,14 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
       <ul>
         {Object.keys(tabs).map((key) => (
           <li key={key}>
-            <Link to={key} className="block w-full" onClick={() => close()}>
+            <Link
+              to={key}
+              className="focus:shadow-outline m-2 block rounded-sm outline-none"
+              onClick={() => close()}
+            >
               <div
                 className={cn(
-                  'mr-4 rounded-sm px-4 py-3',
+                  'rounded-sm px-4 py-3',
                   activeTab?.title === tabs[key]?.title &&
                     'bg-primary text-primary-foreground',
                 )}
