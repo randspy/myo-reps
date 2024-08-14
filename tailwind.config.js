@@ -60,6 +60,9 @@ module.exports = {
         outline:
           '0 0 0 2px  hsl(var(--background)), 0 0 0 4px hsl(var(--ring))',
       },
+      width: {
+        128: '32rem',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },

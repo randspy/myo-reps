@@ -1,7 +1,7 @@
 import { App } from '@/App';
 import { Navigate } from 'react-router-dom';
 import { Workouts } from './workouts/Workouts';
-import { Exercises } from './exercises/Exercises';
+import { ExercisePage } from './exercises/ExercisePage';
 import Sessions from './sessions/Sessions';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
@@ -13,7 +13,7 @@ export const routePaths: RouteType = {
   },
   '/exercises': {
     title: 'Exercises',
-    element: <Exercises />,
+    element: <ExercisePage />,
   },
   '/sessions': {
     title: 'Sessions',

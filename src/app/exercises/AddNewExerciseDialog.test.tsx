@@ -1,6 +1,14 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import { AddNewExerciseDialog } from './AddNewExerciseDialog';
 import { NewExerciseFormValues } from '@/features/exercises/exercises-schema';
+import { Provider } from 'react-redux';
+import { store } from '@/app/store';
 
 vi.mock('@/app/exercises/AddNewExerciseForm', () => ({
   AddNewExerciseForm: ({
@@ -12,7 +20,7 @@ vi.mock('@/app/exercises/AddNewExerciseForm', () => ({
       data-testid="save"
       onClick={() =>
         onSubmit({
-          name: 'Push up',
+          name: 'Mock Push up',
           description: 'Push up description',
         })
       }
@@ -23,31 +31,30 @@ vi.mock('@/app/exercises/AddNewExerciseForm', () => ({
 }));
 
 describe('AddNewExerciseDialog', () => {
-  test('renders the dialog trigger', () => {
-    render(<AddNewExerciseDialog onSubmit={() => {}} />);
-    const dialogTrigger = screen.getByRole('button', {
+  let dialogTrigger: HTMLElement;
+
+  beforeEach(() => {
+    render(
+      <Provider store={store}>
+        <AddNewExerciseDialog />
+      </Provider>,
+    );
+
+    dialogTrigger = screen.getByRole('button', {
       name: 'Add New Exercise',
     });
+  });
+  test('renders the dialog trigger', () => {
     expect(dialogTrigger).toBeInTheDocument();
   });
 
   test('opens the dialog when the trigger is clicked', () => {
-    render(<AddNewExerciseDialog onSubmit={() => {}} />);
-    const dialogTrigger = screen.getByRole('button', {
-      name: 'Add New Exercise',
-    });
     fireEvent.click(dialogTrigger);
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
   });
 
   test('closes the dialog when the form is submitted', async () => {
-    const submitMock = vi.fn();
-    render(<AddNewExerciseDialog onSubmit={submitMock} />);
-    const dialogTrigger = screen.getByRole('button', {
-      name: 'Add New Exercise',
-    });
-
     act(() => {
       fireEvent.click(dialogTrigger);
     });
@@ -59,10 +66,27 @@ describe('AddNewExerciseDialog', () => {
     });
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
 
-    expect(submitMock).toHaveBeenCalledWith({
-      name: 'Push up',
-      description: 'Push up description',
+  test('add exercise to the store when the form is submitted', async () => {
+    act(() => {
+      fireEvent.click(dialogTrigger);
+    });
+
+    const submitButton = screen.getByTestId('save');
+
+    act(() => {
+      fireEvent.click(submitButton);
+    });
+
+    await waitFor(() => {
+      const state = store.getState();
+      const exercises = state.exercises.values;
+      const newExercise = exercises.find(
+        (exercise) => exercise.name === 'Mock Push up',
+      );
+
+      expect(newExercise).toBeDefined();
     });
   });
 });
