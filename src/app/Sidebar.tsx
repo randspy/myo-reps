@@ -24,7 +24,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
           <li key={key}>
             <Link
               to={key}
-              className="focus:shadow-outline m-2 block rounded-sm outline-none"
+              className="focus-visible:shadow-outline m-2 mr-6 block rounded-sm outline-none hover:opacity-90"
               onClick={() => close()}
             >
               <div
