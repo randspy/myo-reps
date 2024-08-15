@@ -17,7 +17,7 @@
     --purple: 242, 48%, 58%;
     --light-purple: 243 100% 82%;
 
-    --background: var(--very-light-grey);
+    --background: var(--light-grey);
     --background-secondary: var(--white);
     --foreground: var(--black);
     --card: 0 0% 100%;
