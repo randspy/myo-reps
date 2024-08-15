@@ -1,5 +1,5 @@
 import { AddNewExerciseDialog } from './AddNewExerciseDialog';
-import { useAppSelector } from '@/app/hooks';
+import { useAppSelector } from '@/store/hooks';
 import { ExerciseList } from '@/app/exercises/ExerciseList';
 import { cn } from '@/lib/utils';
 

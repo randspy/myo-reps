@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
-import { routePaths } from './routes';
+import { routePaths } from '../routes';
 
 describe('Sidebar', () => {
   const path = '/workouts';

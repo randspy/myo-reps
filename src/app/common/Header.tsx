@@ -1,7 +1,7 @@
 import { ModeToggle } from '@/components/mode-toggle';
-import { Sidebar } from '@/app/Sidebar';
+import { Sidebar } from '@/app/common/Sidebar';
 import { useLocation } from 'react-router-dom';
-import { routePaths } from './routes';
+import { routePaths } from '../routes';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import { LegacyRef, useState } from 'react';

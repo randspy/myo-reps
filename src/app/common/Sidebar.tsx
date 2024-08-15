@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { RouteType } from './routes';
+import { RouteType } from '../routes';
 import { Link } from 'react-router-dom';
 
 export type SidebarProps = {

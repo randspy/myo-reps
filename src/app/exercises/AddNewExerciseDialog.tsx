@@ -11,7 +11,7 @@ import { AddNewExerciseForm } from '@/app/exercises/AddNewExerciseForm';
 import { NewExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
 import { addExercise } from '@/features/exercises/exercises-slice';
-import { useAppDispatch } from '@/app/hooks';
+import { useAppDispatch } from '@/store/hooks';
 
 export const AddNewExerciseDialog: React.FC = () => {
   const [open, setOpen] = useState(false);

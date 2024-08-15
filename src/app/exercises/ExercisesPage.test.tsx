@@ -5,7 +5,7 @@ import {
   NewExerciseFormValues,
 } from '@/features/exercises/exercises-schema';
 import { Provider } from 'react-redux';
-import { store } from '@/app/store';
+import { store } from '@/store/store';
 import { addExercise } from '@/features/exercises/exercises-slice';
 
 const exerciseListProps = vi.fn();

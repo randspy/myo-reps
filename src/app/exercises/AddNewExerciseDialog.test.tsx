@@ -8,7 +8,7 @@ import {
 import { AddNewExerciseDialog } from './AddNewExerciseDialog';
 import { NewExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { Provider } from 'react-redux';
-import { store } from '@/app/store';
+import { store } from '@/store/store';
 
 vi.mock('@/app/exercises/AddNewExerciseForm', () => ({
   AddNewExerciseForm: ({

@@ -1,6 +1,7 @@
 import { createAction, createListenerMiddleware } from '@reduxjs/toolkit';
 import { setExercises } from '@/features/exercises/exercises-slice';
 import { db } from '@/db';
+
 const INIT_ACTION_TYPE = 'store/init';
 
 const listenerMiddleware = createListenerMiddleware();

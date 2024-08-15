@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Header } from '@/app/Header';
+import { Header } from '@/app/common/Header';
 
 export const App = () => {
   return (

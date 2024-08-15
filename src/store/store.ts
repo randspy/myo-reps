@@ -1,6 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import exercisesReducer from '@/features/exercises/exercises-slice';
-import { INIT_ACTION_TYPE, listenerMiddleware } from '@/app/middlewareListener';
+import {
+  INIT_ACTION_TYPE,
+  listenerMiddleware,
+} from '@/store/middlewareListener';
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,15 +1,15 @@
 import { act, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { Header } from './Header';
-import { SidebarProps } from '@/app/Sidebar';
+import { Header } from '@/app/common/Header';
+import { SidebarProps } from '@/app/common/Sidebar';
 
 vi.mock('@/components/mode-toggle', () => ({
   ModeToggle: () => <div data-testid="mode-toggle">Mock Mode Toggle</div>,
 }));
 
 const sidebarMock = vi.fn();
-vi.mock('@/app/Sidebar', () => ({
+vi.mock('@/app/common/Sidebar', () => ({
   Sidebar: (props: SidebarProps) => {
     sidebarMock(props);
     return (
