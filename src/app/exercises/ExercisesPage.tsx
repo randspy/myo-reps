@@ -12,10 +12,11 @@ export const ExercisesPage = () => {
         'my-8 flex h-full flex-col items-center px-2',
         exercises.length === 0 && 'justify-center',
       )}
+      data-testid="exercises-page-container"
     >
       <AddNewExerciseDialog />
       <div className="mt-8 w-full">
-        <ExerciseList exercises={exercises} />
+        <ExerciseList />
       </div>
     </div>
   );

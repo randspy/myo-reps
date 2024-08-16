@@ -21,7 +21,6 @@ describe('AddNewExerciseForm', () => {
     render(
       <AddNewExerciseForm
         onSubmit={(values) => {
-          console.log('onSubmitMock', values);
           onSubmitMock(values);
         }}
       />,
