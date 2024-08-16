@@ -7,10 +7,10 @@ export const formSchema = z.object({
   description: z.string().optional(),
 });
 
-export type NewExerciseFormValues = z.infer<typeof formSchema>;
-export type ExerciseValue = NewExerciseFormValues & { id: string };
+export type ExerciseFormValues = z.infer<typeof formSchema>;
+export type ExerciseValue = ExerciseFormValues & { id: string };
 
-export const defaultValues: NewExerciseFormValues = {
+export const defaultValues: ExerciseFormValues = {
   name: '',
   description: '',
 };

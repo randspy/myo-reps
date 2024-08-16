@@ -8,31 +8,39 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { ExerciseForm } from '@/app/exercises/ExerciseForm';
-import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
+import {
+  ExerciseValue,
+  ExerciseFormValues,
+} from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
-import { addExercise } from '@/features/exercises/exercises-slice';
+import { updateExercise } from '@/features/exercises/exercises-slice';
 import { useAppDispatch } from '@/store/hooks';
+import { PencilIcon } from 'lucide-react';
 
-export const AddNewExerciseDialog: React.FC = () => {
+export const EditExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
+  exercise,
+}) => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
 
   const submit = (values: ExerciseFormValues) => {
-    dispatch(addExercise(values));
+    dispatch(updateExercise({ ...values, id: exercise.id }));
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="w-full md:w-fit">Add New Exercise</Button>
+        <Button data-testid="exercise-edit-button">
+          <PencilIcon className="h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Exercise</DialogTitle>
+          <DialogTitle>Edit Exercise</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <ExerciseForm onSubmit={submit} />
+        <ExerciseForm onSubmit={submit} values={exercise} />
       </DialogContent>
     </Dialog>
   );

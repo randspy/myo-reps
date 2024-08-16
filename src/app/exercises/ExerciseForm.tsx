@@ -15,15 +15,16 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   defaultValues,
   formSchema,
-  NewExerciseFormValues,
+  ExerciseFormValues,
 } from '@/features/exercises/exercises-schema';
 
-export const AddNewExerciseForm: React.FC<{
-  onSubmit: (values: NewExerciseFormValues) => void;
-}> = ({ onSubmit }) => {
-  const form = useForm<NewExerciseFormValues>({
+export const ExerciseForm: React.FC<{
+  onSubmit: (values: ExerciseFormValues) => void;
+  values?: ExerciseFormValues;
+}> = ({ onSubmit, values = defaultValues }) => {
+  const form = useForm<ExerciseFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    values,
   });
 
   return (

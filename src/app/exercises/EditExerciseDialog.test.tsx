@@ -5,10 +5,24 @@ import {
   act,
   waitFor,
 } from '@testing-library/react';
-import { AddNewExerciseDialog } from './AddNewExerciseDialog';
+import { EditExerciseDialog } from './EditExerciseDialog';
 import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { Provider } from 'react-redux';
-import { store } from '@/store/store';
+import exercisesReducer from '@/features/exercises/exercises-slice';
+import { configureStore } from '@reduxjs/toolkit';
+
+const initialState = {
+  exercises: {
+    values: [{ id: '1', name: 'Push-up', description: 'Push up description' }],
+  },
+};
+
+const store = configureStore({
+  reducer: {
+    exercises: exercisesReducer,
+  },
+  preloadedState: initialState,
+});
 
 vi.mock('@/app/exercises/ExerciseForm', () => ({
   ExerciseForm: ({
@@ -30,20 +44,24 @@ vi.mock('@/app/exercises/ExerciseForm', () => ({
   ),
 }));
 
-describe('AddNewExerciseDialog', () => {
+describe('EditExerciseDialog', () => {
   let dialogTrigger: HTMLElement;
+  const exercise = {
+    id: '1',
+    name: 'Push-up',
+    description: 'Push up description',
+  };
 
   beforeEach(() => {
     render(
       <Provider store={store}>
-        <AddNewExerciseDialog />
+        <EditExerciseDialog exercise={exercise} />
       </Provider>,
     );
 
-    dialogTrigger = screen.getByRole('button', {
-      name: 'Add New Exercise',
-    });
+    dialogTrigger = screen.getByTestId('exercise-edit-button');
   });
+
   test('renders the dialog trigger', () => {
     expect(dialogTrigger).toBeInTheDocument();
   });
@@ -68,7 +86,7 @@ describe('AddNewExerciseDialog', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  test('add exercise to the store when the form is submitted', async () => {
+  test('update exercise to the store when the form is submitted', async () => {
     act(() => {
       fireEvent.click(dialogTrigger);
     });
@@ -82,11 +100,10 @@ describe('AddNewExerciseDialog', () => {
     await waitFor(() => {
       const state = store.getState();
       const exercises = state.exercises.values;
-      const newExercise = exercises.find(
-        (exercise) => exercise.name === 'Mock Push up',
-      );
+      const exercise = exercises.find((exercise) => exercise.id === '1');
 
-      expect(newExercise).toBeDefined();
+      expect(exercise).toBeDefined();
+      expect(exercise?.name).toEqual('Mock Push up');
     });
   });
 });

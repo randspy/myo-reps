@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import {
   ExerciseValue,
-  NewExerciseFormValues,
+  ExerciseFormValues,
 } from '@/features/exercises/exercises-schema';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -20,7 +20,7 @@ const exercisesSlice = createSlice({
     setExercises(state, action: PayloadAction<ExerciseValue[]>) {
       state.values = action.payload;
     },
-    addExercise(state, action: PayloadAction<NewExerciseFormValues>) {
+    addExercise(state, action: PayloadAction<ExerciseFormValues>) {
       const value = { ...action.payload, id: crypto.randomUUID() };
       state.values.push(value);
       db.exercises.add(value);
