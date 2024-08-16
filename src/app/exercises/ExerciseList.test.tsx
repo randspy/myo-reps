@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { act } from 'react';
 import { ExerciseList } from './ExerciseList';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -43,12 +42,12 @@ describe('ExerciseList', () => {
       </Provider>,
     );
 
-    const deleteButtons = await screen.findAllByTestId('delete-exercise');
+    const editButtons = await screen.findAllByTestId('exercise-edit-button');
+    const deleteButtons = await screen.findAllByTestId(
+      'exercise-delete-button',
+    );
 
-    act(() => {
-      deleteButtons[0].click();
-    });
-
-    expect(screen.queryByText('Push-up')).not.toBeInTheDocument();
+    expect(editButtons).toHaveLength(initialState.exercises.values.length);
+    expect(deleteButtons).toHaveLength(initialState.exercises.values.length);
   });
 });

@@ -31,7 +31,11 @@ export const EditExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button data-testid="exercise-edit-button">
+        <Button
+          data-testid="exercise-edit-button"
+          variant="outline"
+          size="icon"
+        >
           <PencilIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
