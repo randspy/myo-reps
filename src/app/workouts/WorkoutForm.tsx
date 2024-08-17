@@ -1,6 +1,6 @@
+import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import {
   Form,
   FormControl,
@@ -10,21 +10,19 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
   defaultValues,
-  exerciseSchema,
-  ExerciseFormValues,
-} from '@/features/exercises/exercises-schema';
+  WorkoutFormValues,
+  workoutSchema,
+} from '@/features/workouts/workouts-schema';
 
-export const ExerciseForm: React.FC<{
-  onSubmit: (values: ExerciseFormValues) => void;
-  values?: ExerciseFormValues;
-}> = ({ onSubmit, values = defaultValues }) => {
-  const form = useForm<ExerciseFormValues>({
-    resolver: zodResolver(exerciseSchema),
-    values,
+export const WorkoutForm: React.FC<{
+  onSubmit: () => void;
+}> = ({ onSubmit }) => {
+  const form = useForm<WorkoutFormValues>({
+    resolver: zodResolver(workoutSchema),
+    defaultValues,
   });
 
   return (
@@ -41,7 +39,7 @@ export const ExerciseForm: React.FC<{
             <FormItem>
               <FormLabel>Exercise Name</FormLabel>
               <FormControl>
-                <Input placeholder="Push up" {...field} />
+                <Input placeholder="Upper body workout" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -54,7 +52,7 @@ export const ExerciseForm: React.FC<{
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Exercise description" {...field} />
+                <Textarea placeholder="Workout description" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
