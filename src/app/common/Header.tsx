@@ -22,7 +22,7 @@ export function Header() {
       >
         <div className="mr-4 md:hidden">
           <Button
-            variant="outline"
+            variant="icon"
             size="icon"
             data-testid="sidebar-toggle"
             onClick={() => setIsSidebarOpen((isOpen) => !isOpen)}

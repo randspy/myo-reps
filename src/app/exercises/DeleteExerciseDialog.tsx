@@ -28,11 +28,7 @@ export const DeleteExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          data-testid="exercise-delete-button"
-          variant="outline"
-          size="icon"
-        >
+        <Button data-testid="exercise-delete-button" variant="icon" size="icon">
           <Trash2Icon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
@@ -44,7 +40,7 @@ export const DeleteExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
           <DialogDescription>This action cannot be undone.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="icon" onClick={() => setOpen(false)}>
             Cancel
           </Button>
           <Button variant="destructive" onClick={deleteById}>
