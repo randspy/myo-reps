@@ -31,7 +31,7 @@ export const ExerciseForm: React.FC<{
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8"
+        className="space-y-6"
         data-testid="add-new-exercise-form"
       >
         <FormField

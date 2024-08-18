@@ -9,11 +9,13 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { WorkoutForm } from './WorkoutForm';
+import { WorkoutFormValues } from '@/features/workouts/workouts-schema';
 
 export const AddNewWorkoutDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
 
-  const submit = () => {
+  const submit = (values: WorkoutFormValues) => {
+    console.log(values);
     setOpen(false);
   };
 
