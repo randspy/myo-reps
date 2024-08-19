@@ -4,6 +4,7 @@ import {
   ExerciseFormValues,
 } from '@/features/exercises/exercises-schema';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ExercisesState {
   values: ExerciseValue[];
@@ -21,7 +22,7 @@ const exercisesSlice = createSlice({
       state.values = action.payload;
     },
     addExercise(state, action: PayloadAction<ExerciseFormValues>) {
-      const value = { ...action.payload, id: crypto.randomUUID() };
+      const value = { ...action.payload, id: uuidv4() };
       state.values.push(value);
       db.exercises.add(value);
     },

@@ -4,8 +4,11 @@ import reducer, {
   updateExercise,
 } from '@/features/exercises/exercises-slice';
 import { db } from '@/db';
+import { v4 } from 'uuid';
 
-type UUID = `${string}-${string}-${string}-${string}-${string}`;
+vi.mock('uuid', () => ({
+  v4: vi.fn(),
+}));
 
 vi.mock('@/db', () => ({
   db: {
@@ -18,23 +21,10 @@ vi.mock('@/db', () => ({
 }));
 
 describe('exercises slice', () => {
-  let originalRandomUUID: () => UUID;
   const id = '16281fc7-56d7-4cba-b5c0-d3c3856ca604';
 
-  beforeAll(() => {
-    originalRandomUUID = crypto.randomUUID;
-  });
-
   beforeEach(() => {
-    vi.spyOn(global.crypto, 'randomUUID').mockReturnValue(id);
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  afterAll(() => {
-    global.crypto.randomUUID = originalRandomUUID;
+    vi.clearAllMocks();
   });
 
   describe('addExercise', () => {
@@ -47,6 +37,8 @@ describe('exercises slice', () => {
         name: 'Squats',
         description: 'Squats description',
       };
+
+      vi.mocked(v4).mockImplementation(() => id);
 
       const action = addExercise(newExercise);
       const nextState = reducer(initialState, action);

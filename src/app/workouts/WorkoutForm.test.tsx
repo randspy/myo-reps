@@ -3,7 +3,11 @@ import { Provider } from 'react-redux';
 import { WorkoutForm } from '@/app/workouts/WorkoutForm';
 import { configureStore } from '@reduxjs/toolkit';
 import exercisesReducer from '@/features/exercises/exercises-slice';
-import { UUID } from 'crypto';
+import { v4 } from 'uuid';
+
+vi.mock('uuid', () => ({
+  v4: vi.fn(),
+}));
 
 const initialState = {
   exercises: {
@@ -19,23 +23,8 @@ const store = configureStore({
 });
 
 describe('WorkoutForm', () => {
-  let originalRandomUUID: () => UUID;
-  const id = '16281fc7-56d7-4cba-b5c0-d3c3856ca604';
-
-  beforeAll(() => {
-    originalRandomUUID = crypto.randomUUID;
-  });
-
   beforeEach(() => {
-    vi.spyOn(global.crypto, 'randomUUID').mockReturnValue(id);
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  afterAll(() => {
-    global.crypto.randomUUID = originalRandomUUID;
+    vi.clearAllMocks();
   });
 
   test('renders the form correctly', () => {
@@ -64,6 +53,8 @@ describe('WorkoutForm', () => {
 
   test('submits the form when "Save" button is clicked', async () => {
     const onSubmit = vi.fn();
+    const id = '16281fc7-56d7-4cba-b5c0-d3c3856ca604';
+    vi.mocked(v4).mockImplementation(() => id);
 
     render(
       <Provider store={store}>

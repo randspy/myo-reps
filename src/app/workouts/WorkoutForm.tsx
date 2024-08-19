@@ -18,6 +18,7 @@ import {
   workoutSchema,
 } from '@/features/workouts/workouts-schema';
 import { ExerciseComboBox } from '@/app/workouts/ExerciseComboBox';
+import { v4 as uuidv4 } from 'uuid';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -108,7 +109,7 @@ export const WorkoutForm: React.FC<{
           className="mb-4 mt-2 w-full"
           type="button"
           onClick={() =>
-            append({ id: crypto.randomUUID(), repetitions: 1, exerciseId: '' })
+            append({ id: uuidv4(), repetitions: 1, exerciseId: '' })
           }
         >
           Add Exercise
