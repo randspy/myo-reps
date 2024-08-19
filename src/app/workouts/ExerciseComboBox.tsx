@@ -18,16 +18,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { ExerciseValue } from '@/features/exercises/exercises-schema';
 import {
-  defaultValues as defaultExercise,
-  ExerciseValue,
-} from '@/features/exercises/exercises-schema';
+  defaultWorkoutExerciseValue,
+  WorkoutExerciseValue,
+} from '@/features/workouts/workouts-schema';
 
 export const ExerciseComboBox: React.FC<{
   items: ExerciseValue[];
-  selected: ExerciseValue | undefined;
-  onSelect: (item: ExerciseValue) => void;
-}> = ({ items, selected = { ...defaultExercise, id: '' }, onSelect }) => {
+  selected: WorkoutExerciseValue | undefined;
+  onSelect: (item: WorkoutExerciseValue) => void;
+}> = ({ items, selected = defaultWorkoutExerciseValue, onSelect }) => {
   const [open, setOpen] = React.useState(false);
 
   const filterItems = (id: string, searchPrompt: string) => {
@@ -37,11 +38,21 @@ export const ExerciseComboBox: React.FC<{
 
   const itemSelected = (id: string) => {
     if (id !== selected.id) {
-      const item = items.find((item) => item.id === id);
-      onSelect(item!);
+      onSelect({
+        ...selected,
+        exerciseId: id,
+      });
     }
 
     setOpen(false);
+  };
+
+  const selectedName = () => {
+    if (selected.exerciseId) {
+      return items.find((item) => item.id === selected.exerciseId)?.name;
+    }
+
+    return 'Select Exercise';
   };
 
   return (
@@ -53,7 +64,7 @@ export const ExerciseComboBox: React.FC<{
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selected.name ? selected.name : 'Select Exercise'}
+          {selectedName()}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

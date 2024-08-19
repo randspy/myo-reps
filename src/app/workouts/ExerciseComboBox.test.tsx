@@ -7,12 +7,14 @@ describe('ExerciseComboBox', () => {
     { id: '2', name: 'Squat' },
     { id: '3', name: 'Pull-up' },
   ];
+  const selected = { id: '42', exerciseId: '1', repetitions: 1 };
+
   test('renders the component', () => {
     render(
       <ExerciseComboBox
         items={exercises}
         onSelect={() => true}
-        selected={exercises[0]}
+        selected={selected}
       />,
     );
 
@@ -25,7 +27,7 @@ describe('ExerciseComboBox', () => {
       <ExerciseComboBox
         items={exercises}
         onSelect={() => true}
-        selected={exercises[0]}
+        selected={selected}
       />,
     );
 
@@ -39,14 +41,18 @@ describe('ExerciseComboBox', () => {
       <ExerciseComboBox
         items={exercises}
         onSelect={onSelectMock}
-        selected={exercises[0]}
+        selected={selected}
       />,
     );
 
     fireEvent.click(screen.getByRole('combobox'));
     fireEvent.click(screen.getByText('Squat'));
 
-    expect(onSelectMock).toHaveBeenCalledWith({ id: '2', name: 'Squat' });
+    expect(onSelectMock).toHaveBeenCalledWith({
+      id: '42',
+      exerciseId: '2',
+      repetitions: 1,
+    });
   });
 
   test('filters the exercise list based on user input', () => {

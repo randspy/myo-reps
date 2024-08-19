@@ -91,7 +91,7 @@ describe('WorkoutForm', () => {
         exercises: [
           {
             id,
-            name: 'Push-up',
+            exerciseId: '1',
             repetitions: 1,
           },
         ],

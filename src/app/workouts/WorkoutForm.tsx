@@ -42,14 +42,13 @@ export const WorkoutForm: React.FC<{
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submit)}
-        className="space-y-6"
         data-testid="add-new-exercise-form"
       >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel>Workout Name</FormLabel>
               <FormControl>
                 <Input placeholder="Upper body workout" {...field} />
@@ -62,7 +61,7 @@ export const WorkoutForm: React.FC<{
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-4">
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="Workout description" {...field} />
@@ -72,32 +71,28 @@ export const WorkoutForm: React.FC<{
           )}
         />
 
-        <Button
-          className="w-full"
-          type="button"
-          onClick={() =>
-            append({ name: '', id: crypto.randomUUID(), repetitions: 1 })
-          }
-        >
-          Add Exercise
-        </Button>
-
+        {fields.length > 0 && (
+          <FormLabel className="mb-2 inline-block">Exercises</FormLabel>
+        )}
         {fields.map((exercise, index) => (
           <div key={exercise.id}>
             <FormField
               control={form.control}
               key={index}
-              name={`exercises.${index}.name`}
+              name={`exercises.${index}.exerciseId`}
               render={() => (
-                <FormItem>
+                <FormItem className="mb-2">
                   <FormControl>
                     <div className="w-full">
                       <ExerciseComboBox
                         items={exercises}
                         selected={form.getValues(`exercises.${index}`)}
                         onSelect={(item) => {
-                          form.setValue(`exercises.${index}.name`, item.name);
-                          form.clearErrors(`exercises.${index}.name`);
+                          form.setValue(
+                            `exercises.${index}.exerciseId`,
+                            item.exerciseId,
+                          );
+                          form.clearErrors(`exercises.${index}.exerciseId`);
                         }}
                       />
                     </div>
@@ -108,6 +103,16 @@ export const WorkoutForm: React.FC<{
             />
           </div>
         ))}
+
+        <Button
+          className="mb-4 mt-2 w-full"
+          type="button"
+          onClick={() =>
+            append({ id: crypto.randomUUID(), repetitions: 1, exerciseId: '' })
+          }
+        >
+          Add Exercise
+        </Button>
 
         <Button type="submit" className="w-full">
           Save

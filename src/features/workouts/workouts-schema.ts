@@ -9,7 +9,7 @@ export const workoutSchema = z.object({
     .array(
       z.object({
         id: z.string(),
-        name: z.string().min(1, {
+        exerciseId: z.string().min(1, {
           message: 'Need to select an exercise',
         }),
         repetitions: z.number().int().min(1, {
@@ -26,4 +26,20 @@ export const defaultValues: WorkoutFormValues = {
   name: '',
   description: '',
   exercises: [],
+};
+
+export type WorkoutExerciseValue = {
+  id: string;
+  exerciseId: string;
+  repetitions: number;
+};
+
+export const defaultWorkoutExerciseValue: WorkoutExerciseValue = {
+  id: '',
+  exerciseId: '',
+  repetitions: 1,
+};
+
+export type WorkoutValue = WorkoutFormValues & { id: string } & {
+  exercises: WorkoutExerciseValue[];
 };
