@@ -37,8 +37,7 @@ describe('Add new workout', () => {
   });
 
   it('opens the dialog when the trigger is clicked', () => {
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
   it('closes the dialog when the form is submitted', async () => {

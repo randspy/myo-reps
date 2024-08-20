@@ -21,7 +21,7 @@ const store = configureStore({
   preloadedState: initialState,
 });
 
-describe('ExercisePage', () => {
+describe('Exercise page', () => {
   test('renders ExerciseList component', () => {
     render(
       <Provider store={store}>

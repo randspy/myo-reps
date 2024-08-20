@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AddNewExerciseDialog } from './AddNewExerciseDialog';
 import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { Provider } from 'react-redux';
@@ -21,7 +15,6 @@ vi.mock('@/app/exercises/ExerciseForm', () => ({
       onClick={() =>
         onSubmit({
           name: 'Mock Push up',
-          description: 'Push up description',
         })
       }
     >
@@ -30,9 +23,7 @@ vi.mock('@/app/exercises/ExerciseForm', () => ({
   ),
 }));
 
-describe('AddNewExerciseDialog', () => {
-  let dialogTrigger: HTMLElement;
-
+describe('Add new exercise', () => {
   beforeEach(() => {
     render(
       <Provider store={store}>
@@ -40,44 +31,25 @@ describe('AddNewExerciseDialog', () => {
       </Provider>,
     );
 
-    dialogTrigger = screen.getByRole('button', {
-      name: 'Add New Exercise',
-    });
-  });
-  test('renders the dialog trigger', () => {
-    expect(dialogTrigger).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: 'Add New Exercise',
+      }),
+    );
   });
 
   test('opens the dialog when the trigger is clicked', () => {
-    fireEvent.click(dialogTrigger);
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
   test('closes the dialog when the form is submitted', async () => {
-    act(() => {
-      fireEvent.click(dialogTrigger);
-    });
-
-    const submitButton = screen.getByTestId('save');
-
-    act(() => {
-      fireEvent.click(submitButton);
-    });
+    fireEvent.click(screen.getByTestId('save'));
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   test('add exercise to the store when the form is submitted', async () => {
-    act(() => {
-      fireEvent.click(dialogTrigger);
-    });
-
-    const submitButton = screen.getByTestId('save');
-
-    act(() => {
-      fireEvent.click(submitButton);
-    });
+    fireEvent.click(screen.getByTestId('save'));
 
     await waitFor(() => {
       const state = store.getState();

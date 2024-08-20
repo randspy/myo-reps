@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ExerciseComboBox } from '@/app/workouts/ExerciseComboBox';
 
-describe('ExerciseComboBox', () => {
+describe('Exercise selector', () => {
   const exercises = [
     { id: '1', name: 'Push-up' },
     { id: '2', name: 'Squat' },
@@ -18,8 +18,7 @@ describe('ExerciseComboBox', () => {
       />,
     );
 
-    const comboBoxElement = screen.getByRole('combobox');
-    expect(comboBoxElement).toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 
   test('displays the selected exercise', () => {
@@ -31,8 +30,7 @@ describe('ExerciseComboBox', () => {
       />,
     );
 
-    const comboBoxElement = screen.getByRole('combobox');
-    expect(comboBoxElement).toHaveTextContent('Push-up');
+    expect(screen.getByRole('combobox')).toHaveTextContent('Push-up');
   });
 
   test('calls the onSelect callback when exercise is selected', () => {

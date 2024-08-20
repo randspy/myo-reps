@@ -22,7 +22,7 @@ const store = configureStore({
   preloadedState: initialState,
 });
 
-describe('WorkoutForm', () => {
+describe('Workout form', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

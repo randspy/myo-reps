@@ -11,16 +11,6 @@ vi.mock('uuid', () => ({
   v4: vi.fn(),
 }));
 
-vi.mock('@/db', () => ({
-  db: {
-    workouts: {
-      add: vi.fn(),
-      delete: vi.fn(),
-      update: vi.fn(),
-    },
-  },
-}));
-
 describe('workout slice', () => {
   const id = '16281fc7-56d7-4cba-b5c0-d3c3856ca604';
 
@@ -28,7 +18,7 @@ describe('workout slice', () => {
     vi.clearAllMocks();
   });
 
-  describe('addWorkout', () => {
+  describe('add workout', () => {
     it('should add a new workout to the state', () => {
       const initialState = {
         values: [],
@@ -57,7 +47,7 @@ describe('workout slice', () => {
     });
   });
 
-  describe('deleteWorkout', () => {
+  describe('delete workout', () => {
     it('should delete an workout from the state', () => {
       const initialState = {
         values: [
@@ -77,7 +67,7 @@ describe('workout slice', () => {
     });
   });
 
-  describe('updateWorkout', () => {
+  describe('update workout', () => {
     it('should update an workout in the state', () => {
       const initialState = {
         values: [
@@ -105,7 +95,7 @@ describe('workout slice', () => {
     });
   });
 
-  describe('setWorkouts', () => {
+  describe('set workouts', () => {
     it('should set the workouts in the state', () => {
       const initialState = {
         values: [],

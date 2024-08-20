@@ -17,9 +17,8 @@ const store = configureStore({
   preloadedState: initialValue,
 });
 
-describe('DeleteExerciseDialog', () => {
+describe('Delete exercise', () => {
   const exercise = initialValue.exercises.values[0];
-  let dialogTrigger: HTMLElement;
 
   beforeEach(() => {
     render(
@@ -27,40 +26,30 @@ describe('DeleteExerciseDialog', () => {
         <DeleteExerciseDialog exercise={exercise} />{' '}
       </Provider>,
     );
-    dialogTrigger = screen.getByTestId('exercise-delete-button');
-  });
 
-  it('renders the dialog trigger', () => {
-    expect(dialogTrigger).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('exercise-delete-button'));
   });
 
   it('opens the dialog when the trigger is clicked', () => {
-    fireEvent.click(dialogTrigger);
-
-    const dialogTitle = screen.getByRole('heading', {
-      name: 'Are you sure you want to delete this exercise?',
-    });
-    expect(dialogTitle).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', {
+        name: 'Are you sure you want to delete this exercise?',
+      }),
+    ).toBeInTheDocument();
   });
 
   it('closes the dialog when the cancel button is clicked', () => {
-    fireEvent.click(dialogTrigger);
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
-    const cancelButton = screen.getByRole('button', { name: 'Cancel' });
-
-    fireEvent.click(cancelButton);
-
-    const dialogTitle = screen.queryByRole('heading', {
-      name: 'Are you sure you want to delete this exercise?',
-    });
-    expect(dialogTitle).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', {
+        name: 'Are you sure you want to delete this exercise?',
+      }),
+    ).not.toBeInTheDocument();
   });
 
   it('calls the deleteExercise function when the confirm button is clicked', async () => {
-    fireEvent.click(dialogTrigger);
-
-    const confirmButton = screen.getByRole('button', { name: 'Delete' });
-    fireEvent.click(confirmButton);
+    fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {
       const state = store.getState();

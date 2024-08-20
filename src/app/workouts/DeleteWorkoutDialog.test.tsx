@@ -21,7 +21,6 @@ const store = configureStore({
 
 describe('Delete workout', () => {
   const workout = initialValue.workouts.values[0];
-  let dialogTrigger: HTMLElement;
 
   beforeEach(() => {
     render(
@@ -30,8 +29,7 @@ describe('Delete workout', () => {
       </Provider>,
     );
 
-    dialogTrigger = screen.getByTestId('workout-delete-button');
-    fireEvent.click(dialogTrigger);
+    fireEvent.click(screen.getByTestId('workout-delete-button'));
   });
 
   it('opens the dialog when the trigger is clicked', () => {

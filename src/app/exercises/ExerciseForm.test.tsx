@@ -1,13 +1,7 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ExerciseForm } from './ExerciseForm';
 
-describe('ExerciseForm', () => {
+describe('Exercise form', () => {
   test('renders form fields correctly', () => {
     render(<ExerciseForm onSubmit={() => {}} />);
 
@@ -50,23 +44,13 @@ describe('ExerciseForm', () => {
       />,
     );
 
-    const exerciseNameInput = screen.getByLabelText('Exercise Name');
-    const descriptionInput = screen.getByLabelText('Description');
-    const submitButton = screen.getByTestId('add-new-exercise-form');
-
-    act(() => {
-      fireEvent.change(exerciseNameInput, { target: { value: 'Push-ups' } });
-      fireEvent.change(descriptionInput, {
-        target: { value: 'Perform push-ups exercise' },
-      });
+    fireEvent.change(screen.getByLabelText('Exercise Name'), {
+      target: { value: 'Push-ups' },
     });
-
-    expect(exerciseNameInput).toHaveValue('Push-ups');
-    expect(descriptionInput).toHaveValue('Perform push-ups exercise');
-
-    act(() => {
-      fireEvent.submit(submitButton);
+    fireEvent.change(screen.getByLabelText('Description'), {
+      target: { value: 'Perform push-ups exercise' },
     });
+    fireEvent.submit(screen.getByTestId('add-new-exercise-form'));
 
     await waitFor(() => {
       expect(onSubmitMock).toHaveBeenCalledWith({
