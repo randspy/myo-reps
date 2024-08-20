@@ -1,9 +1,9 @@
 import reducer, {
-  addExercise,
-  deleteExercise,
-  setExercises,
-  updateExercise,
-} from '@/features/exercises/exercises-slice';
+  addWorkout,
+  deleteWorkout,
+  setWorkouts,
+  updateWorkout,
+} from '@/features/workouts/workouts-slice';
 import { db } from '@/db';
 import { v4 } from 'uuid';
 
@@ -13,7 +13,7 @@ vi.mock('uuid', () => ({
 
 vi.mock('@/db', () => ({
   db: {
-    exercises: {
+    workouts: {
       add: vi.fn(),
       delete: vi.fn(),
       update: vi.fn(),
@@ -21,44 +21,44 @@ vi.mock('@/db', () => ({
   },
 }));
 
-describe('exercises slice', () => {
+describe('workout slice', () => {
   const id = '16281fc7-56d7-4cba-b5c0-d3c3856ca604';
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('addExercise', () => {
-    it('should add a new exercise to the state', () => {
+  describe('addWorkout', () => {
+    it('should add a new workout to the state', () => {
       const initialState = {
         values: [],
       };
 
-      const newExercise = {
+      const newWorkout = {
         name: 'Squats',
         description: 'Squats description',
       };
 
       vi.mocked(v4).mockImplementation(() => id);
 
-      const action = addExercise(newExercise);
+      const action = addWorkout(newWorkout);
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toHaveLength(1);
       expect(nextState.values[0]).toEqual({
         id,
-        ...newExercise,
+        ...newWorkout,
       });
 
-      expect(db.exercises.add).toHaveBeenCalledWith({
+      expect(db.workouts.add).toHaveBeenCalledWith({
         id,
-        ...newExercise,
+        ...newWorkout,
       });
     });
   });
 
-  describe('deleteExercise', () => {
-    it('should delete an exercise from the state', () => {
+  describe('deleteWorkout', () => {
+    it('should delete an workout from the state', () => {
       const initialState = {
         values: [
           {
@@ -69,16 +69,16 @@ describe('exercises slice', () => {
         ],
       };
 
-      const action = deleteExercise(id);
+      const action = deleteWorkout(id);
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toHaveLength(0);
-      expect(db.exercises.delete).toHaveBeenCalledWith(id);
+      expect(db.workouts.delete).toHaveBeenCalledWith(id);
     });
   });
 
-  describe('updateExercise', () => {
-    it('should update an exercise in the state', () => {
+  describe('updateWorkout', () => {
+    it('should update an workout in the state', () => {
       const initialState = {
         values: [
           {
@@ -89,29 +89,29 @@ describe('exercises slice', () => {
         ],
       };
 
-      const updatedExercise = {
+      const updatedWorkout = {
         id,
         name: 'Push ups',
         description: 'Push ups description',
       };
 
-      const action = updateExercise(updatedExercise);
+      const action = updateWorkout(updatedWorkout);
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toHaveLength(1);
-      expect(nextState.values[0]).toEqual(updatedExercise);
+      expect(nextState.values[0]).toEqual(updatedWorkout);
 
-      expect(db.exercises.update).toHaveBeenCalledWith(id, updatedExercise);
+      expect(db.workouts.update).toHaveBeenCalledWith(id, updatedWorkout);
     });
   });
 
-  describe('setExercises', () => {
-    it('should set the exercises in the state', () => {
+  describe('setWorkouts', () => {
+    it('should set the workouts in the state', () => {
       const initialState = {
         values: [],
       };
 
-      const exercises = [
+      const workouts = [
         {
           id: '1',
           name: 'Squats',
@@ -124,11 +124,11 @@ describe('exercises slice', () => {
         },
       ];
 
-      const action = setExercises(exercises);
+      const action = setWorkouts(workouts);
 
       const nextState = reducer(initialState, action);
 
-      expect(nextState.values).toEqual(exercises);
+      expect(nextState.values).toEqual(workouts);
     });
   });
 });

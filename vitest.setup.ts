@@ -9,5 +9,11 @@ vi.mock('@/db', () => ({
       update: vi.fn(),
       toArray: vi.fn().mockResolvedValue([]),
     },
+    workouts: {
+      add: vi.fn(),
+      delete: vi.fn(),
+      update: vi.fn(),
+      toArray: vi.fn().mockResolvedValue([]),
+    },
   },
 }));

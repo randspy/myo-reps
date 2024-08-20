@@ -8,14 +8,17 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useState } from 'react';
-import { WorkoutForm } from './WorkoutForm';
+import { WorkoutForm } from '@/app/workouts/WorkoutForm';
 import { WorkoutFormValues } from '@/features/workouts/workouts-schema';
+import { useAppDispatch } from '@/store/hooks';
+import { addWorkout } from '@/features/workouts/workouts-slice';
 
 export const AddNewWorkoutDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   const submit = (values: WorkoutFormValues) => {
-    console.log(values);
+    dispatch(addWorkout(values));
     setOpen(false);
   };
 
