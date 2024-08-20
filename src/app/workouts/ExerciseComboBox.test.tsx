@@ -7,7 +7,7 @@ describe('ExerciseComboBox', () => {
     { id: '2', name: 'Squat' },
     { id: '3', name: 'Pull-up' },
   ];
-  const selected = { id: '42', exerciseId: '1', repetitions: 1 };
+  const selected = { id: '42', exerciseId: '1', sets: 1 };
 
   test('renders the component', () => {
     render(
@@ -51,7 +51,7 @@ describe('ExerciseComboBox', () => {
     expect(onSelectMock).toHaveBeenCalledWith({
       id: '42',
       exerciseId: '2',
-      repetitions: 1,
+      sets: 1,
     });
   });
 

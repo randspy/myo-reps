@@ -19,6 +19,7 @@ import {
 } from '@/features/workouts/workouts-schema';
 import { ExerciseComboBox } from '@/app/workouts/ExerciseComboBox';
 import { v4 as uuidv4 } from 'uuid';
+import { NumberScrollWheelSelectorPopover } from '@/app/common/NumberScrollWheelSelectorPopover';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -84,7 +85,7 @@ export const WorkoutForm: React.FC<{
               render={() => (
                 <FormItem className="mb-2">
                   <FormControl>
-                    <div className="w-full">
+                    <div className="flex space-x-2">
                       <ExerciseComboBox
                         items={exercises}
                         selected={form.getValues(`exercises.${index}`)}
@@ -94,6 +95,15 @@ export const WorkoutForm: React.FC<{
                             item.exerciseId,
                           );
                           form.clearErrors(`exercises.${index}.exerciseId`);
+                        }}
+                      />
+                      <NumberScrollWheelSelectorPopover
+                        value={form.getValues(`exercises.${index}.sets`)}
+                        label="Sets"
+                        max={20}
+                        onValueChange={(value) => {
+                          form.setValue(`exercises.${index}.sets`, value);
+                          form.clearErrors(`exercises.${index}.sets`);
                         }}
                       />
                     </div>
@@ -108,9 +118,7 @@ export const WorkoutForm: React.FC<{
         <Button
           className="mb-4 mt-2 w-full"
           type="button"
-          onClick={() =>
-            append({ id: uuidv4(), repetitions: 1, exerciseId: '' })
-          }
+          onClick={() => append({ id: uuidv4(), sets: 1, exerciseId: '' })}
         >
           Add Exercise
         </Button>

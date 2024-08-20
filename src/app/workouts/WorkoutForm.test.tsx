@@ -72,6 +72,8 @@ describe('WorkoutForm', () => {
     fireEvent.click(screen.getByText('Add Exercise'));
     fireEvent.click(screen.getByText('Select Exercise'));
     fireEvent.click(screen.getByText('Push-up'));
+    fireEvent.click(screen.getByText('1'));
+    fireEvent.click(screen.getByText('2'));
 
     fireEvent.submit(screen.getByText('Save'));
 
@@ -83,7 +85,7 @@ describe('WorkoutForm', () => {
           {
             id,
             exerciseId: '1',
-            repetitions: 1,
+            sets: 2,
           },
         ],
       });
