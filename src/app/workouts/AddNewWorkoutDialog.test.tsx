@@ -25,7 +25,7 @@ vi.mock('@/app/workouts/WorkoutForm', () => ({
   ),
 }));
 
-describe('Opening dialog', () => {
+describe('Add new workout', () => {
   beforeEach(() => {
     render(
       <Provider store={store}>

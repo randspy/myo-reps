@@ -23,10 +23,11 @@ import { NumberScrollWheelSelectorPopover } from '@/app/common/NumberScrollWheel
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
-}> = ({ onSubmit }) => {
+  values?: WorkoutFormValues;
+}> = ({ onSubmit, values = defaultValues }) => {
   const form = useForm<WorkoutFormValues>({
     resolver: zodResolver(workoutSchema),
-    defaultValues,
+    values,
   });
 
   const { fields, append } = useFieldArray({
