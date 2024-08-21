@@ -64,7 +64,7 @@ describe('Exercise selector', () => {
 
     fireEvent.click(screen.getByRole('combobox'));
     fireEvent.change(screen.getByPlaceholderText('Search Exercise'), {
-      target: { value: 'Pu' },
+      target: { value: 'Pup' },
     });
 
     expect(screen.queryByText('Push-up')).toBeInTheDocument();

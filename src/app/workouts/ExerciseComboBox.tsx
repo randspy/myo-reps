@@ -23,6 +23,8 @@ import {
   defaultWorkoutExerciseValue,
   WorkoutExerciseValue,
 } from '@/features/workouts/workouts-schema';
+import { useMemo } from 'react';
+import Fuse from 'fuse.js';
 
 export const ExerciseComboBox: React.FC<{
   items: ExerciseValue[];
@@ -31,9 +33,25 @@ export const ExerciseComboBox: React.FC<{
 }> = ({ items, selected = defaultWorkoutExerciseValue, onSelect }) => {
   const [open, setOpen] = React.useState(false);
 
+  const fuzzySearch = useMemo(
+    () => new Fuse(items, { keys: ['name'], includeScore: true }),
+    [items],
+  );
+
   const filterItems = (id: string, searchPrompt: string) => {
-    const exerciseName = items.find((item) => item.id === id)?.name ?? '';
-    return exerciseName.includes(searchPrompt) ? 1 : 0;
+    // it's not optimal to have a search for every item, duplicated work
+    // there is a mismatch between the fuzzy search libraries and the api provided
+    // by the Command component. Command component should provide a way to filter
+    // items in one function execution for all items.
+    // Neverless but it's good enough for number of items I will work with
+
+    const matchedItems = fuzzySearch
+      .search(searchPrompt)
+      .filter((match) => match.item.id === id);
+
+    return matchedItems.length && matchedItems[0].score
+      ? 1 - matchedItems[0].score
+      : 0;
   };
 
   const itemSelected = (id: string) => {
