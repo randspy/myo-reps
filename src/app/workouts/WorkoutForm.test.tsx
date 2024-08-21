@@ -91,4 +91,19 @@ describe('Workout form', () => {
       });
     });
   });
+
+  test('deletes an exercise when "Delete" button is clicked', () => {
+    render(
+      <Provider store={store}>
+        <WorkoutForm onSubmit={() => {}} />
+      </Provider>,
+    );
+
+    fireEvent.click(screen.getByText('Add Exercise'));
+    fireEvent.click(screen.getByText('Select Exercise'));
+    fireEvent.click(screen.getByText('Push-up'));
+    fireEvent.click(screen.getByLabelText('Delete exercise'));
+
+    expect(screen.queryByText('Push-up')).not.toBeInTheDocument();
+  });
 });

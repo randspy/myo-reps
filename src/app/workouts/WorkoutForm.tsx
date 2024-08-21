@@ -20,6 +20,7 @@ import {
 import { ExerciseComboBox } from '@/app/workouts/ExerciseComboBox';
 import { v4 as uuidv4 } from 'uuid';
 import { NumberScrollWheelSelectorPopover } from '@/app/common/NumberScrollWheelSelectorPopover';
+import { Trash2Icon } from 'lucide-react';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -86,7 +87,7 @@ export const WorkoutForm: React.FC<{
               render={() => (
                 <FormItem className="mb-2">
                   <FormControl>
-                    <div className="flex space-x-2">
+                    <div className="grid w-full grid-cols-[1fr,minmax(7rem,auto)] space-x-2">
                       <ExerciseComboBox
                         items={exercises}
                         selected={form.getValues(`exercises.${index}`)}
@@ -98,15 +99,32 @@ export const WorkoutForm: React.FC<{
                           form.clearErrors(`exercises.${index}.exerciseId`);
                         }}
                       />
-                      <NumberScrollWheelSelectorPopover
-                        value={form.getValues(`exercises.${index}.sets`)}
-                        label="Sets"
-                        max={20}
-                        onValueChange={(value) => {
-                          form.setValue(`exercises.${index}.sets`, value);
-                          form.clearErrors(`exercises.${index}.sets`);
-                        }}
-                      />
+                      <div className="flex justify-end">
+                        <NumberScrollWheelSelectorPopover
+                          value={form.getValues(`exercises.${index}.sets`)}
+                          label="Sets"
+                          max={20}
+                          onValueChange={(value) => {
+                            form.setValue(`exercises.${index}.sets`, value);
+                            form.clearErrors(`exercises.${index}.sets`);
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          className="ml-2"
+                          aria-label="Delete exercise"
+                          variant="icon"
+                          size="icon"
+                          onClick={() => {
+                            form.setValue(
+                              'exercises',
+                              fields.filter((_, i) => i !== index),
+                            );
+                          }}
+                        >
+                          <Trash2Icon className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </FormControl>
                   <FormMessage />

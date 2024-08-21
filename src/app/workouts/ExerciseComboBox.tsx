@@ -62,7 +62,7 @@ export const ExerciseComboBox: React.FC<{
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between truncate"
         >
           {selectedName()}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
