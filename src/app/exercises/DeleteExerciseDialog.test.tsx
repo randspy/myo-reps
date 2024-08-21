@@ -27,7 +27,7 @@ describe('Delete exercise', () => {
       </Provider>,
     );
 
-    fireEvent.click(screen.getByTestId('exercise-delete-button'));
+    fireEvent.click(screen.getByLabelText('Delete exercise'));
   });
 
   it('opens the dialog when the trigger is clicked', () => {

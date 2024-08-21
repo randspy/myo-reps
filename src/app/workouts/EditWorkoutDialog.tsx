@@ -29,7 +29,7 @@ export const EditWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button data-testid="workout-edit-button" variant="icon" size="icon">
+        <Button variant="icon" size="icon" aria-label="Edit workout">
           <PencilIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>

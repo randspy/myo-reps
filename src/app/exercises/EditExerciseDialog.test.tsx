@@ -52,7 +52,7 @@ describe('Edit exercise', () => {
       </Provider>,
     );
 
-    fireEvent.click(screen.getByTestId('exercise-edit-button'));
+    fireEvent.click(screen.getByLabelText('Edit exercise'));
   });
 
   test('opens the dialog when the trigger is clicked', () => {

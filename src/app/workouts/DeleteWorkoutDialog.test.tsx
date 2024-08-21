@@ -29,7 +29,7 @@ describe('Delete workout', () => {
       </Provider>,
     );
 
-    fireEvent.click(screen.getByTestId('workout-delete-button'));
+    fireEvent.click(screen.getByLabelText('Delete workout'));
   });
 
   it('opens the dialog when the trigger is clicked', () => {

@@ -51,7 +51,7 @@ describe('Edit workout', () => {
       </Provider>,
     );
 
-    fireEvent.click(screen.getByTestId('workout-edit-button'));
+    fireEvent.click(screen.getByLabelText('Edit workout'));
   });
 
   test('opens the dialog when the trigger is clicked', () => {

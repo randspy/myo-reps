@@ -28,7 +28,7 @@ export const DeleteExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button data-testid="exercise-delete-button" variant="icon" size="icon">
+        <Button variant="icon" size="icon" aria-label="Delete exercise">
           <Trash2Icon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
