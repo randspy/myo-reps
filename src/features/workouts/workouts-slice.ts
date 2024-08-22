@@ -15,11 +15,16 @@ const workoutsSlice = createSlice({
   name: 'workouts',
   initialState,
   reducers: {
+    restoreWorkouts(state, action: PayloadAction<WorkoutValue[]>) {
+      state.values = action.payload.toSorted((a, b) => a.position - b.position);
+    },
     setWorkouts(state, action: PayloadAction<WorkoutValue[]>) {
-      state.values = action.payload;
+      const values = updateWorkoutPositions(action.payload);
+      state.values = values;
+      db.workouts.bulkPut(values);
     },
     addWorkout(state, action: PayloadAction<WorkoutFormValues>) {
-      const value = { ...action.payload, id: uuidv4() };
+      const value = createWorkoutFromForm(action.payload, state.values.length);
       state.values.push(value);
       db.workouts.add(value);
     },
@@ -39,6 +44,29 @@ const workoutsSlice = createSlice({
   },
 });
 
-export const { addWorkout, deleteWorkout, updateWorkout, setWorkouts } =
-  workoutsSlice.actions;
+export const {
+  addWorkout,
+  deleteWorkout,
+  updateWorkout,
+  setWorkouts,
+  restoreWorkouts,
+} = workoutsSlice.actions;
 export default workoutsSlice.reducer;
+
+function updateWorkoutPositions(workouts: WorkoutValue[]) {
+  return workouts.map((workout, idx) => ({
+    ...workout,
+    position: idx,
+  }));
+}
+
+function createWorkoutFromForm(
+  values: WorkoutFormValues,
+  position: number,
+): WorkoutValue {
+  return {
+    ...values,
+    id: uuidv4(),
+    position,
+  };
+}

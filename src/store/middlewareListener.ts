@@ -1,6 +1,6 @@
 import { createAction, createListenerMiddleware } from '@reduxjs/toolkit';
 import { restoreExercises } from '@/features/exercises/exercises-slice';
-import { setWorkouts } from '@/features/workouts/workouts-slice';
+import { restoreWorkouts } from '@/features/workouts/workouts-slice';
 import { db } from '@/db';
 
 const INIT_ACTION_TYPE = 'store/init';
@@ -16,7 +16,7 @@ listenerMiddleware.startListening({
     listenerApi.dispatch(restoreExercises(exercises));
 
     const workouts = await db.workouts.toArray();
-    listenerApi.dispatch(setWorkouts(workouts));
+    listenerApi.dispatch(restoreWorkouts(workouts));
   },
 });
 

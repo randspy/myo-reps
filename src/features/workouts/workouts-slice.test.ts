@@ -1,6 +1,7 @@
 import reducer, {
   addWorkout,
   deleteWorkout,
+  restoreWorkouts,
   setWorkouts,
   updateWorkout,
 } from '@/features/workouts/workouts-slice';
@@ -37,11 +38,13 @@ describe('workout slice', () => {
       expect(nextState.values).toHaveLength(1);
       expect(nextState.values[0]).toEqual({
         id,
+        position: 0,
         ...newWorkout,
       });
 
       expect(db.workouts.add).toHaveBeenCalledWith({
         id,
+        position: 0,
         ...newWorkout,
       });
     });
@@ -53,6 +56,7 @@ describe('workout slice', () => {
         values: [
           {
             id,
+            position: 0,
             name: 'Squats',
             description: 'Squats description',
           },
@@ -73,6 +77,7 @@ describe('workout slice', () => {
         values: [
           {
             id,
+            position: 0,
             name: 'Squats',
             description: 'Squats description',
           },
@@ -81,6 +86,7 @@ describe('workout slice', () => {
 
       const updatedWorkout = {
         id,
+        position: 0,
         name: 'Push ups',
         description: 'Push ups description',
       };
@@ -105,11 +111,13 @@ describe('workout slice', () => {
         {
           id: '1',
           name: 'Squats',
+          position: 1,
           description: 'Squats description',
         },
         {
           id: '2',
           name: 'Push ups',
+          position: 0,
           description: 'Push ups description',
         },
       ];
@@ -118,7 +126,42 @@ describe('workout slice', () => {
 
       const nextState = reducer(initialState, action);
 
-      expect(nextState.values).toEqual(workouts);
+      expect(nextState.values).toEqual(
+        workouts.map((workout, idx) => ({ ...workout, position: idx })),
+      );
+
+      expect(db.workouts.bulkPut).toHaveBeenCalledWith(
+        workouts.map((workout, idx) => ({ ...workout, position: idx })),
+      );
+    });
+  });
+
+  describe('restore workouts', () => {
+    it('should set the restore in the state', () => {
+      const initialState = {
+        values: [],
+      };
+
+      const workouts = [
+        {
+          id: '1',
+          position: 1,
+          name: 'Squats',
+          description: 'Squats description',
+        },
+        {
+          id: '2',
+          position: 0,
+          name: 'Push ups',
+          description: 'Push ups description',
+        },
+      ];
+
+      const action = restoreWorkouts(workouts);
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState.values).toEqual([workouts[1], workouts[0]]);
     });
   });
 });

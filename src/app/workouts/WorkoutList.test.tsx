@@ -8,7 +8,12 @@ import { WorkoutValue } from '@/features/workouts/workouts-schema';
 const initialState = {
   workouts: {
     values: [
-      { id: '1', name: 'Upper body', description: 'Upper body description' },
+      {
+        id: '1',
+        position: 0,
+        name: 'Upper body',
+        description: 'Upper body description',
+      },
     ],
   },
 };

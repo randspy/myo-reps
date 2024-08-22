@@ -34,10 +34,10 @@ export type WorkoutExerciseValue = {
   sets: number;
 };
 
+export type WorkoutValue = WorkoutFormValues & { id: string; position: number };
+
 export const defaultWorkoutExerciseValue: WorkoutExerciseValue = {
   id: '',
   exerciseId: '',
   sets: 1,
 };
-
-export type WorkoutValue = WorkoutFormValues & { id: string };

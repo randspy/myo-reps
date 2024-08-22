@@ -22,7 +22,7 @@ export const EditWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   const dispatch = useAppDispatch();
 
   const submit = (values: ExerciseFormValues) => {
-    dispatch(updateWorkout({ ...values, id: workout.id }));
+    dispatch(updateWorkout({ ...workout, ...values }));
     setOpen(false);
   };
 
