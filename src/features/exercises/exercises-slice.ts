@@ -19,7 +19,7 @@ const exercisesSlice = createSlice({
   initialState,
   reducers: {
     restoreExercises(state, action: PayloadAction<ExerciseValue[]>) {
-      state.values = action.payload.sort((a, b) => a.position - b.position);
+      state.values = action.payload.toSorted((a, b) => a.position - b.position);
     },
     setExercises(state, action: PayloadAction<ExerciseValue[]>) {
       const values = updateExercisePositions(action.payload);

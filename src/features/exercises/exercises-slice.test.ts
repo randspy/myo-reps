@@ -161,7 +161,7 @@ describe('exercises slice', () => {
 
       const nextState = reducer(initialState, action);
 
-      expect(nextState.values).toEqual(exercises);
+      expect(nextState.values).toEqual([exercises[1], exercises[0]]);
     });
   });
 });
