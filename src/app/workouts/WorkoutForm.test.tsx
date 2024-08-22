@@ -11,7 +11,14 @@ vi.mock('uuid', () => ({
 
 const initialState = {
   exercises: {
-    values: [{ id: '1', name: 'Push-up', description: 'Push up description' }],
+    values: [
+      {
+        id: '1',
+        position: 0,
+        name: 'Push-up',
+        description: 'Push up description',
+      },
+    ],
   },
 };
 

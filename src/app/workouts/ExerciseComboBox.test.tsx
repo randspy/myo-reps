@@ -3,9 +3,9 @@ import { ExerciseComboBox } from '@/app/workouts/ExerciseComboBox';
 
 describe('Exercise selector', () => {
   const exercises = [
-    { id: '1', name: 'Push-up' },
-    { id: '2', name: 'Squat' },
-    { id: '3', name: 'Pull-up' },
+    { id: '1', position: 0, name: 'Push-up' },
+    { id: '2', position: 1, name: 'Squat' },
+    { id: '3', position: 2, name: 'Pull-up' },
   ];
   const selected = { id: '42', exerciseId: '1', sets: 1 };
 

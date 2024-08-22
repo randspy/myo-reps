@@ -7,7 +7,14 @@ import { configureStore } from '@reduxjs/toolkit';
 
 const initialState = {
   exercises: {
-    values: [{ id: '1', name: 'Push-up', description: 'Push up description' }],
+    values: [
+      {
+        id: '1',
+        position: 0,
+        name: 'Push-up',
+        description: 'Push up description',
+      },
+    ],
   },
 };
 
@@ -41,6 +48,7 @@ vi.mock('@/app/exercises/ExerciseForm', () => ({
 describe('Edit exercise', () => {
   const exercise = {
     id: '1',
+    position: 0,
     name: 'Push-up',
     description: 'Push up description',
   };

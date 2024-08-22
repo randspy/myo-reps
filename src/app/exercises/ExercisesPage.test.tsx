@@ -8,8 +8,13 @@ import exercisesReducer from '@/features/exercises/exercises-slice';
 const initialState = {
   exercises: {
     values: [
-      { id: '1', name: 'Push-up', description: 'Push up description' },
-      { id: '2', name: 'Squat', description: 'Squat description' },
+      {
+        id: '1',
+        position: 0,
+        name: 'Push-up',
+        description: 'Push up description',
+      },
+      { id: '2', position: 1, name: 'Squat', description: 'Squat description' },
     ],
   },
 };

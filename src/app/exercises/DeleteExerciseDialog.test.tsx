@@ -6,7 +6,14 @@ import { Provider } from 'react-redux';
 
 const initialValue = {
   exercises: {
-    values: [{ id: '1', name: 'Push-up', description: 'Push up description' }],
+    values: [
+      {
+        id: '1',
+        position: 0,
+        name: 'Push-up',
+        description: 'Push up description',
+      },
+    ],
   },
 };
 

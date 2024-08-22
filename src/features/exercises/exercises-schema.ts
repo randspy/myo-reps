@@ -8,7 +8,10 @@ export const exerciseSchema = z.object({
 });
 
 export type ExerciseFormValues = z.infer<typeof exerciseSchema>;
-export type ExerciseValue = ExerciseFormValues & { id: string };
+export type ExerciseValue = ExerciseFormValues & {
+  id: string;
+  position: number;
+};
 
 export const defaultValues: ExerciseFormValues = {
   name: '',

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { ExerciseList } from './ExerciseList';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -7,7 +7,20 @@ import { ExerciseValue } from '@/features/exercises/exercises-schema';
 
 const initialState = {
   exercises: {
-    values: [{ id: '1', name: 'Push-up', description: 'Push up description' }],
+    values: [
+      {
+        id: '1',
+        name: 'Push-up',
+        description: 'Push up description',
+        position: 0,
+      },
+      {
+        id: '2',
+        name: 'Squats',
+        description: 'Squats description',
+        position: 1,
+      },
+    ],
   },
 };
 
@@ -35,6 +48,24 @@ vi.mock('@/app/exercises/DeleteExerciseDialog', () => ({
   },
 }));
 
+let onReorder: (values: ExerciseValue[]) => void;
+
+vi.mock('framer-motion', () => ({
+  Reorder: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Group: (props: any) => {
+      onReorder = props.onReorder;
+      return <div data-testid="reorder-group">{props.children}</div>;
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Item: (props: any) => (
+      <div {...props} data-testid="reorder-item">
+        {props.children}
+      </div>
+    ),
+  },
+}));
+
 describe('Exercise list', () => {
   beforeEach(() => {
     render(
@@ -55,5 +86,24 @@ describe('Exercise list', () => {
     expect(deleteExercise).toHaveBeenCalledWith(
       initialState.exercises.values[0],
     );
+  });
+
+  it('simulate drag and drop', async () => {
+    act(() => {
+      onReorder([
+        initialState.exercises.values[1],
+        initialState.exercises.values[0],
+      ]);
+    });
+
+    await waitFor(() => {
+      const state = store.getState();
+      const exercises = state.exercises.values;
+
+      expect(exercises).toEqual([
+        { ...initialState.exercises.values[1], position: 0 },
+        { ...initialState.exercises.values[0], position: 1 },
+      ]);
+    });
   });
 });

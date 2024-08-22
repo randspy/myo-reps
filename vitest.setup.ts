@@ -8,12 +8,14 @@ vi.mock('@/db', () => ({
       delete: vi.fn(),
       update: vi.fn(),
       toArray: vi.fn().mockResolvedValue([]),
+      bulkPut: vi.fn(),
     },
     workouts: {
       add: vi.fn(),
       delete: vi.fn(),
       update: vi.fn(),
       toArray: vi.fn().mockResolvedValue([]),
+      bulkPut: vi.fn(),
     },
   },
 }));

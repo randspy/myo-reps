@@ -1,5 +1,5 @@
 import { createAction, createListenerMiddleware } from '@reduxjs/toolkit';
-import { setExercises } from '@/features/exercises/exercises-slice';
+import { restoreExercises } from '@/features/exercises/exercises-slice';
 import { setWorkouts } from '@/features/workouts/workouts-slice';
 import { db } from '@/db';
 
@@ -13,7 +13,7 @@ listenerMiddleware.startListening({
     listenerApi.cancelActiveListeners();
 
     const exercises = await db.exercises.toArray();
-    listenerApi.dispatch(setExercises(exercises));
+    listenerApi.dispatch(restoreExercises(exercises));
 
     const workouts = await db.workouts.toArray();
     listenerApi.dispatch(setWorkouts(workouts));

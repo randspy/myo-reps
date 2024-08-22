@@ -1,6 +1,7 @@
 import reducer, {
   addExercise,
   deleteExercise,
+  restoreExercises,
   setExercises,
   updateExercise,
 } from '@/features/exercises/exercises-slice';
@@ -37,11 +38,13 @@ describe('exercises slice', () => {
       expect(nextState.values).toHaveLength(1);
       expect(nextState.values[0]).toEqual({
         id,
+        position: 0,
         ...newExercise,
       });
 
       expect(db.exercises.add).toHaveBeenCalledWith({
         id,
+        position: 0,
         ...newExercise,
       });
     });
@@ -55,6 +58,7 @@ describe('exercises slice', () => {
             id,
             name: 'Squats',
             description: 'Squats description',
+            position: 0,
           },
         ],
       };
@@ -75,12 +79,14 @@ describe('exercises slice', () => {
             id,
             name: 'Squats',
             description: 'Squats description',
+            position: 0,
           },
         ],
       };
 
       const updatedExercise = {
         id,
+        position: 0,
         name: 'Push ups',
         description: 'Push ups description',
       };
@@ -104,17 +110,54 @@ describe('exercises slice', () => {
       const exercises = [
         {
           id: '1',
+          position: 1,
           name: 'Squats',
           description: 'Squats description',
         },
         {
           id: '2',
+          position: 0,
           name: 'Push ups',
           description: 'Push ups description',
         },
       ];
 
       const action = setExercises(exercises);
+
+      const nextState = reducer(initialState, action);
+
+      expect(nextState.values).toEqual(
+        exercises.map((exercise, idx) => ({ ...exercise, position: idx })),
+      );
+
+      expect(db.exercises.bulkPut).toHaveBeenCalledWith(
+        exercises.map((exercise, idx) => ({ ...exercise, position: idx })),
+      );
+    });
+  });
+
+  describe('restore exercises', () => {
+    it('should restore the exercises in the state', () => {
+      const initialState = {
+        values: [],
+      };
+
+      const exercises = [
+        {
+          id: '1',
+          position: 1,
+          name: 'Squats',
+          description: 'Squats description',
+        },
+        {
+          id: '2',
+          position: 0,
+          name: 'Push ups',
+          description: 'Push ups description',
+        },
+      ];
+
+      const action = restoreExercises(exercises);
 
       const nextState = reducer(initialState, action);
 

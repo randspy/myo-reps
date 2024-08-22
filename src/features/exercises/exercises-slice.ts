@@ -18,11 +18,16 @@ const exercisesSlice = createSlice({
   name: 'exercises',
   initialState,
   reducers: {
+    restoreExercises(state, action: PayloadAction<ExerciseValue[]>) {
+      state.values = action.payload.sort((a, b) => a.position - b.position);
+    },
     setExercises(state, action: PayloadAction<ExerciseValue[]>) {
-      state.values = action.payload;
+      const values = updateExercisePositions(action.payload);
+      state.values = values;
+      db.exercises.bulkPut(values);
     },
     addExercise(state, action: PayloadAction<ExerciseFormValues>) {
-      const value = { ...action.payload, id: uuidv4() };
+      const value = createExerciseFromForm(action.payload, state.values.length);
       state.values.push(value);
       db.exercises.add(value);
     },
@@ -42,6 +47,29 @@ const exercisesSlice = createSlice({
   },
 });
 
-export const { addExercise, setExercises, deleteExercise, updateExercise } =
-  exercisesSlice.actions;
+export const {
+  addExercise,
+  setExercises,
+  deleteExercise,
+  updateExercise,
+  restoreExercises,
+} = exercisesSlice.actions;
 export default exercisesSlice.reducer;
+
+function updateExercisePositions(exercises: ExerciseValue[]) {
+  return exercises.map((exercise, idx) => ({
+    ...exercise,
+    position: idx,
+  }));
+}
+
+function createExerciseFromForm(
+  values: ExerciseFormValues,
+  position: number,
+): ExerciseValue {
+  return {
+    ...values,
+    id: uuidv4(),
+    position,
+  };
+}
