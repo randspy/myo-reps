@@ -7,6 +7,7 @@ import reducer, {
 } from '@/features/exercises/exercises-slice';
 import { db } from '@/db';
 import { v4 } from 'uuid';
+import { generateExercise } from '@/lib/test-utils';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(),
@@ -36,17 +37,21 @@ describe('exercises slice', () => {
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toHaveLength(1);
-      expect(nextState.values[0]).toEqual({
-        id,
-        position: 0,
-        ...newExercise,
-      });
+      expect(nextState.values[0]).toEqual(
+        generateExercise({
+          id,
+          position: 0,
+          ...newExercise,
+        }),
+      );
 
-      expect(db.exercises.add).toHaveBeenCalledWith({
-        id,
-        position: 0,
-        ...newExercise,
-      });
+      expect(db.exercises.add).toHaveBeenCalledWith(
+        generateExercise({
+          id,
+          position: 0,
+          ...newExercise,
+        }),
+      );
     });
   });
 
@@ -54,12 +59,10 @@ describe('exercises slice', () => {
     it('should delete an exercise from the state', () => {
       const initialState = {
         values: [
-          {
+          generateExercise({
             id,
             name: 'Squats',
-            description: 'Squats description',
-            position: 0,
-          },
+          }),
         ],
       };
 
@@ -75,21 +78,17 @@ describe('exercises slice', () => {
     it('should update an exercise in the state', () => {
       const initialState = {
         values: [
-          {
+          generateExercise({
             id,
             name: 'Squats',
-            description: 'Squats description',
-            position: 0,
-          },
+          }),
         ],
       };
 
-      const updatedExercise = {
+      const updatedExercise = generateExercise({
         id,
-        position: 0,
         name: 'Push ups',
-        description: 'Push ups description',
-      };
+      });
 
       const action = updateExercise(updatedExercise);
       const nextState = reducer(initialState, action);
@@ -108,18 +107,16 @@ describe('exercises slice', () => {
       };
 
       const exercises = [
-        {
+        generateExercise({
           id: '1',
           position: 1,
           name: 'Squats',
-          description: 'Squats description',
-        },
-        {
+        }),
+        generateExercise({
           id: '2',
           position: 0,
           name: 'Push ups',
-          description: 'Push ups description',
-        },
+        }),
       ];
 
       const action = setExercises(exercises);
@@ -143,18 +140,16 @@ describe('exercises slice', () => {
       };
 
       const exercises = [
-        {
+        generateExercise({
           id: '1',
           position: 1,
           name: 'Squats',
-          description: 'Squats description',
-        },
-        {
+        }),
+        generateExercise({
           id: '2',
           position: 0,
           name: 'Push ups',
-          description: 'Push ups description',
-        },
+        }),
       ];
 
       const action = restoreExercises(exercises);

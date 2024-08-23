@@ -4,6 +4,7 @@ import { WorkoutForm } from '@/app/workouts/WorkoutForm';
 import { configureStore } from '@reduxjs/toolkit';
 import exercisesReducer from '@/features/exercises/exercises-slice';
 import { v4 } from 'uuid';
+import { generateExercise } from '@/lib/test-utils';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(),
@@ -12,12 +13,10 @@ vi.mock('uuid', () => ({
 const initialState = {
   exercises: {
     values: [
-      {
+      generateExercise({
         id: '1',
-        position: 0,
         name: 'Push-up',
-        description: 'Push up description',
-      },
+      }),
     ],
   },
 };

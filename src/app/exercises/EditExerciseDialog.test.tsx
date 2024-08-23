@@ -4,16 +4,16 @@ import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { Provider } from 'react-redux';
 import exercisesReducer from '@/features/exercises/exercises-slice';
 import { configureStore } from '@reduxjs/toolkit';
+import { generateExercise } from '@/lib/test-utils';
 
 const initialState = {
   exercises: {
     values: [
-      {
+      generateExercise({
         id: '1',
         position: 0,
         name: 'Push-up',
-        description: 'Push up description',
-      },
+      }),
     ],
   },
 };
@@ -46,12 +46,10 @@ vi.mock('@/app/exercises/ExerciseForm', () => ({
 }));
 
 describe('Edit exercise', () => {
-  const exercise = {
+  const exercise = generateExercise({
     id: '1',
-    position: 0,
     name: 'Push-up',
-    description: 'Push up description',
-  };
+  });
 
   beforeEach(() => {
     render(

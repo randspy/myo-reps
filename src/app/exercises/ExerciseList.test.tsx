@@ -4,22 +4,21 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import exercisesReducer from '@/features/exercises/exercises-slice';
 import { ExerciseValue } from '@/features/exercises/exercises-schema';
+import { generateExercise } from '@/lib/test-utils';
 
 const initialState = {
   exercises: {
     values: [
-      {
+      generateExercise({
         id: '1',
         name: 'Push-up',
-        description: 'Push up description',
         position: 0,
-      },
-      {
+      }),
+      generateExercise({
         id: '2',
         name: 'Squats',
-        description: 'Squats description',
         position: 1,
-      },
+      }),
     ],
   },
 };

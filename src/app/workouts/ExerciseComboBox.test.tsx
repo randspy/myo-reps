@@ -1,11 +1,12 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ExerciseComboBox } from '@/app/workouts/ExerciseComboBox';
+import { generateExercise } from '@/lib/test-utils';
 
 describe('Exercise selector', () => {
   const exercises = [
-    { id: '1', position: 0, name: 'Push-up' },
-    { id: '2', position: 1, name: 'Squat' },
-    { id: '3', position: 2, name: 'Pull-up' },
+    generateExercise({ id: '1', position: 0, name: 'Push-up' }),
+    generateExercise({ id: '2', position: 1, name: 'Squat' }),
+    generateExercise({ id: '3', position: 2, name: 'Pull-up' }),
   ];
   const selected = { id: '42', exerciseId: '1', sets: 1 };
 

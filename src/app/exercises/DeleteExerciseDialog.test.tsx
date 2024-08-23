@@ -3,16 +3,15 @@ import { DeleteExerciseDialog } from '@/app/exercises/DeleteExerciseDialog';
 import exercisesReducer from '@/features/exercises/exercises-slice';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { generateExercise } from '@/lib/test-utils';
 
 const initialValue = {
   exercises: {
     values: [
-      {
+      generateExercise({
         id: '1',
-        position: 0,
         name: 'Push-up',
-        description: 'Push up description',
-      },
+      }),
     ],
   },
 };
