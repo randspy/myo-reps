@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import exercisesReducer from '@/features/exercises/exercises-slice';
 import workoutsReducer from '@/features/workouts/workouts-slice';
 import {
@@ -9,11 +9,13 @@ import {
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
 
+export const rootReducer = combineReducers({
+  exercises: exercisesReducer,
+  workouts: workoutsReducer,
+});
+
 export const store = configureStore({
-  reducer: {
-    exercises: exercisesReducer,
-    workouts: workoutsReducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 });

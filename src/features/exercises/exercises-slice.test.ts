@@ -1,9 +1,11 @@
 import reducer, {
   addExercise,
   deleteExercise,
+  addUsage,
   restoreExercises,
   setExercises,
   updateExercise,
+  removeUsage,
 } from '@/features/exercises/exercises-slice';
 import { db } from '@/db';
 import { v4 } from 'uuid';
@@ -157,6 +159,48 @@ describe('exercises slice', () => {
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toEqual([exercises[1], exercises[0]]);
+    });
+  });
+
+  describe('usage', () => {
+    it('should add usage to an exercise', () => {
+      const initialState = {
+        values: [
+          generateExercise({
+            id,
+            name: 'Squats',
+            usage: [],
+          }),
+        ],
+      };
+
+      const userId = 'user-id';
+
+      const action = addUsage({ exerciseId: id, userId });
+      const nextState = reducer(initialState, action);
+
+      expect(nextState.values[0].usage).toEqual([{ id: userId }]);
+      expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
+    });
+
+    it('should remove usage from an exercise', () => {
+      const initialState = {
+        values: [
+          generateExercise({
+            id,
+            name: 'Squats',
+            usage: [{ id: 'user-id' }],
+          }),
+        ],
+      };
+
+      const userId = 'user-id';
+
+      const action = removeUsage({ exerciseId: id, userId });
+      const nextState = reducer(initialState, action);
+
+      expect(nextState.values[0].usage).toEqual([]);
+      expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
     });
   });
 });

@@ -23,10 +23,9 @@ const workoutsSlice = createSlice({
       state.values = values;
       db.workouts.bulkPut(values);
     },
-    addWorkout(state, action: PayloadAction<WorkoutFormValues>) {
-      const value = createWorkoutFromForm(action.payload, state.values.length);
-      state.values.push(value);
-      db.workouts.add(value);
+    addWorkout(state, action: PayloadAction<WorkoutValue>) {
+      state.values.push(action.payload);
+      db.workouts.add(action.payload);
     },
     deleteWorkout(state, action: PayloadAction<string>) {
       state.values = state.values.filter(
@@ -60,13 +59,13 @@ function updateWorkoutPositions(workouts: WorkoutValue[]) {
   }));
 }
 
-function createWorkoutFromForm(
+export function createWorkoutFromForm(
   values: WorkoutFormValues,
   position: number,
 ): WorkoutValue {
   return {
-    ...values,
     id: uuidv4(),
     position,
+    ...values,
   };
 }

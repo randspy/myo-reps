@@ -9,20 +9,19 @@ import {
 } from '@/components/ui/dialog';
 import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
-import { useAppDispatch } from '@/store/hooks';
 import { PencilIcon } from 'lucide-react';
-import { updateWorkout } from '@/features/workouts/workouts-slice';
 import { WorkoutValue } from '@/features/workouts/workouts-schema';
 import { WorkoutForm } from './WorkoutForm';
+import { useWorkout } from './hooks/useWorkout';
 
 export const EditWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   workout,
 }) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { dispatchUpdate } = useWorkout();
 
   const submit = (values: ExerciseFormValues) => {
-    dispatch(updateWorkout({ ...workout, ...values }));
+    dispatchUpdate({ ...workout, ...values });
     setOpen(false);
   };
 

@@ -4,16 +4,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import workoutsReducer from '@/features/workouts/workouts-slice';
 import { WorkoutList } from './WorkoutList';
 import { WorkoutValue } from '@/features/workouts/workouts-schema';
+import { generateWorkout } from '@/lib/test-utils';
 
 const initialState = {
   workouts: {
     values: [
-      {
+      generateWorkout({
         id: '1',
         position: 0,
         name: 'Upper body',
-        description: 'Upper body description',
-      },
+      }),
     ],
   },
 };

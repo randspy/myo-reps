@@ -44,6 +44,44 @@ const exercisesSlice = createSlice({
       state.values[index] = action.payload;
       db.exercises.update(action.payload.id, action.payload);
     },
+    addUsage(
+      state,
+      action: PayloadAction<{ exerciseId: string; userId: string }>,
+    ) {
+      const index = state.values.findIndex(
+        (exercise) => exercise.id === action.payload.exerciseId,
+      );
+
+      if (index !== -1) {
+        state.values[index].usage.push({
+          id: action.payload.userId,
+        });
+
+        db.exercises.update(action.payload.exerciseId, {
+          ...state.values[index],
+          usage: state.values[index].usage.map((item) => ({ ...item })),
+        });
+      }
+    },
+    removeUsage(
+      state,
+      action: PayloadAction<{ exerciseId: string; userId: string }>,
+    ) {
+      const index = state.values.findIndex(
+        (exercise) => exercise.id === action.payload.exerciseId,
+      );
+
+      if (index !== -1) {
+        state.values[index].usage = state.values[index].usage.filter(
+          (item) => item.id !== action.payload.userId,
+        );
+
+        db.exercises.update(action.payload.exerciseId, {
+          ...state.values[index],
+          usage: state.values[index].usage.map((item) => ({ ...item })),
+        });
+      }
+    },
   },
 });
 
@@ -53,6 +91,8 @@ export const {
   deleteExercise,
   updateExercise,
   restoreExercises,
+  addUsage,
+  removeUsage,
 } = exercisesSlice.actions;
 export default exercisesSlice.reducer;
 
@@ -71,5 +111,6 @@ function createExerciseFromForm(
     ...values,
     id: uuidv4(),
     position,
+    usage: [],
   };
 }

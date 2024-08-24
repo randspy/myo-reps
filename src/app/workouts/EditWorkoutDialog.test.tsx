@@ -4,16 +4,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { WorkoutFormValues } from '@/features/workouts/workouts-schema';
 import { EditWorkoutDialog } from '@/app/workouts/EditWorkoutDialog';
+import { generateWorkout } from '@/lib/test-utils';
 
 const initialState = {
   workouts: {
     values: [
-      {
+      generateWorkout({
         id: '1',
         position: 0,
         name: 'Upper body',
-        description: 'Upper body description',
-      },
+      }),
     ],
   },
 };

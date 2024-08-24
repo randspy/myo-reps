@@ -5,19 +5,17 @@ export const workoutSchema = z.object({
     message: 'Exercise name must be at least 1 character long',
   }),
   description: z.string().optional(),
-  exercises: z
-    .array(
-      z.object({
-        id: z.string(),
-        exerciseId: z.string().min(1, {
-          message: 'Need to select an exercise',
-        }),
-        sets: z.number().int().min(1, {
-          message: 'Need to have minimum of 1 repetition',
-        }),
+  exercises: z.array(
+    z.object({
+      id: z.string(),
+      exerciseId: z.string().min(1, {
+        message: 'Need to select an exercise',
       }),
-    )
-    .optional(),
+      sets: z.number().int().min(1, {
+        message: 'Need to have minimum of 1 repetition',
+      }),
+    }),
+  ),
 });
 
 export type WorkoutFormValues = z.infer<typeof workoutSchema>;

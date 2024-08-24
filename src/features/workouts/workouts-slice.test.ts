@@ -7,6 +7,7 @@ import reducer, {
 } from '@/features/workouts/workouts-slice';
 import { db } from '@/db';
 import { v4 } from 'uuid';
+import { generateWorkout } from '@/lib/test-utils';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(),
@@ -25,10 +26,10 @@ describe('workout slice', () => {
         values: [],
       };
 
-      const newWorkout = {
+      const newWorkout = generateWorkout({
         name: 'Squats',
-        description: 'Squats description',
-      };
+        id,
+      });
 
       vi.mocked(v4).mockImplementation(() => id);
 
@@ -37,14 +38,10 @@ describe('workout slice', () => {
 
       expect(nextState.values).toHaveLength(1);
       expect(nextState.values[0]).toEqual({
-        id,
-        position: 0,
         ...newWorkout,
       });
 
       expect(db.workouts.add).toHaveBeenCalledWith({
-        id,
-        position: 0,
         ...newWorkout,
       });
     });
@@ -54,12 +51,10 @@ describe('workout slice', () => {
     it('should delete an workout from the state', () => {
       const initialState = {
         values: [
-          {
+          generateWorkout({
             id,
-            position: 0,
             name: 'Squats',
-            description: 'Squats description',
-          },
+          }),
         ],
       };
 
@@ -75,21 +70,17 @@ describe('workout slice', () => {
     it('should update an workout in the state', () => {
       const initialState = {
         values: [
-          {
+          generateWorkout({
             id,
-            position: 0,
             name: 'Squats',
-            description: 'Squats description',
-          },
+          }),
         ],
       };
 
-      const updatedWorkout = {
+      const updatedWorkout = generateWorkout({
         id,
-        position: 0,
         name: 'Push ups',
-        description: 'Push ups description',
-      };
+      });
 
       const action = updateWorkout(updatedWorkout);
       const nextState = reducer(initialState, action);
@@ -108,18 +99,16 @@ describe('workout slice', () => {
       };
 
       const workouts = [
-        {
+        generateWorkout({
           id: '1',
           name: 'Squats',
           position: 1,
-          description: 'Squats description',
-        },
-        {
+        }),
+        generateWorkout({
           id: '2',
           name: 'Push ups',
           position: 0,
-          description: 'Push ups description',
-        },
+        }),
       ];
 
       const action = setWorkouts(workouts);
@@ -143,18 +132,16 @@ describe('workout slice', () => {
       };
 
       const workouts = [
-        {
+        generateWorkout({
           id: '1',
           position: 1,
           name: 'Squats',
-          description: 'Squats description',
-        },
-        {
+        }),
+        generateWorkout({
           id: '2',
           position: 0,
           name: 'Push ups',
-          description: 'Push ups description',
-        },
+        }),
       ];
 
       const action = restoreWorkouts(workouts);

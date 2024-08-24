@@ -10,15 +10,14 @@ import {
 import { useState } from 'react';
 import { WorkoutForm } from '@/app/workouts/WorkoutForm';
 import { WorkoutFormValues } from '@/features/workouts/workouts-schema';
-import { useAppDispatch } from '@/store/hooks';
-import { addWorkout } from '@/features/workouts/workouts-slice';
+import { useWorkout } from './hooks/useWorkout';
 
 export const AddNewWorkoutDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { dispatchAdd } = useWorkout();
 
   const submit = (values: WorkoutFormValues) => {
-    dispatch(addWorkout(values));
+    dispatchAdd(values);
     setOpen(false);
   };
 

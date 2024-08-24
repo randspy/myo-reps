@@ -9,19 +9,18 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useState } from 'react';
-import { useAppDispatch } from '@/store/hooks';
 import { Trash2Icon } from 'lucide-react';
 import { WorkoutValue } from '@/features/workouts/workouts-schema';
-import { deleteWorkout } from '@/features/workouts/workouts-slice';
+import { useWorkout } from './hooks/useWorkout';
 
 export const DeleteWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   workout,
 }) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { dispatchDelete } = useWorkout();
 
   const deleteById = () => {
-    dispatch(deleteWorkout(workout.id));
+    dispatchDelete(workout.id);
     setOpen(false);
   };
 
