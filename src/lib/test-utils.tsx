@@ -64,6 +64,7 @@ export const generateExercise = (
     description: 'Description',
     position: 0,
     usage: [],
+    hidden: false,
     ...values,
   };
 };

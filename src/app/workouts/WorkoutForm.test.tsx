@@ -17,6 +17,11 @@ const initialState = {
         id: '1',
         name: 'Push-up',
       }),
+      generateExercise({
+        id: '2',
+        name: 'Pull-up',
+        hidden: true,
+      }),
     ],
   },
 };
@@ -55,6 +60,20 @@ describe('Workout form', () => {
 
     fireEvent.click(screen.getByText('Add Exercise'));
     expect(screen.getByText('Select Exercise')).toBeInTheDocument();
+  });
+
+  test('select the exercise', () => {
+    render(
+      <Provider store={store}>
+        <WorkoutForm onSubmit={() => {}} />
+      </Provider>,
+    );
+
+    fireEvent.click(screen.getByText('Add Exercise'));
+    fireEvent.click(screen.getByText('Select Exercise'));
+
+    expect(screen.getByText('Push-up')).toBeInTheDocument();
+    expect(screen.queryByText('Pull-up')).not.toBeInTheDocument();
   });
 
   test('submits the form when "Save" button is clicked', async () => {

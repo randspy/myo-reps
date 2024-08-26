@@ -74,6 +74,26 @@ describe('exercises slice', () => {
       expect(nextState.values).toHaveLength(0);
       expect(db.exercises.delete).toHaveBeenCalledWith(id);
     });
+
+    it('should not delete an exercise if it is used but hide it', () => {
+      const initialState = {
+        values: [
+          generateExercise({
+            id,
+            name: 'Squats',
+            usage: [{ id: 'user-id' }],
+          }),
+        ],
+      };
+
+      const action = deleteExercise(id);
+      const nextState = reducer(initialState, action);
+
+      expect(nextState.values).toHaveLength(1);
+      expect(nextState.values[0].hidden).toBe(true);
+      expect(db.exercises.delete).not.toHaveBeenCalled();
+      expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
+    });
   });
 
   describe('update exercise', () => {
@@ -189,7 +209,7 @@ describe('exercises slice', () => {
           generateExercise({
             id,
             name: 'Squats',
-            usage: [{ id: 'user-id' }],
+            usage: [{ id: 'user-id' }, { id: 'another-user-id' }],
           }),
         ],
       };
@@ -199,8 +219,29 @@ describe('exercises slice', () => {
       const action = removeUsage({ exerciseId: id, userId });
       const nextState = reducer(initialState, action);
 
-      expect(nextState.values[0].usage).toEqual([]);
+      expect(nextState.values[0].usage).toEqual([{ id: 'another-user-id' }]);
       expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
+    });
+
+    it('should delete an exercise if it has no usage and is hidden', () => {
+      const initialState = {
+        values: [
+          generateExercise({
+            id,
+            name: 'Squats',
+            usage: [{ id: 'user-id' }],
+            hidden: true,
+          }),
+        ],
+      };
+
+      const userId = 'user-id';
+
+      const action = removeUsage({ exerciseId: id, userId });
+      const nextState = reducer(initialState, action);
+
+      expect(nextState.values).toHaveLength(0);
+      expect(db.exercises.delete).toHaveBeenCalledWith(id);
     });
   });
 });

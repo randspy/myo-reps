@@ -1,12 +1,14 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAppDispatch } from '@/store/hooks';
 import React from 'react';
 import { EditExerciseDialog } from '@/app/exercises/EditExerciseDialog';
 import { DeleteExerciseDialog } from '@/app/exercises/DeleteExerciseDialog';
 import { Reorder } from 'framer-motion';
 import { setExercises } from '@/features/exercises/exercises-slice';
+import { useSelector } from 'react-redux';
+import { selectVisibleExercises } from '@/features/exercises/exercises-selectors';
 
 export const ExerciseList: React.FC = () => {
-  const exercises = useAppSelector((state) => state.exercises.values);
+  const exercises = useSelector(selectVisibleExercises);
   const dispatch = useAppDispatch();
 
   return (

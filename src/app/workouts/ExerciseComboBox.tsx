@@ -28,14 +28,20 @@ import Fuse from 'fuse.js';
 
 export const ExerciseComboBox: React.FC<{
   items: ExerciseValue[];
+  dropdownItems: ExerciseValue[];
   selected: WorkoutExerciseValue | undefined;
   onSelect: (item: WorkoutExerciseValue) => void;
-}> = ({ items, selected = defaultWorkoutExerciseValue, onSelect }) => {
+}> = ({
+  items,
+  dropdownItems,
+  selected = defaultWorkoutExerciseValue,
+  onSelect,
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const fuzzySearch = useMemo(
-    () => new Fuse(items, { keys: ['name'], includeScore: true }),
-    [items],
+    () => new Fuse(dropdownItems, { keys: ['name'], includeScore: true }),
+    [dropdownItems],
   );
 
   const filterItems = (id: string, searchPrompt: string) => {
@@ -92,7 +98,7 @@ export const ExerciseComboBox: React.FC<{
           <CommandList>
             <CommandEmpty>No exercise found.</CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {dropdownItems.map((item) => (
                 <CommandItem
                   key={item.id}
                   value={item.id}

@@ -32,10 +32,26 @@ const exercisesSlice = createSlice({
       db.exercises.add(value);
     },
     deleteExercise(state, action: PayloadAction<string>) {
-      state.values = state.values.filter(
-        (exercise) => exercise.id !== action.payload,
+      const exercise = state.values.find(
+        (exercise) => exercise.id === action.payload,
       );
-      db.exercises.delete(action.payload);
+
+      if (!exercise) {
+        return;
+      }
+
+      if (exercise.usage.length > 0) {
+        exercise.hidden = true;
+        db.exercises.update(action.payload, {
+          ...exercise,
+          usage: exercise.usage.map((item) => ({ ...item })),
+        });
+      } else {
+        state.values = state.values.filter(
+          (exercise) => exercise.id !== action.payload,
+        );
+        db.exercises.delete(action.payload);
+      }
     },
     updateExercise(state, action: PayloadAction<ExerciseValue>) {
       const index = state.values.findIndex(
@@ -72,14 +88,23 @@ const exercisesSlice = createSlice({
       );
 
       if (index !== -1) {
-        state.values[index].usage = state.values[index].usage.filter(
+        const usage = state.values[index].usage.filter(
           (item) => item.id !== action.payload.userId,
         );
 
-        db.exercises.update(action.payload.exerciseId, {
-          ...state.values[index],
-          usage: state.values[index].usage.map((item) => ({ ...item })),
-        });
+        if (!usage.length && state.values[index].hidden) {
+          state.values = state.values.filter(
+            (exercise) => exercise.id !== action.payload.exerciseId,
+          );
+          db.exercises.delete(action.payload.exerciseId);
+        } else {
+          state.values[index].usage = usage;
+
+          db.exercises.update(action.payload.exerciseId, {
+            ...state.values[index],
+            usage: state.values[index].usage.map((item) => ({ ...item })),
+          });
+        }
       }
     },
   },
@@ -112,5 +137,6 @@ function createExerciseFromForm(
     id: uuidv4(),
     position,
     usage: [],
+    hidden: false,
   };
 }
