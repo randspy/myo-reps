@@ -1,6 +1,6 @@
 import { createAction, createListenerMiddleware } from '@reduxjs/toolkit';
-import { restoreExercises } from '@/features/exercises/exercises-slice';
-import { restoreWorkouts } from '@/features/workouts/workouts-slice';
+import { restoreExercises } from '@/app/core/exercises/exercises-slice';
+import { restoreWorkouts } from '@/app/core/workouts/workouts-slice';
 import { db } from '@/db';
 
 const INIT_ACTION_TYPE = 'store/init';

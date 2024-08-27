@@ -1,8 +1,8 @@
 import { App } from '@/App';
 import { Navigate } from 'react-router-dom';
-import { WorkoutsPage } from './workouts/WorkoutsPage';
-import { ExercisesPage } from './exercises/ExercisesPage';
-import { SessionsPage } from './sessions/SessionsPage';
+import { WorkoutsPage } from '@/app/features/workouts/WorkoutsPage';
+import { ExercisesPage } from '@/app/features/exercises/ExercisesPage';
+import { SessionsPage } from '@/app/features/sessions/SessionsPage';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
 

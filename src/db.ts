@@ -1,6 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
-import { ExerciseValue } from './features/exercises/exercises-schema';
-import { WorkoutValue } from './features/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 
 const db = new Dexie('myo-reps') as Dexie & {
   exercises: EntityTable<ExerciseValue, 'id'>;

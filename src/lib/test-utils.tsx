@@ -1,5 +1,5 @@
-import { ExerciseValue } from '@/features/exercises/exercises-schema';
-import { WorkoutValue } from '@/features/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 import { v4 as uuidv4 } from 'uuid';
 import React, { PropsWithChildren } from 'react';
 import { render, renderHook, RenderOptions } from '@testing-library/react';
