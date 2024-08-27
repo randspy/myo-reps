@@ -10,18 +10,18 @@ import {
 } from '@/components/ui/dialog';
 import { ExerciseValue } from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
-import { deleteExercise } from '@/features/exercises/exercises-slice';
-import { useAppDispatch } from '@/store/hooks';
 import { Trash2Icon } from 'lucide-react';
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 
 export const DeleteExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   exercise,
 }) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+
+  const { dispatchDelete } = useExercise();
 
   const deleteById = () => {
-    dispatch(deleteExercise(exercise.id));
+    dispatchDelete(exercise.id);
     setOpen(false);
   };
 

@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useAppSelector } from '@/store/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
@@ -23,8 +22,7 @@ import { NumberScrollWheelSelectorPopover } from '@/app/common/NumberScrollWheel
 import { Trash2Icon } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectVisibleExercises } from '@/features/exercises/exercises-selectors';
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -41,8 +39,7 @@ export const WorkoutForm: React.FC<{
   });
   const [active, setActive] = useState(0);
 
-  const exercises = useAppSelector((state) => state.exercises.values);
-  const availableExercises = useSelector(selectVisibleExercises);
+  const { exercises, activeExercises } = useExercise();
 
   const submit = (values: WorkoutFormValues) => {
     onSubmit(values);
@@ -113,7 +110,7 @@ export const WorkoutForm: React.FC<{
                       <div className="grid w-full grid-cols-[1fr,minmax(7rem,auto)] space-x-2">
                         <ExerciseComboBox
                           items={exercises}
-                          dropdownItems={availableExercises}
+                          dropdownItems={activeExercises}
                           selected={form.getValues(`exercises.${index}`)}
                           onSelect={(item) => {
                             form.setValue(

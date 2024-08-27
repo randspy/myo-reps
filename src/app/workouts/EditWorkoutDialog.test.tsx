@@ -1,10 +1,11 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import workoutsReducer from '@/features/workouts/workouts-slice';
-import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { WorkoutFormValues } from '@/features/workouts/workouts-schema';
 import { EditWorkoutDialog } from '@/app/workouts/EditWorkoutDialog';
-import { generateWorkout } from '@/lib/test-utils';
+import {
+  AppStore,
+  generateWorkout,
+  renderWithProviders,
+} from '@/lib/test-utils';
 
 const initialState = {
   workouts: {
@@ -17,13 +18,6 @@ const initialState = {
     ],
   },
 };
-
-const store = configureStore({
-  reducer: {
-    workouts: workoutsReducer,
-  },
-  preloadedState: initialState,
-});
 
 vi.mock('@/app/workouts/WorkoutForm', () => ({
   WorkoutForm: ({
@@ -48,13 +42,12 @@ vi.mock('@/app/workouts/WorkoutForm', () => ({
 
 describe('Edit workout', () => {
   const workout = initialState.workouts.values[0];
+  let store: AppStore;
 
   beforeEach(() => {
-    render(
-      <Provider store={store}>
-        <EditWorkoutDialog workout={workout} />
-      </Provider>,
-    );
+    store = renderWithProviders(<EditWorkoutDialog workout={workout} />, {
+      preloadedState: initialState,
+    }).store;
 
     fireEvent.click(screen.getByLabelText('Edit workout'));
   });
@@ -73,12 +66,9 @@ describe('Edit workout', () => {
     fireEvent.click(screen.getByTestId('save'));
 
     await waitFor(() => {
-      const state = store.getState();
-      const exercises = state.workouts.values;
-      const workout = exercises.find((workout) => workout.id === '1');
-
-      expect(workout).toBeDefined();
-      expect(workout?.name).toEqual('Mock upper body workout');
+      expect(store.getState().workouts.values[0].name).toEqual(
+        'Mock upper body workout',
+      );
     });
   });
 });

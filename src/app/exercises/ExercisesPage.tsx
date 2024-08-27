@@ -1,10 +1,10 @@
 import { AddNewExerciseDialog } from './AddNewExerciseDialog';
-import { useAppSelector } from '@/store/hooks';
 import { ExerciseList } from '@/app/exercises/ExerciseList';
 import { cn } from '@/lib/utils';
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 
 export const ExercisesPage = () => {
-  const exercises = useAppSelector((state) => state.exercises.values);
+  const { exercises } = useExercise();
 
   return (
     <div

@@ -1,10 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { WorkoutsPage } from '@/app/workouts/WorkoutsPage';
-import { Provider } from 'react-redux';
-import { store as emptyStore } from '@/store/store';
-import { configureStore } from '@reduxjs/toolkit';
-import workoutsReducer from '@/features/workouts/workouts-slice';
-import { generateWorkout } from '@/lib/test-utils';
+import { generateWorkout, renderWithProviders } from '@/lib/test-utils';
 
 const initialState = {
   workouts: {
@@ -18,21 +14,12 @@ const initialState = {
   },
 };
 
-const store = configureStore({
-  reducer: {
-    workouts: workoutsReducer,
-  },
-  preloadedState: initialState,
-});
-
 describe('Workouts page', () => {
   describe('when there are workouts present', () => {
     beforeEach(() => {
-      render(
-        <Provider store={store}>
-          <WorkoutsPage />
-        </Provider>,
-      );
+      renderWithProviders(<WorkoutsPage />, {
+        preloadedState: initialState,
+      });
     });
 
     test('renders workouts list component', () => {
@@ -49,11 +36,8 @@ describe('Workouts page', () => {
   });
 
   test('that it centers the add button when no workouts present', () => {
-    render(
-      <Provider store={emptyStore}>
-        <WorkoutsPage />
-      </Provider>,
-    );
+    renderWithProviders(<WorkoutsPage />);
+
     expect(screen.getByTestId('workouts-page-container')).toHaveClass(
       'justify-center',
     );

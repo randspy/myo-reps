@@ -1,9 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { DeleteExerciseDialog } from '@/app/exercises/DeleteExerciseDialog';
-import exercisesReducer from '@/features/exercises/exercises-slice';
-import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
-import { generateExercise } from '@/lib/test-utils';
+import {
+  AppStore,
+  generateExercise,
+  renderWithProviders,
+} from '@/lib/test-utils';
 
 const initialValue = {
   exercises: {
@@ -16,22 +17,14 @@ const initialValue = {
   },
 };
 
-const store = configureStore({
-  reducer: {
-    exercises: exercisesReducer,
-  },
-  preloadedState: initialValue,
-});
-
 describe('Delete exercise', () => {
   const exercise = initialValue.exercises.values[0];
+  let store: AppStore;
 
   beforeEach(() => {
-    render(
-      <Provider store={store}>
-        <DeleteExerciseDialog exercise={exercise} />{' '}
-      </Provider>,
-    );
+    store = renderWithProviders(<DeleteExerciseDialog exercise={exercise} />, {
+      preloadedState: initialValue,
+    }).store;
 
     fireEvent.click(screen.getByLabelText('Delete exercise'));
   });
@@ -58,10 +51,7 @@ describe('Delete exercise', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {
-      const state = store.getState();
-      const exercises = state.exercises.values;
-
-      expect(exercises.length).toEqual(0);
+      expect(store.getState().exercises.values.length).toEqual(0);
     });
   });
 });

@@ -1,8 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { AddNewExerciseDialog } from './AddNewExerciseDialog';
 import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
-import { Provider } from 'react-redux';
-import { store } from '@/store/store';
+import { AppStore, renderWithProviders } from '@/lib/test-utils';
 
 vi.mock('@/app/exercises/ExerciseForm', () => ({
   ExerciseForm: ({
@@ -24,12 +23,16 @@ vi.mock('@/app/exercises/ExerciseForm', () => ({
 }));
 
 describe('Add new exercise', () => {
+  let store: AppStore;
+
   beforeEach(() => {
-    render(
-      <Provider store={store}>
-        <AddNewExerciseDialog />
-      </Provider>,
-    );
+    store = renderWithProviders(<AddNewExerciseDialog />, {
+      preloadedState: {
+        exercises: {
+          values: [],
+        },
+      },
+    }).store;
 
     fireEvent.click(
       screen.getByRole('button', {
@@ -52,13 +55,7 @@ describe('Add new exercise', () => {
     fireEvent.click(screen.getByTestId('save'));
 
     await waitFor(() => {
-      const state = store.getState();
-      const exercises = state.exercises.values;
-      const newExercise = exercises.find(
-        (exercise) => exercise.name === 'Mock Push up',
-      );
-
-      expect(newExercise).toBeDefined();
+      expect(store.getState().exercises.values[0].name).toEqual('Mock Push up');
     });
   });
 });

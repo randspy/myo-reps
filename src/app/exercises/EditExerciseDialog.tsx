@@ -13,23 +13,20 @@ import {
   ExerciseFormValues,
 } from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
-import { updateExercise } from '@/features/exercises/exercises-slice';
-import { useAppDispatch } from '@/store/hooks';
 import { PencilIcon } from 'lucide-react';
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 
 export const EditExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   exercise,
 }) => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { dispatchUpdate } = useExercise();
 
   const submit = (values: ExerciseFormValues) => {
-    dispatch(
-      updateExercise({
-        ...exercise,
-        ...values,
-      }),
-    );
+    dispatchUpdate({
+      ...exercise,
+      ...values,
+    });
     setOpen(false);
   };
 

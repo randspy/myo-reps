@@ -1,29 +1,22 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { EditExerciseDialog } from './EditExerciseDialog';
 import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
-import { Provider } from 'react-redux';
-import exercisesReducer from '@/features/exercises/exercises-slice';
-import { configureStore } from '@reduxjs/toolkit';
-import { generateExercise } from '@/lib/test-utils';
+import {
+  AppStore,
+  generateExercise,
+  renderWithProviders,
+} from '@/lib/test-utils';
 
 const initialState = {
   exercises: {
     values: [
       generateExercise({
         id: '1',
-        position: 0,
         name: 'Push-up',
       }),
     ],
   },
 };
-
-const store = configureStore({
-  reducer: {
-    exercises: exercisesReducer,
-  },
-  preloadedState: initialState,
-});
 
 vi.mock('@/app/exercises/ExerciseForm', () => ({
   ExerciseForm: ({
@@ -50,13 +43,12 @@ describe('Edit exercise', () => {
     id: '1',
     name: 'Push-up',
   });
+  let store: AppStore;
 
   beforeEach(() => {
-    render(
-      <Provider store={store}>
-        <EditExerciseDialog exercise={exercise} />
-      </Provider>,
-    );
+    store = renderWithProviders(<EditExerciseDialog exercise={exercise} />, {
+      preloadedState: initialState,
+    }).store;
 
     fireEvent.click(screen.getByLabelText('Edit exercise'));
   });
@@ -75,12 +67,7 @@ describe('Edit exercise', () => {
     fireEvent.click(screen.getByTestId('save'));
 
     await waitFor(() => {
-      const state = store.getState();
-      const exercises = state.exercises.values;
-      const exercise = exercises.find((exercise) => exercise.id === '1');
-
-      expect(exercise).toBeDefined();
-      expect(exercise?.name).toEqual('Mock Push up');
+      expect(store.getState().exercises.values[0].name).toEqual('Mock Push up');
     });
   });
 });

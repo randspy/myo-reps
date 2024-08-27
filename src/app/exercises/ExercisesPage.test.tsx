@@ -1,10 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { ExercisesPage } from '@/app/exercises/ExercisesPage';
-import { Provider } from 'react-redux';
-import { store as emptyStore } from '@/store/store';
-import { configureStore } from '@reduxjs/toolkit';
-import exercisesReducer from '@/features/exercises/exercises-slice';
-import { generateExercise } from '@/lib/test-utils';
+import { generateExercise, renderWithProviders } from '@/lib/test-utils';
 
 const initialState = {
   exercises: {
@@ -23,20 +19,11 @@ const initialState = {
   },
 };
 
-const store = configureStore({
-  reducer: {
-    exercises: exercisesReducer,
-  },
-  preloadedState: initialState,
-});
-
 describe('Exercise page', () => {
   test('renders ExerciseList component', () => {
-    render(
-      <Provider store={store}>
-        <ExercisesPage />
-      </Provider>,
-    );
+    renderWithProviders(<ExercisesPage />, {
+      preloadedState: initialState,
+    });
 
     initialState.exercises.values.forEach((exercise) => {
       const exerciseElement = screen.getByText(exercise.name);
@@ -46,11 +33,9 @@ describe('Exercise page', () => {
   });
 
   test('renders ExerciseList component', () => {
-    render(
-      <Provider store={store}>
-        <ExercisesPage />
-      </Provider>,
-    );
+    renderWithProviders(<ExercisesPage />, {
+      preloadedState: initialState,
+    });
 
     initialState.exercises.values.forEach((exercise) => {
       const exerciseElement = screen.getByText(exercise.name);
@@ -60,22 +45,16 @@ describe('Exercise page', () => {
   });
 
   test('that it centers the add button when no exercises present', () => {
-    render(
-      <Provider store={emptyStore}>
-        <ExercisesPage />
-      </Provider>,
-    );
+    renderWithProviders(<ExercisesPage />);
 
     const container = screen.getByTestId('exercises-page-container');
     expect(container).toHaveClass('justify-center');
   });
 
   test("that it doesn't centers the add button when there are exercises present", () => {
-    render(
-      <Provider store={store}>
-        <ExercisesPage />
-      </Provider>,
-    );
+    renderWithProviders(<ExercisesPage />, {
+      preloadedState: initialState,
+    });
 
     const container = screen.getByTestId('exercises-page-container');
     expect(container).not.toHaveClass('justify-center');

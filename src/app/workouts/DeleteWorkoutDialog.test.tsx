@@ -1,9 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import workoutsReducer from '@/features/workouts/workouts-slice';
-import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { DeleteWorkoutDialog } from '@/app/workouts/DeleteWorkoutDialog';
-import { generateWorkout } from '@/lib/test-utils';
+import {
+  AppStore,
+  generateWorkout,
+  renderWithProviders,
+} from '@/lib/test-utils';
 
 const initialValue = {
   workouts: {
@@ -17,22 +18,14 @@ const initialValue = {
   },
 };
 
-const store = configureStore({
-  reducer: {
-    workouts: workoutsReducer,
-  },
-  preloadedState: initialValue,
-});
-
 describe('Delete workout', () => {
   const workout = initialValue.workouts.values[0];
+  let store: AppStore;
 
   beforeEach(() => {
-    render(
-      <Provider store={store}>
-        <DeleteWorkoutDialog workout={workout} />{' '}
-      </Provider>,
-    );
+    store = renderWithProviders(<DeleteWorkoutDialog workout={workout} />, {
+      preloadedState: initialValue,
+    }).store;
 
     fireEvent.click(screen.getByLabelText('Delete workout'));
   });
@@ -59,10 +52,7 @@ describe('Delete workout', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {
-      const state = store.getState();
-      const workouts = state.workouts.values;
-
-      expect(workouts.length).toEqual(0);
+      expect(store.getState().workouts.values.length).toEqual(0);
     });
   });
 });

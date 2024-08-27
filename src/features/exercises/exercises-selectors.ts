@@ -3,7 +3,7 @@ import { RootState } from '@/store/store';
 
 const selectAllExercises = (state: RootState) => state.exercises.values;
 
-export const selectVisibleExercises = createSelector(
+export const selectActiveExercises = createSelector(
   [selectAllExercises],
   (exercises) => exercises.filter((exercise) => !exercise.hidden),
 );

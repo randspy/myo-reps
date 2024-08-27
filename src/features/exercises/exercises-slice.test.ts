@@ -1,11 +1,10 @@
 import reducer, {
   addExercise,
   deleteExercise,
-  addUsage,
   restoreExercises,
   setExercises,
   updateExercise,
-  removeUsage,
+  hideExercise,
 } from '@/features/exercises/exercises-slice';
 import { db } from '@/db';
 import { v4 } from 'uuid';
@@ -28,10 +27,10 @@ describe('exercises slice', () => {
         values: [],
       };
 
-      const newExercise = {
+      const newExercise = generateExercise({
         name: 'Squats',
         description: 'Squats description',
-      };
+      });
 
       vi.mocked(v4).mockImplementation(() => id);
 
@@ -39,20 +38,10 @@ describe('exercises slice', () => {
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toHaveLength(1);
-      expect(nextState.values[0]).toEqual(
-        generateExercise({
-          id,
-          position: 0,
-          ...newExercise,
-        }),
-      );
+      expect(nextState.values[0]).toEqual(newExercise);
 
       expect(db.exercises.add).toHaveBeenCalledWith(
-        generateExercise({
-          id,
-          position: 0,
-          ...newExercise,
-        }),
+        generateExercise(newExercise),
       );
     });
   });
@@ -74,24 +63,24 @@ describe('exercises slice', () => {
       expect(nextState.values).toHaveLength(0);
       expect(db.exercises.delete).toHaveBeenCalledWith(id);
     });
+  });
 
-    it('should not delete an exercise if it is used but hide it', () => {
+  describe('hide exercise', () => {
+    it('should hide an exercise in the state', () => {
       const initialState = {
         values: [
           generateExercise({
             id,
             name: 'Squats',
-            usage: [{ id: 'user-id' }],
           }),
         ],
       };
 
-      const action = deleteExercise(id);
+      const action = hideExercise(id);
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toHaveLength(1);
       expect(nextState.values[0].hidden).toBe(true);
-      expect(db.exercises.delete).not.toHaveBeenCalled();
       expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
     });
   });
@@ -179,69 +168,6 @@ describe('exercises slice', () => {
       const nextState = reducer(initialState, action);
 
       expect(nextState.values).toEqual([exercises[1], exercises[0]]);
-    });
-  });
-
-  describe('usage', () => {
-    it('should add usage to an exercise', () => {
-      const initialState = {
-        values: [
-          generateExercise({
-            id,
-            name: 'Squats',
-            usage: [],
-          }),
-        ],
-      };
-
-      const userId = 'user-id';
-
-      const action = addUsage({ exerciseId: id, userId });
-      const nextState = reducer(initialState, action);
-
-      expect(nextState.values[0].usage).toEqual([{ id: userId }]);
-      expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
-    });
-
-    it('should remove usage from an exercise', () => {
-      const initialState = {
-        values: [
-          generateExercise({
-            id,
-            name: 'Squats',
-            usage: [{ id: 'user-id' }, { id: 'another-user-id' }],
-          }),
-        ],
-      };
-
-      const userId = 'user-id';
-
-      const action = removeUsage({ exerciseId: id, userId });
-      const nextState = reducer(initialState, action);
-
-      expect(nextState.values[0].usage).toEqual([{ id: 'another-user-id' }]);
-      expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
-    });
-
-    it('should delete an exercise if it has no usage and is hidden', () => {
-      const initialState = {
-        values: [
-          generateExercise({
-            id,
-            name: 'Squats',
-            usage: [{ id: 'user-id' }],
-            hidden: true,
-          }),
-        ],
-      };
-
-      const userId = 'user-id';
-
-      const action = removeUsage({ exerciseId: id, userId });
-      const nextState = reducer(initialState, action);
-
-      expect(nextState.values).toHaveLength(0);
-      expect(db.exercises.delete).toHaveBeenCalledWith(id);
     });
   });
 });

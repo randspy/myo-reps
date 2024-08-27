@@ -10,15 +10,14 @@ import {
 import { ExerciseForm } from '@/app/exercises/ExerciseForm';
 import { ExerciseFormValues } from '@/features/exercises/exercises-schema';
 import { useState } from 'react';
-import { addExercise } from '@/features/exercises/exercises-slice';
-import { useAppDispatch } from '@/store/hooks';
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 
 export const AddNewExerciseDialog: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const { dispatchAdd } = useExercise();
 
   const submit = (values: ExerciseFormValues) => {
-    dispatch(addExercise(values));
+    dispatchAdd(values);
     setOpen(false);
   };
 

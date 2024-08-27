@@ -1,24 +1,21 @@
-import { useAppDispatch } from '@/store/hooks';
 import React from 'react';
 import { EditExerciseDialog } from '@/app/exercises/EditExerciseDialog';
 import { DeleteExerciseDialog } from '@/app/exercises/DeleteExerciseDialog';
 import { Reorder } from 'framer-motion';
-import { setExercises } from '@/features/exercises/exercises-slice';
-import { useSelector } from 'react-redux';
-import { selectVisibleExercises } from '@/features/exercises/exercises-selectors';
+
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 
 export const ExerciseList: React.FC = () => {
-  const exercises = useSelector(selectVisibleExercises);
-  const dispatch = useAppDispatch();
+  const { activeExercises, dispatchSet } = useExercise();
 
   return (
     <div className="w-full">
       <Reorder.Group
         className="flex flex-col items-center"
-        values={exercises}
-        onReorder={(values) => dispatch(setExercises(values))}
+        values={activeExercises}
+        onReorder={(values) => dispatchSet(values)}
       >
-        {exercises?.map((exercise) => (
+        {activeExercises?.map((exercise) => (
           <Reorder.Item
             key={exercise.id}
             value={exercise}

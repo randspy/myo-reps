@@ -1,4 +1,4 @@
-import { addUsage, removeUsage } from '@/features/exercises/exercises-slice';
+import { useExercise } from '@/features/exercises/hooks/useExercise';
 import {
   WorkoutFormValues,
   WorkoutValue,
@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 export const useWorkout = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
+  const { dispatchAddUsage, dispatchRemoveUsage } = useExercise();
 
   const dispatch = useAppDispatch();
 
@@ -25,7 +26,7 @@ export const useWorkout = () => {
     );
 
     for (const exerciseId of distinctExercises) {
-      dispatch(addUsage({ exerciseId: exerciseId, userId: workout.id }));
+      dispatchAddUsage({ exerciseId: exerciseId, userId: workout.id });
     }
   }
 
@@ -52,21 +53,17 @@ export const useWorkout = () => {
     });
 
     for (const exercise of addedExercises) {
-      dispatch(
-        addUsage({
-          exerciseId: exercise.exerciseId,
-          userId: updatedWorkout.id,
-        }),
-      );
+      dispatchAddUsage({
+        exerciseId: exercise.exerciseId,
+        userId: updatedWorkout.id,
+      });
     }
 
     for (const exercise of removedExercises) {
-      dispatch(
-        removeUsage({
-          exerciseId: exercise.exerciseId,
-          userId: updatedWorkout.id,
-        }),
-      );
+      dispatchRemoveUsage({
+        exerciseId: exercise.exerciseId,
+        userId: updatedWorkout.id,
+      });
     }
   }
 
@@ -77,7 +74,7 @@ export const useWorkout = () => {
       workouts.find((workout) => workout.id === id)?.exercises || [];
 
     for (const exercise of exercises) {
-      dispatch(removeUsage({ exerciseId: exercise.exerciseId, userId: id }));
+      dispatchRemoveUsage({ exerciseId: exercise.exerciseId, userId: id });
     }
   }
 
