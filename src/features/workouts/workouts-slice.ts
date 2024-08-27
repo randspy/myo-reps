@@ -1,7 +1,7 @@
 import { db } from '@/db';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { v4 as uuidv4 } from 'uuid';
-import { WorkoutFormValues, WorkoutValue } from './workouts-schema';
+
+import { WorkoutValue } from './workouts-schema';
 
 interface WorkoutState {
   values: WorkoutValue[];
@@ -57,15 +57,4 @@ function updateWorkoutPositions(workouts: WorkoutValue[]) {
     ...workout,
     position: idx,
   }));
-}
-
-export function createWorkoutFromForm(
-  values: WorkoutFormValues,
-  position: number,
-): WorkoutValue {
-  return {
-    id: uuidv4(),
-    position,
-    ...values,
-  };
 }

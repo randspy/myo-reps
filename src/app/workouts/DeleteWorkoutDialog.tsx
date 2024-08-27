@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { Trash2Icon } from 'lucide-react';
 import { WorkoutValue } from '@/features/workouts/workouts-schema';
-import { useWorkout } from './hooks/useWorkout';
+import { useWorkout } from '@/features/workouts/hooks/useWorkout';
 
 export const DeleteWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   workout,

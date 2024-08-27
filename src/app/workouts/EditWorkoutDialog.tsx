@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { PencilIcon } from 'lucide-react';
 import { WorkoutValue } from '@/features/workouts/workouts-schema';
 import { WorkoutForm } from './WorkoutForm';
-import { useWorkout } from './hooks/useWorkout';
+import { useWorkout } from '@/features/workouts/hooks/useWorkout';
 
 export const EditWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   workout,

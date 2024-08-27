@@ -5,11 +5,11 @@ import {
 } from '@/features/workouts/workouts-schema';
 import {
   addWorkout,
-  createWorkoutFromForm,
   deleteWorkout,
   updateWorkout,
 } from '@/features/workouts/workouts-slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { v4 as uuidv4 } from 'uuid';
 
 export const useWorkout = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
@@ -85,3 +85,14 @@ export const useWorkout = () => {
     dispatchDelete,
   };
 };
+
+export function createWorkoutFromForm(
+  values: WorkoutFormValues,
+  position: number,
+): WorkoutValue {
+  return {
+    id: uuidv4(),
+    position,
+    ...values,
+  };
+}

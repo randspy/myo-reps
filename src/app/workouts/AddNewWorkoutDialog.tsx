@@ -10,7 +10,7 @@ import {
 import { useState } from 'react';
 import { WorkoutForm } from '@/app/workouts/WorkoutForm';
 import { WorkoutFormValues } from '@/features/workouts/workouts-schema';
-import { useWorkout } from './hooks/useWorkout';
+import { useWorkout } from '@/features/workouts/hooks/useWorkout';
 
 export const AddNewWorkoutDialog: React.FC = () => {
   const [open, setOpen] = useState(false);

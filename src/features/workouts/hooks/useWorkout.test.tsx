@@ -1,4 +1,4 @@
-import { useWorkout } from '@/app/workouts/hooks/useWorkout';
+import { useWorkout } from '@/features/workouts/hooks/useWorkout';
 import {
   generateExercise,
   generateWorkout,
