@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { WorkoutsPage } from '@/app/features/workouts/WorkoutsPage';
 import { ExercisesPage } from '@/app/features/exercises/ExercisesPage';
 import { SessionsPage } from '@/app/features/sessions/SessionsPage';
+import { PageNotFound } from '@/app/layout/PageNotFound';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
 
@@ -34,6 +35,10 @@ export const routes = [
         path: key,
         element: routePaths[key].element,
       })),
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
 ];
