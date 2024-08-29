@@ -4,6 +4,7 @@ import { WorkoutsPage } from '@/app/features/workouts/WorkoutsPage';
 import { ExercisesPage } from '@/app/features/exercises/ExercisesPage';
 import { SessionsPage } from '@/app/features/sessions/SessionsPage';
 import { PageNotFound } from '@/app/layout/PageNotFound';
+import { ErrorPage } from '@/app/layout/ErrorPage';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
 
@@ -34,6 +35,7 @@ export const routes = [
       ...Object.keys(routePaths).map((key) => ({
         path: key,
         element: routePaths[key].element,
+        errorElement: <ErrorPage />,
       })),
       {
         path: '*',
