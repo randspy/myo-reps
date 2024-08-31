@@ -11,7 +11,7 @@
     --dark-grey: 235, 12%, 19%;
     --grey: 236, 11%, 27%;
     --medium-gray: 216 15% 57%;
-    --light-grey: 221 69% 94%;
+    --light-grey: 221 69% 91%;
     --very-light-grey: 220 69% 97%;
     --white: 210 40% 98%;
     --purple: 242, 48%, 58%;
@@ -20,8 +20,8 @@
     --background: var(--light-grey);
     --background-secondary: var(--white);
     --foreground: var(--black);
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: var(--white);
+    --card-foreground: var(--black);
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: var(--purple);
@@ -49,8 +49,8 @@
     --background: var(--very-dark-grey);
     --background-secondary: var(--dark-grey);
     --foreground: var(--white);
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: var(--dark-grey);
+    --card-foreground: var(--white);
     --popover: var(--dark-grey);
     --popover-foreground: var(--white);
     --primary: var(--purple);

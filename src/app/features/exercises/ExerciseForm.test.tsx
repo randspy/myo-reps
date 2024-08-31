@@ -3,7 +3,7 @@ import { ExerciseForm } from './ExerciseForm';
 
 describe('Exercise form', () => {
   test('renders form fields correctly', () => {
-    render(<ExerciseForm onSubmit={() => {}} />);
+    render(<ExerciseForm onSubmit={() => {}} onCancel={() => {}} />);
 
     expect(screen.getByLabelText('Exercise Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
@@ -11,7 +11,7 @@ describe('Exercise form', () => {
   });
 
   test('renders form fields with default values', () => {
-    render(<ExerciseForm onSubmit={() => {}} />);
+    render(<ExerciseForm onSubmit={() => {}} onCancel={() => {}} />);
 
     expect(screen.getByLabelText('Exercise Name')).toHaveValue('');
     expect(screen.getByLabelText('Description')).toHaveValue('');
@@ -21,6 +21,7 @@ describe('Exercise form', () => {
     render(
       <ExerciseForm
         onSubmit={() => {}}
+        onCancel={() => {}}
         values={{
           name: 'Push-ups',
           description: 'Perform push-ups exercise',
@@ -41,6 +42,7 @@ describe('Exercise form', () => {
         onSubmit={(values) => {
           onSubmitMock(values);
         }}
+        onCancel={() => {}}
       />,
     );
 
@@ -58,5 +60,37 @@ describe('Exercise form', () => {
         description: 'Perform push-ups exercise',
       });
     });
+  });
+
+  test('calls onCancel when cancel button is clicked', () => {
+    const onCancelMock = vi.fn();
+    render(
+      <ExerciseForm
+        onSubmit={() => {}}
+        onCancel={() => {
+          onCancelMock();
+        }}
+      />,
+    );
+
+    fireEvent.click(screen.getByText('Cancel'));
+
+    expect(onCancelMock).toHaveBeenCalled();
+  });
+
+  test('opens dialog when cancel button is clicked and form is dirty', () => {
+    render(<ExerciseForm onSubmit={() => {}} onCancel={() => {}} />);
+
+    fireEvent.change(screen.getByLabelText('Exercise Name'), {
+      target: { value: 'Push-ups' },
+    });
+
+    fireEvent.click(screen.getByText('Cancel'));
+
+    expect(
+      screen.getByText(
+        "Are you sure you don't want to keep the modifications?",
+      ),
+    ).toBeInTheDocument();
   });
 });

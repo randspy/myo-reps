@@ -8,7 +8,7 @@ export const MainLayout: React.FC = () => {
       <div className="fixed left-0 top-0 w-dvw">
         <Header />
       </div>
-      <div className="ml-0 mt-20 h-[calc(100dvh_-_20rem)] py-1 md:ml-48">
+      <div className="ml-0 mt-20 h-[calc(100dvh_-_7rem)] py-1 md:ml-48">
         <Outlet />
       </div>
     </ThemeProvider>

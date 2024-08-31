@@ -9,7 +9,8 @@ export type SidebarProps = {
 };
 
 export function Sidebar({ tabs, path, close }: SidebarProps) {
-  const activeTab = tabs[path];
+  const matchingTab = Object.keys(tabs).find((tab) => path.includes(tab));
+  const activeTab = matchingTab ? tabs[matchingTab] : null;
 
   return (
     <div
@@ -25,7 +26,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
             <Link
               to={key}
               className={cn(
-                'focus-visible:shadow-outline m-2 mr-6 block rounded-sm outline-none hover:opacity-90',
+                'm-2 mr-6 block rounded-sm outline-none hover:opacity-90 focus-visible:shadow-outline',
                 activeTab?.title !== tabs[key]?.title &&
                   'hover:hover:bg-accent',
               )}

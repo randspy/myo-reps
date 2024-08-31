@@ -1,7 +1,7 @@
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { Sidebar } from '@/app/layout/Sidebar';
 import { useLocation } from 'react-router-dom';
-import { routePaths } from '../routes';
+import { sideBarRoutePaths } from '../routes';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import { LegacyRef, useState } from 'react';
@@ -32,7 +32,7 @@ export function Header() {
         </div>
 
         <h2 className="text-lg" data-testid="title">
-          {routePaths[location.pathname]?.title}
+          {sideBarRoutePaths[location.pathname]?.title}
         </h2>
         <div className="ml-auto mr-4">
           <ModeToggle />
@@ -46,7 +46,7 @@ export function Header() {
         )}
       >
         <Sidebar
-          tabs={routePaths}
+          tabs={sideBarRoutePaths}
           path={location.pathname}
           close={() => setIsSidebarOpen(false)}
         />
