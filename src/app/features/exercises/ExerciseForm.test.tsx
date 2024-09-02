@@ -35,7 +35,35 @@ describe('Exercise form', () => {
     );
   });
 
-  test('calls onSubmit with form values when submit button is clicked', async () => {
+  test('saves changes to local storage', () => {
+    render(
+      <ExerciseForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        values={{
+          name: 'Push-ups',
+          description: 'Perform push-ups exercise',
+        }}
+      />,
+    );
+
+    fireEvent.change(screen.getByLabelText('Exercise Name'), {
+      target: { value: 'New push-ups' },
+    });
+    fireEvent.change(screen.getByLabelText('Description'), {
+      target: { value: 'New perform push-ups exercise' },
+    });
+
+    const storedData = JSON.parse(localStorage.getItem('exercises') || '{}');
+
+    expect(storedData).toMatchObject({
+      name: 'New push-ups',
+      description: 'New perform push-ups exercise',
+    });
+    expect(storedData._timestamp).toBeDefined();
+  });
+
+  test('submits form', async () => {
     const onSubmitMock = vi.fn();
     render(
       <ExerciseForm
@@ -60,9 +88,11 @@ describe('Exercise form', () => {
         description: 'Perform push-ups exercise',
       });
     });
+
+    expect(localStorage.getItem('exercises')).toBeNull();
   });
 
-  test('calls onCancel when cancel button is clicked', () => {
+  test('cancels form', () => {
     const onCancelMock = vi.fn();
     render(
       <ExerciseForm
@@ -78,19 +108,32 @@ describe('Exercise form', () => {
     expect(onCancelMock).toHaveBeenCalled();
   });
 
-  test('opens dialog when cancel button is clicked and form is dirty', () => {
-    render(<ExerciseForm onSubmit={() => {}} onCancel={() => {}} />);
+  test('resets form', () => {
+    render(
+      <ExerciseForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        values={{
+          name: 'Push-ups',
+          description: 'Perform push-ups exercise',
+        }}
+      />,
+    );
 
     fireEvent.change(screen.getByLabelText('Exercise Name'), {
-      target: { value: 'Push-ups' },
+      target: { value: 'Squats' },
+    });
+    fireEvent.change(screen.getByLabelText('Description'), {
+      target: { value: 'Perform squats exercise' },
     });
 
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getByText('Reset'));
 
-    expect(
-      screen.getByText(
-        "Are you sure you don't want to keep the modifications?",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Exercise Name')).toHaveValue('Push-ups');
+    expect(screen.getByLabelText('Description')).toHaveValue(
+      'Perform push-ups exercise',
+    );
+
+    expect(localStorage.getItem('exercises')).toBeNull();
   });
 });

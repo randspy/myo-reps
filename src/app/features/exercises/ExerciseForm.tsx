@@ -17,8 +17,7 @@ import {
   exerciseSchema,
   ExerciseFormValues,
 } from '@/app/core/exercises/exercises-schema';
-import { ModifiedFormDialog } from '@/app/ui/ModifiedFormDialog';
-import { useState } from 'react';
+import { usePersistForm } from '@/app/core/hooks/usePersistentForm';
 
 export const ExerciseForm: React.FC<{
   onSubmit: (values: ExerciseFormValues) => void;
@@ -30,23 +29,21 @@ export const ExerciseForm: React.FC<{
     values,
   });
 
-  const isDirty = form.formState.isDirty;
+  const { clear } = usePersistForm<ExerciseFormValues>('exercises', {
+    watch: form.watch,
+    setValue: form.setValue,
+  });
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  function cancel() {
-    if (isDirty) {
-      setDialogOpen(true);
-    } else {
-      onCancel();
-    }
-  }
+  const submit = (values: ExerciseFormValues) => {
+    onSubmit(values);
+    clear();
+  };
 
   return (
     <>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(submit)}
           className="space-y-6"
           data-testid="add-new-exercise-form"
         >
@@ -77,22 +74,26 @@ export const ExerciseForm: React.FC<{
             )}
           />
 
-          <div className="flex flex-col-reverse justify-between gap-4 md:flex-row">
-            <Button type="button" variant="outline" onClick={cancel}>
+          <div className="flex flex-col-reverse gap-4 md:flex-row">
+            <Button type="button" variant="outline" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                form.reset();
+                clear();
+              }}
+            >
+              Reset
+            </Button>
+            <Button className="md:ml-auto" type="submit">
+              Save
+            </Button>
           </div>
         </form>
       </Form>
-      <ModifiedFormDialog
-        open={dialogOpen}
-        cancel={() => setDialogOpen(false)}
-        ok={() => {
-          setDialogOpen(false);
-          onCancel();
-        }}
-      />
     </>
   );
 };
