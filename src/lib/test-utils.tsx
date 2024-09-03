@@ -1,12 +1,17 @@
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 import { v4 as uuidv4 } from 'uuid';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import { render, renderHook, RenderOptions } from '@testing-library/react';
 import { configureStore } from '@reduxjs/toolkit';
 
 import { Provider } from 'react-redux';
 import { rootReducer, RootState } from '@/store/store';
+import {
+  createMemoryRouter,
+  RouteObject,
+  RouterProvider,
+} from 'react-router-dom';
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {
   return configureStore({
@@ -53,6 +58,26 @@ export function renderHookWithProviders<T>(
     store,
     ...renderHook(hookFunction, { wrapper: Wrapper, ...renderOptions }),
   };
+}
+
+interface RenderWithRouterOptions {
+  element: ReactElement;
+  path: string;
+}
+
+export function renderWithRouter(
+  children: ReactElement | RenderWithRouterOptions,
+  routes: RouteObject[] = [],
+) {
+  const options = { element: children, path: '/' };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const router = createMemoryRouter([{ ...options } as any, ...routes], {
+    initialEntries: [options.path],
+    initialIndex: 1,
+  });
+
+  return render(<RouterProvider router={router} />);
 }
 
 export const generateExercise = (

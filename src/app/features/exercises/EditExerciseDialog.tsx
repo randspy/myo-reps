@@ -42,7 +42,12 @@ export const EditExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
           <DialogTitle>Edit Exercise</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <ExerciseForm onSubmit={submit} onCancel={() => {}} values={exercise} />
+        <ExerciseForm
+          onSubmit={submit}
+          onCancel={() => {}}
+          onDirtyChange={() => {}}
+          values={exercise}
+        />
       </DialogContent>
     </Dialog>
   );

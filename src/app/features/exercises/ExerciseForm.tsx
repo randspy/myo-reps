@@ -17,27 +17,30 @@ import {
   exerciseSchema,
   ExerciseFormValues,
 } from '@/app/core/exercises/exercises-schema';
-import { usePersistForm } from '@/app/core/hooks/usePersistentForm';
+import { useEffect } from 'react';
 
 export const ExerciseForm: React.FC<{
   onSubmit: (values: ExerciseFormValues) => void;
   onCancel: () => void;
+  onDirtyChange: (isDirty: boolean) => void;
   values?: ExerciseFormValues;
-}> = ({ onSubmit, onCancel, values = defaultValues }) => {
+}> = ({ onSubmit, onCancel, onDirtyChange, values = defaultValues }) => {
   const form = useForm<ExerciseFormValues>({
     resolver: zodResolver(exerciseSchema),
     values,
   });
 
-  const { clear } = usePersistForm<ExerciseFormValues>('exercises', {
-    watch: form.watch,
-    setValue: form.setValue,
-  });
+  const {
+    formState: { isDirty },
+  } = form;
 
   const submit = (values: ExerciseFormValues) => {
     onSubmit(values);
-    clear();
   };
+
+  useEffect(() => {
+    onDirtyChange(isDirty);
+  }, [isDirty]);
 
   return (
     <>
@@ -83,7 +86,6 @@ export const ExerciseForm: React.FC<{
               variant="outline"
               onClick={() => {
                 form.reset();
-                clear();
               }}
             >
               Reset

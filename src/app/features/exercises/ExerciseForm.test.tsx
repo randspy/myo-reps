@@ -1,9 +1,15 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { ExerciseForm } from './ExerciseForm';
 
 describe('Exercise form', () => {
   test('renders form fields correctly', () => {
-    render(<ExerciseForm onSubmit={() => {}} onCancel={() => {}} />);
+    render(
+      <ExerciseForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
+    );
 
     expect(screen.getByLabelText('Exercise Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
@@ -11,7 +17,13 @@ describe('Exercise form', () => {
   });
 
   test('renders form fields with default values', () => {
-    render(<ExerciseForm onSubmit={() => {}} onCancel={() => {}} />);
+    render(
+      <ExerciseForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
+    );
 
     expect(screen.getByLabelText('Exercise Name')).toHaveValue('');
     expect(screen.getByLabelText('Description')).toHaveValue('');
@@ -22,6 +34,7 @@ describe('Exercise form', () => {
       <ExerciseForm
         onSubmit={() => {}}
         onCancel={() => {}}
+        onDirtyChange={() => {}}
         values={{
           name: 'Push-ups',
           description: 'Perform push-ups exercise',
@@ -35,34 +48,6 @@ describe('Exercise form', () => {
     );
   });
 
-  test('saves changes to local storage', () => {
-    render(
-      <ExerciseForm
-        onSubmit={() => {}}
-        onCancel={() => {}}
-        values={{
-          name: 'Push-ups',
-          description: 'Perform push-ups exercise',
-        }}
-      />,
-    );
-
-    fireEvent.change(screen.getByLabelText('Exercise Name'), {
-      target: { value: 'New push-ups' },
-    });
-    fireEvent.change(screen.getByLabelText('Description'), {
-      target: { value: 'New perform push-ups exercise' },
-    });
-
-    const storedData = JSON.parse(localStorage.getItem('exercises') || '{}');
-
-    expect(storedData).toMatchObject({
-      name: 'New push-ups',
-      description: 'New perform push-ups exercise',
-    });
-    expect(storedData._timestamp).toBeDefined();
-  });
-
   test('submits form', async () => {
     const onSubmitMock = vi.fn();
     render(
@@ -71,6 +56,7 @@ describe('Exercise form', () => {
           onSubmitMock(values);
         }}
         onCancel={() => {}}
+        onDirtyChange={() => {}}
       />,
     );
 
@@ -100,6 +86,7 @@ describe('Exercise form', () => {
         onCancel={() => {
           onCancelMock();
         }}
+        onDirtyChange={() => {}}
       />,
     );
 
@@ -117,6 +104,7 @@ describe('Exercise form', () => {
           name: 'Push-ups',
           description: 'Perform push-ups exercise',
         }}
+        onDirtyChange={() => {}}
       />,
     );
 
@@ -135,5 +123,25 @@ describe('Exercise form', () => {
     );
 
     expect(localStorage.getItem('exercises')).toBeNull();
+  });
+
+  test('call onDirtyChange on isDirty form property change', () => {
+    const onDirtyChangeMock = vi.fn();
+
+    render(
+      <ExerciseForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={(isDirty) => {
+          onDirtyChangeMock(isDirty);
+        }}
+      />,
+    );
+
+    fireEvent.change(screen.getByLabelText('Exercise Name'), {
+      target: { value: 'Push-ups' },
+    });
+
+    expect(onDirtyChangeMock).toHaveBeenCalledWith(true);
   });
 });

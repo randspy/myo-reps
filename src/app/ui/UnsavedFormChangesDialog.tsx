@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-export const ModifiedFormDialog: React.FC<{
+export const UnsavedFormChangesDialog: React.FC<{
   open: boolean;
   cancel: () => void;
   ok: () => void;
