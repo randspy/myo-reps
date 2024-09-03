@@ -6,6 +6,7 @@ import { SessionsPage } from '@/app/features/sessions/SessionsPage';
 import { PageNotFound } from '@/app/layout/PageNotFound';
 import { ErrorPage } from '@/app/layout/ErrorPage';
 import { NewExercisePage } from './features/exercises/NewExercisePage';
+import { EditExercisePage } from './features/exercises/EditExercisePage';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
 
@@ -28,6 +29,7 @@ export const routes = [
   {
     path: '/',
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: '/',
@@ -36,11 +38,14 @@ export const routes = [
       ...Object.keys(sideBarRoutePaths).map((key) => ({
         path: key,
         element: sideBarRoutePaths[key].element,
-        errorElement: <ErrorPage />,
       })),
       {
         path: '/exercises/new',
         element: <NewExercisePage />,
+      },
+      {
+        path: '/exercises/:id',
+        element: <EditExercisePage />,
       },
       {
         path: '*',

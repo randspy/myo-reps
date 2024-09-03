@@ -15,9 +15,10 @@ export const ExercisesPage = () => {
       )}
       data-testid="exercises-page-container"
     >
-      <Link to="/exercises/new">
-        <Button className="w-full md:w-fit">Add New Exercise</Button>
-      </Link>
+      <Button asChild className="w-full md:w-fit">
+        <Link to="/exercises/new">Add New Exercise</Link>
+      </Button>
+
       <div className="mt-8 w-full">
         <ExerciseList />
       </div>

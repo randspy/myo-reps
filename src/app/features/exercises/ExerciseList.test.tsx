@@ -1,4 +1,4 @@
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { ExerciseList } from './ExerciseList';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import {
@@ -6,6 +6,7 @@ import {
   generateExercise,
   renderWithProviders,
 } from '@/lib/test-utils';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 const initialState = {
   exercises: {
@@ -24,15 +25,7 @@ const initialState = {
   },
 };
 
-const editExercise = vi.fn();
 const deleteExercise = vi.fn();
-
-vi.mock('@/app/features/exercises/EditExerciseDialog', () => ({
-  EditExerciseDialog: ({ exercise }: { exercise: ExerciseValue }) => {
-    editExercise(exercise);
-    return <div></div>;
-  },
-}));
 
 vi.mock('@/app/features/exercises/DeleteExerciseDialog', () => ({
   DeleteExerciseDialog: ({ exercise }: { exercise: ExerciseValue }) => {
@@ -63,9 +56,20 @@ describe('Exercise list', () => {
   let store: AppStore;
 
   beforeEach(() => {
-    store = renderWithProviders(<ExerciseList />, {
-      preloadedState: initialState,
-    }).store;
+    store = renderWithProviders(
+      <MemoryRouter initialEntries={['/']}>
+        <Routes>
+          <Route path="/" element={<ExerciseList />} />
+          <Route
+            path="/exercises/:id"
+            element={<div>Mock Edit Exercise</div>}
+          />
+        </Routes>
+      </MemoryRouter>,
+      {
+        preloadedState: initialState,
+      },
+    ).store;
   });
 
   it('renders the list of exercises', () => {
@@ -74,11 +78,15 @@ describe('Exercise list', () => {
     });
   });
 
-  it('pass through workouts to child components', async () => {
-    expect(editExercise).toHaveBeenCalledWith(initialState.exercises.values[0]);
+  it('pass through exercises to child components', async () => {
     expect(deleteExercise).toHaveBeenCalledWith(
       initialState.exercises.values[0],
     );
+  });
+
+  it('redirect to edit page', () => {
+    fireEvent.click(screen.getAllByLabelText('Edit exercise')[0]);
+    expect(screen.getByText('Mock Edit Exercise')).toBeInTheDocument();
   });
 
   it('simulate drag and drop', async () => {

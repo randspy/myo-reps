@@ -1,9 +1,11 @@
 import React from 'react';
-import { EditExerciseDialog } from '@/app/features/exercises/EditExerciseDialog';
 import { DeleteExerciseDialog } from '@/app/features/exercises/DeleteExerciseDialog';
 import { Reorder } from 'framer-motion';
 
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { PencilIcon } from 'lucide-react';
 
 export const ExerciseList: React.FC = () => {
   const { activeExercises, dispatchSet } = useExercise();
@@ -22,7 +24,11 @@ export const ExerciseList: React.FC = () => {
             className="my-2 flex w-full items-center rounded-md bg-background-secondary p-5 pr-2 shadow-sm md:w-128"
           >
             <h3 className="mr-auto truncate">{exercise.name}</h3>
-            <EditExerciseDialog exercise={exercise} />
+            <Button asChild variant="icon" size="icon">
+              <Link to={`/exercises/${exercise.id}`} aria-label="Edit exercise">
+                <PencilIcon className="h-4 w-4" />
+              </Link>
+            </Button>
             <DeleteExerciseDialog exercise={exercise} />
           </Reorder.Item>
         ))}

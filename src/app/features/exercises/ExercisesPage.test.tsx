@@ -87,7 +87,7 @@ describe('Exercise page', () => {
       </MemoryRouter>,
     );
 
-    const addExerciseButton = screen.getByRole('button', {
+    const addExerciseButton = screen.getByRole('link', {
       name: 'Add New Exercise',
     });
 
@@ -104,7 +104,7 @@ describe('Exercise page', () => {
       </MemoryRouter>,
     );
 
-    const addExerciseButton = screen.getByRole('button', {
+    const addExerciseButton = screen.getByRole('link', {
       name: 'Add New Exercise',
     });
 
