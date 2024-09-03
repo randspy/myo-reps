@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils';
-import { AddNewWorkoutDialog } from './AddNewWorkoutDialog';
 import { WorkoutList } from '@/app/features/workouts/WorkoutList';
 import { useAppSelector } from '@/store/hooks';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 export const WorkoutsPage: React.FC = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
@@ -14,7 +15,9 @@ export const WorkoutsPage: React.FC = () => {
       )}
       data-testid="workouts-page-container"
     >
-      <AddNewWorkoutDialog />
+      <Button asChild className="w-full md:w-fit">
+        <Link to="/workouts/new">Add New Workout</Link>
+      </Button>
       <div className="mt-8 w-full">
         <WorkoutList />
       </div>

@@ -1,16 +1,13 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { WorkoutForm } from '@/app/features/workouts/WorkoutForm';
-import { configureStore } from '@reduxjs/toolkit';
-import exercisesReducer from '@/app/core/exercises/exercises-slice';
 import { v4 } from 'uuid';
-import { generateExercise } from '@/lib/test-utils';
+import { generateExercise, renderWithProviders } from '@/lib/test-utils';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(),
 }));
 
-const initialState = {
+const preloadedState = {
   exercises: {
     values: [
       generateExercise({
@@ -26,23 +23,18 @@ const initialState = {
   },
 };
 
-const store = configureStore({
-  reducer: {
-    exercises: exercisesReducer,
-  },
-  preloadedState: initialState,
-});
-
 describe('Workout form', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test('renders the form correctly', () => {
-    render(
-      <Provider store={store}>
-        <WorkoutForm onSubmit={() => {}} />
-      </Provider>,
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
     );
 
     expect(screen.getByLabelText('Workout Name')).toBeInTheDocument();
@@ -52,10 +44,13 @@ describe('Workout form', () => {
   });
 
   test('adds a new exercise when "Add Exercise" button is clicked', () => {
-    render(
-      <Provider store={store}>
-        <WorkoutForm onSubmit={() => {}} />
-      </Provider>,
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
+      { preloadedState },
     );
 
     fireEvent.click(screen.getByText('Add Exercise'));
@@ -63,10 +58,13 @@ describe('Workout form', () => {
   });
 
   test('select the exercise', () => {
-    render(
-      <Provider store={store}>
-        <WorkoutForm onSubmit={() => {}} />
-      </Provider>,
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
+      { preloadedState },
     );
 
     fireEvent.click(screen.getByText('Add Exercise'));
@@ -81,10 +79,13 @@ describe('Workout form', () => {
     const id = '16281fc7-56d7-4cba-b5c0-d3c3856ca604';
     vi.mocked(v4).mockImplementation(() => id);
 
-    render(
-      <Provider store={store}>
-        <WorkoutForm onSubmit={onSubmit} />
-      </Provider>,
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={onSubmit}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
+      { preloadedState },
     );
 
     fireEvent.change(screen.getByLabelText('Workout Name'), {
@@ -118,10 +119,13 @@ describe('Workout form', () => {
   });
 
   test('deletes an exercise when "Delete" button is clicked', () => {
-    render(
-      <Provider store={store}>
-        <WorkoutForm onSubmit={() => {}} />
-      </Provider>,
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={() => {}}
+      />,
+      { preloadedState },
     );
 
     fireEvent.click(screen.getByText('Add Exercise'));
@@ -130,5 +134,71 @@ describe('Workout form', () => {
     fireEvent.click(screen.getByLabelText('Delete exercise'));
 
     expect(screen.queryByText('Push-up')).not.toBeInTheDocument();
+  });
+
+  test('cancels form', () => {
+    const onCancelMock = vi.fn();
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {
+          onCancelMock();
+        }}
+        onDirtyChange={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getByText('Cancel'));
+
+    expect(onCancelMock).toHaveBeenCalled();
+  });
+
+  test('resets form', () => {
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        values={{
+          name: 'Upper body',
+          description: 'Upper body workout',
+          exercises: [],
+        }}
+        onDirtyChange={() => {}}
+      />,
+    );
+
+    fireEvent.change(screen.getByLabelText('Workout Name'), {
+      target: { value: 'Lower body' },
+    });
+    fireEvent.change(screen.getByLabelText('Description'), {
+      target: { value: 'Lower body workout' },
+    });
+
+    fireEvent.click(screen.getByText('Reset'));
+
+    expect(screen.getByLabelText('Workout Name')).toHaveValue('Upper body');
+    expect(screen.getByLabelText('Description')).toHaveValue(
+      'Upper body workout',
+    );
+  });
+
+  test('call onDirtyChange on isDirty form property change', () => {
+    const onDirtyChangeMock = vi.fn();
+
+    renderWithProviders(
+      <WorkoutForm
+        onSubmit={() => {}}
+        onCancel={() => {}}
+        onDirtyChange={(isDirty) => {
+          onDirtyChangeMock(isDirty);
+        }}
+      />,
+    );
+
+    fireEvent.change(screen.getByLabelText('Workout Name'), {
+      target: { value: 'Split' },
+    });
+
+    expect(onDirtyChangeMock).toHaveBeenCalledWith(true);
   });
 });

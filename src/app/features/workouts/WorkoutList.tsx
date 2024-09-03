@@ -1,9 +1,10 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import React from 'react';
-import { EditWorkoutDialog } from '@/app/features/workouts/EditWorkoutDialog';
 import { DeleteWorkoutDialog } from './DeleteWorkoutDialog';
 import { Reorder } from 'framer-motion';
 import { setWorkouts } from '@/app/core/workouts/workouts-slice';
+import { Button } from '@/components/ui/button';
+import { PencilIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const WorkoutList: React.FC = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
@@ -23,7 +24,13 @@ export const WorkoutList: React.FC = () => {
             className="my-2 flex w-full items-center rounded-md bg-background-secondary p-5 pr-2 shadow-sm md:w-128"
           >
             <h3 className="mr-auto truncate">{workout.name}</h3>
-            <EditWorkoutDialog workout={workout} />
+
+            <Button asChild variant="icon" size="icon">
+              <Link to={`/workouts/${workout.id}`} aria-label="Edit workout">
+                <PencilIcon className="h-4 w-4" />
+              </Link>
+            </Button>
+
             <DeleteWorkoutDialog workout={workout} />
           </Reorder.Item>
         ))}

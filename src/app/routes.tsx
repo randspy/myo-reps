@@ -7,6 +7,8 @@ import { PageNotFound } from '@/app/layout/PageNotFound';
 import { ErrorPage } from '@/app/layout/ErrorPage';
 import { NewExercisePage } from './features/exercises/NewExercisePage';
 import { EditExercisePage } from './features/exercises/EditExercisePage';
+import { NewWorkoutPage } from './features/workouts/NewWorkoutPage';
+import { EditWorkoutPage } from './features/workouts/EditWorkoutPage';
 
 export type RouteType = Record<string, { title: string; element: JSX.Element }>;
 
@@ -46,6 +48,14 @@ export const routes = [
       {
         path: '/exercises/:id',
         element: <EditExercisePage />,
+      },
+      {
+        path: '/workouts/new',
+        element: <NewWorkoutPage />,
+      },
+      {
+        path: '/workouts/:id',
+        element: <EditWorkoutPage />,
       },
       {
         path: '*',

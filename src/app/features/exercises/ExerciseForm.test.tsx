@@ -74,8 +74,6 @@ describe('Exercise form', () => {
         description: 'Perform push-ups exercise',
       });
     });
-
-    expect(localStorage.getItem('exercises')).toBeNull();
   });
 
   test('cancels form', () => {
@@ -121,8 +119,6 @@ describe('Exercise form', () => {
     expect(screen.getByLabelText('Description')).toHaveValue(
       'Perform push-ups exercise',
     );
-
-    expect(localStorage.getItem('exercises')).toBeNull();
   });
 
   test('call onDirtyChange on isDirty form property change', () => {

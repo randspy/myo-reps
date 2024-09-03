@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import workoutsReducer from '@/app/core/workouts/workouts-slice';
 import { WorkoutList } from './WorkoutList';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 import { generateWorkout } from '@/lib/test-utils';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 const initialState = {
   workouts: {
@@ -46,7 +47,16 @@ describe('Workout list', () => {
   beforeEach(() => {
     render(
       <Provider store={store}>
-        <WorkoutList />
+        <MemoryRouter initialEntries={['/workouts']}>
+          <Routes>
+            <Route path="/workouts" element={<WorkoutList />} />
+            <Route
+              path="/workouts/:id"
+              element={<div>Mock Edit Workout</div>}
+            />
+          </Routes>
+        </MemoryRouter>
+        ,
       </Provider>,
     );
   });
@@ -58,7 +68,11 @@ describe('Workout list', () => {
   });
 
   it('pass through workouts to child components', async () => {
-    expect(editWorkout).toHaveBeenCalledWith(initialState.workouts.values[0]);
     expect(deleteWorkout).toHaveBeenCalledWith(initialState.workouts.values[0]);
+  });
+
+  it('redirect to edit page', () => {
+    fireEvent.click(screen.getAllByLabelText('Edit workout')[0]);
+    expect(screen.getByText('Mock Edit Workout')).toBeInTheDocument();
   });
 });

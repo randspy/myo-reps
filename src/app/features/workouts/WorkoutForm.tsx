@@ -21,13 +21,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSelectorPopover';
 import { Trash2Icon } from 'lucide-react';
 import { Reorder } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
+  onCancel: () => void;
+  onDirtyChange: (isDirty: boolean) => void;
   values?: WorkoutFormValues;
-}> = ({ onSubmit, values = defaultValues }) => {
+}> = ({ onSubmit, onCancel, onDirtyChange, values = defaultValues }) => {
   const form = useForm<WorkoutFormValues>({
     resolver: zodResolver(workoutSchema),
     values,
@@ -40,6 +42,14 @@ export const WorkoutForm: React.FC<{
   const [active, setActive] = useState(0);
 
   const { exercises, activeExercises } = useExercise();
+
+  const {
+    formState: { isDirty },
+  } = form;
+
+  useEffect(() => {
+    onDirtyChange(isDirty);
+  }, [isDirty]);
 
   const submit = (values: WorkoutFormValues) => {
     onSubmit(values);
@@ -164,9 +174,23 @@ export const WorkoutForm: React.FC<{
           Add Exercise
         </Button>
 
-        <Button type="submit" className="w-full">
-          Save
-        </Button>
+        <div className="flex flex-col-reverse gap-4 md:flex-row">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.reset();
+            }}
+          >
+            Reset
+          </Button>
+          <Button className="md:ml-auto" type="submit">
+            Save
+          </Button>
+        </div>
       </form>
     </Form>
   );

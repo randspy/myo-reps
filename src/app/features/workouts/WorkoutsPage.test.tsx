@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { WorkoutsPage } from '@/app/features/workouts/WorkoutsPage';
 import { generateWorkout, renderWithProviders } from '@/lib/test-utils';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 const initialState = {
   workouts: {
@@ -17,9 +18,14 @@ const initialState = {
 describe('Workouts page', () => {
   describe('when there are workouts present', () => {
     beforeEach(() => {
-      renderWithProviders(<WorkoutsPage />, {
-        preloadedState: initialState,
-      });
+      renderWithProviders(
+        <MemoryRouter>
+          <WorkoutsPage />
+        </MemoryRouter>,
+        {
+          preloadedState: initialState,
+        },
+      );
     });
 
     test('renders workouts list component', () => {
@@ -36,10 +42,33 @@ describe('Workouts page', () => {
   });
 
   test('that it centers the add button when no workouts present', () => {
-    renderWithProviders(<WorkoutsPage />);
+    renderWithProviders(
+      <MemoryRouter>
+        <WorkoutsPage />
+      </MemoryRouter>,
+    );
 
     expect(screen.getByTestId('workouts-page-container')).toHaveClass(
       'justify-center',
     );
+  });
+
+  test('navigates to the new exercise page when the add new exercise button is clicked', () => {
+    renderWithProviders(
+      <MemoryRouter initialEntries={['/workouts']}>
+        <Routes>
+          <Route path="/workouts" element={<WorkoutsPage />} />
+          <Route path="/workouts/new" element={<div>New Workout Page</div>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(
+      screen.getByRole('link', {
+        name: 'Add New Workout',
+      }),
+    );
+
+    expect(screen.getByText('New Workout Page')).toBeInTheDocument();
   });
 });
