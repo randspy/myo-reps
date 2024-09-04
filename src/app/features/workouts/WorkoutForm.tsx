@@ -39,6 +39,9 @@ export const WorkoutForm: React.FC<{
     name: 'exercises',
     control: form.control,
   });
+
+  console.log(form.getFieldState('exercises'));
+
   const [active, setActive] = useState(0);
 
   const { exercises, activeExercises } = useExercise();
@@ -48,6 +51,7 @@ export const WorkoutForm: React.FC<{
   } = form;
 
   useEffect(() => {
+    console.log('isDirty', isDirty);
     onDirtyChange(isDirty);
   }, [isDirty]);
 
@@ -126,6 +130,9 @@ export const WorkoutForm: React.FC<{
                             form.setValue(
                               `exercises.${index}.exerciseId`,
                               item.exerciseId,
+                              {
+                                shouldDirty: true, // by default for array fields it wasn't dirtying the form
+                              },
                             );
                             form.clearErrors(`exercises.${index}.exerciseId`);
                           }}
@@ -136,7 +143,9 @@ export const WorkoutForm: React.FC<{
                             label="Sets"
                             max={20}
                             onValueChange={(value) => {
-                              form.setValue(`exercises.${index}.sets`, value);
+                              form.setValue(`exercises.${index}.sets`, value, {
+                                shouldDirty: true, // by default for array fields it wasn't dirtying the form
+                              });
                               form.clearErrors(`exercises.${index}.sets`);
                             }}
                           />
