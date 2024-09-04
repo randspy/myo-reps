@@ -7,6 +7,7 @@ import { Menu } from 'lucide-react';
 import { LegacyRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useClickAway } from '@uidotdev/usehooks';
+import { ClearAppState } from '@/app/pattern/ClearAppState';
 
 export function Header() {
   const location = useLocation();
@@ -34,9 +35,11 @@ export function Header() {
         <h2 className="truncate text-lg md:ml-4" data-testid="title">
           {sideBarRoutePaths[location.pathname]?.title}
         </h2>
+
         <div className="ml-auto mr-2">
           <ModeToggle />
         </div>
+        <ClearAppState />
       </header>
       <div
         ref={ref as LegacyRef<HTMLDivElement>}

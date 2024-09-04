@@ -54,6 +54,19 @@ describe('Header', () => {
     expect(modeToggleElement).toHaveTextContent('Mock Mode Toggle');
   });
 
+  test('renders clear app state component', () => {
+    render(
+      <MemoryRouter>
+        <Header />
+      </MemoryRouter>,
+    );
+
+    const clearAppStateElement = screen.getByRole('button', {
+      name: "Delete app's state",
+    });
+    expect(clearAppStateElement).toBeInTheDocument();
+  });
+
   test('App renders the correct sidebar content', () => {
     render(
       <MemoryRouter initialEntries={['/workouts']}>

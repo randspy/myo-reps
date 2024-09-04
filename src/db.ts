@@ -12,4 +12,9 @@ db.version(1).stores({
   workouts: 'id',
 });
 
-export { db };
+async function recreateDB() {
+  await db.delete();
+  await db.open();
+}
+
+export { db, recreateDB };
