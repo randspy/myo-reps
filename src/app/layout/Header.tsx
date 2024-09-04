@@ -31,10 +31,10 @@ export function Header() {
           </Button>
         </div>
 
-        <h2 className="text-lg md:ml-4" data-testid="title">
+        <h2 className="truncate text-lg md:ml-4" data-testid="title">
           {sideBarRoutePaths[location.pathname]?.title}
         </h2>
-        <div className="ml-auto mr-4">
+        <div className="ml-auto mr-2">
           <ModeToggle />
         </div>
       </header>
