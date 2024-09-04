@@ -27,7 +27,7 @@ export const WorkoutList: React.FC = () => {
 
             <Button asChild variant="icon" size="icon">
               <Link
-                to={`/sessions/new?workout=${workout.id}`}
+                to={`/sessions/new?workoutId=${workout.id}`}
                 aria-label="Start workout"
               >
                 <PlayIcon className="h-4 w-4" />

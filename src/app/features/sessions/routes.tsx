@@ -1,4 +1,5 @@
 import { SessionsPage } from '@/app/features/sessions/SessionsPage';
+import { StartSessionPage } from '@/app/features/sessions/StartSessionPage';
 
 export const sessionRoutes = [
   {
@@ -10,7 +11,11 @@ export const sessionRoutes = [
       },
       {
         path: 'new',
-        element: <div>New Session</div>,
+        element: <StartSessionPage />,
+      },
+      {
+        path: 'in-progress',
+        element: <div>In progress</div>,
       },
     ],
   },
