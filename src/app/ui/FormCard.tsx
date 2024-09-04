@@ -5,7 +5,7 @@ export const FormCard: React.FC<{
   children: React.ReactNode;
 }> = ({ children, title }) => {
   return (
-    <div className="flex w-full justify-center p-4 md:p-12">
+    <div className="flex w-full justify-center p-2 md:p-12">
       <Card className="w-full max-w-xl">
         <CardHeader>
           <CardTitle className="text-xl">{title}</CardTitle>
