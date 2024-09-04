@@ -10,26 +10,18 @@ import {
   OnDirtyChange,
   OnSubmit,
 } from '@/app/ui/UnsavedFormChangesBlocker';
+import { PageNotFound } from '@/app/layout/PageNotFound';
 
 export const EditExercisePage: React.FC = () => {
   const { dispatchUpdate } = useExercise();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-
   const exercise = useSelector(selectExerciseById(id));
 
-  const submit = (values: ExerciseFormValues) => {
-    if (!exercise) {
-      return;
-    }
-
-    dispatchUpdate({
-      ...exercise,
-      ...values,
-    });
-    navigate('/exercises');
-  };
+  if (!exercise) {
+    return <PageNotFound />;
+  }
 
   return (
     <FormCard title="Edit Exercise">
@@ -38,7 +30,11 @@ export const EditExercisePage: React.FC = () => {
           <ExerciseForm
             onSubmit={(values: ExerciseFormValues) => {
               onSubmit();
-              submit(values);
+              dispatchUpdate({
+                ...exercise!,
+                ...values,
+              });
+              navigate('/exercises');
             }}
             onCancel={() => navigate('/exercises')}
             onDirtyChange={onDirtyChange}

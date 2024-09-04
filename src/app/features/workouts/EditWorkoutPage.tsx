@@ -10,6 +10,7 @@ import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
 import { WorkoutForm } from '@/app/features/workouts/WorkoutForm';
 import { selectWorkoutById } from '@/app/core/workouts/workouts-selectors';
 import { useSelector } from 'react-redux';
+import { PageNotFound } from '@/app/layout/PageNotFound';
 
 export const EditWorkoutPage: React.FC = () => {
   const { dispatchUpdate } = useWorkout();
@@ -18,14 +19,9 @@ export const EditWorkoutPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const workout = useSelector(selectWorkoutById(id));
 
-  const submit = (values: WorkoutFormValues) => {
-    if (!workout) {
-      return;
-    }
-
-    dispatchUpdate({ ...workout, ...values });
-    navigate('/workouts');
-  };
+  if (!workout) {
+    return <PageNotFound />;
+  }
 
   return (
     <FormCard title="Edit Workout">
@@ -34,7 +30,8 @@ export const EditWorkoutPage: React.FC = () => {
           <WorkoutForm
             onSubmit={(values: WorkoutFormValues) => {
               onSubmit();
-              submit(values);
+              dispatchUpdate({ ...workout!, ...values });
+              navigate('/workouts');
             }}
             onCancel={() => navigate('/workouts')}
             onDirtyChange={onDirtyChange}

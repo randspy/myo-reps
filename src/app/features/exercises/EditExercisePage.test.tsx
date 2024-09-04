@@ -58,7 +58,7 @@ vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
     render(mockOnDirtyChange, mockOnSubmit),
 }));
 
-const initialState = {
+const preloadedState = {
   exercises: {
     values: [
       generateExercise({
@@ -85,7 +85,7 @@ describe('Edit exercise page', () => {
         </Routes>
       </MemoryRouter>,
       {
-        preloadedState: initialState,
+        preloadedState,
       },
     ).store;
 
@@ -108,7 +108,7 @@ describe('Edit exercise page', () => {
         </Routes>
       </MemoryRouter>,
       {
-        preloadedState: initialState,
+        preloadedState,
       },
     ).store;
 
@@ -126,12 +126,27 @@ describe('Edit exercise page', () => {
         </Routes>
       </MemoryRouter>,
       {
-        preloadedState: initialState,
+        preloadedState,
       },
     ).store;
 
     fireEvent.click(screen.getByText('Simulate dirty change'));
 
     expect(mockOnDirtyChange).toHaveBeenCalledWith(true);
+  });
+
+  it('show 404 page when exercise is not found', () => {
+    store = renderWithProviders(
+      <MemoryRouter initialEntries={['/2']}>
+        <Routes>
+          <Route path="/:id" element={<EditExercisePage />} />
+        </Routes>
+      </MemoryRouter>,
+      {
+        preloadedState,
+      },
+    ).store;
+
+    expect(screen.getByText('Page not found')).toBeInTheDocument();
   });
 });
