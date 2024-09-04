@@ -3,7 +3,7 @@ import { DeleteWorkoutDialog } from './DeleteWorkoutDialog';
 import { Reorder } from 'framer-motion';
 import { setWorkouts } from '@/app/core/workouts/workouts-slice';
 import { Button } from '@/components/ui/button';
-import { PencilIcon } from 'lucide-react';
+import { PencilIcon, PlayIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const WorkoutList: React.FC = () => {
@@ -25,6 +25,14 @@ export const WorkoutList: React.FC = () => {
           >
             <h3 className="mr-auto truncate">{workout.name}</h3>
 
+            <Button asChild variant="icon" size="icon">
+              <Link
+                to={`/sessions/new?workout=${workout.id}`}
+                aria-label="Start workout"
+              >
+                <PlayIcon className="h-4 w-4" />
+              </Link>
+            </Button>
             <Button asChild variant="icon" size="icon">
               <Link to={`/workouts/${workout.id}`} aria-label="Edit workout">
                 <PencilIcon className="h-4 w-4" />

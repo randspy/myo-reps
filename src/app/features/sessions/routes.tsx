@@ -8,6 +8,10 @@ export const sessionRoutes = [
         path: '',
         element: <SessionsPage />,
       },
+      {
+        path: 'new',
+        element: <div>New Session</div>,
+      },
     ],
   },
 ];

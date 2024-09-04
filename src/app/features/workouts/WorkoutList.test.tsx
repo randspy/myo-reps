@@ -54,9 +54,9 @@ describe('Workout list', () => {
               path="/workouts/:id"
               element={<div>Mock Edit Workout</div>}
             />
+            <Route path="/sessions/new" element={<div>Mock New Session</div>} />
           </Routes>
         </MemoryRouter>
-        ,
       </Provider>,
     );
   });
@@ -74,5 +74,10 @@ describe('Workout list', () => {
   it('redirect to edit page', () => {
     fireEvent.click(screen.getAllByLabelText('Edit workout')[0]);
     expect(screen.getByText('Mock Edit Workout')).toBeInTheDocument();
+  });
+
+  it('redirect to new session page for a given workout', () => {
+    fireEvent.click(screen.getByLabelText('Start workout'));
+    expect(screen.getByText('Mock New Session')).toBeInTheDocument();
   });
 });
