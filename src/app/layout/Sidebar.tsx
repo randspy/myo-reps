@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
-import { RouteType } from '../routes';
+import { RouteType } from '@/app/routes';
 import { Link } from 'react-router-dom';
+import { Logo } from '@/app/ui/Logo';
 
 export type SidebarProps = {
   tabs: RouteType;
@@ -17,9 +18,9 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
       className="h-dvh border-r border-r-border bg-background-secondary pt-1 shadow-md"
       data-testid="sidebar"
     >
-      <h1 className="my-8 flex justify-center text-2xl font-semibold">
-        Myo Reps
-      </h1>
+      <div className="mb-10 mt-5">
+        <Logo />
+      </div>
       <ul>
         {Object.keys(tabs).map((key) => (
           <li key={key}>
