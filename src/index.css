@@ -6,16 +6,19 @@
 
 @layer base {
   :root {
-    --black: 237, 100%, 4%;
+    --black: 209 63% 12%;
     --very-dark-grey: 235, 16%, 15%;
     --dark-grey: 235, 12%, 19%;
     --grey: 236, 11%, 27%;
     --medium-gray: 216 15% 57%;
+    --light-medium-grey: 221deg 95 85;
     --light-grey: 221 69% 91%;
     --very-light-grey: 220 69% 97%;
     --white: 210 40% 98%;
     --purple: 242, 48%, 58%;
     --light-purple: 243 100% 82%;
+    --red: 4, 88%, 24%;
+    --green: 160, 50%, 32%;
 
     --background: var(--light-grey);
     --background-secondary: var(--white);
@@ -30,7 +33,7 @@
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: var(--light-grey);
+    --accent: var(--light-medium-grey);
     --accent-foreground: var(--black);
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;

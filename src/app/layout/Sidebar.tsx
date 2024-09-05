@@ -14,7 +14,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
 
   return (
     <div
-      className="h-dvh border-r border-r-border bg-background-secondary pt-1 shadow-sm"
+      className="h-dvh border-r border-r-border bg-background-secondary pt-1 shadow-md"
       data-testid="sidebar"
     >
       <h1 className="my-8 flex justify-center text-2xl font-semibold">

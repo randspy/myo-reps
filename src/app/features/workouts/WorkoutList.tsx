@@ -21,7 +21,7 @@ export const WorkoutList: React.FC = () => {
           <Reorder.Item
             key={workout.id}
             value={workout}
-            className="my-2 flex w-full items-center bg-background-secondary p-5 pr-2 shadow-sm md:w-128"
+            className="my-1 flex w-full items-center bg-background-secondary p-5 pr-2 shadow-sm md:w-128"
           >
             <h3 className="mr-auto truncate">{workout.name}</h3>
 
