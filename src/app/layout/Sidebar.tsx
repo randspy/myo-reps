@@ -26,7 +26,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
             <Link
               to={key}
               className={cn(
-                'm-2 mr-6 block rounded-sm outline-none hover:opacity-90 focus-visible:shadow-outline',
+                'my-2 ml-4 block outline-none hover:opacity-90 focus-visible:shadow-outline md:-mr-4',
                 activeTab?.title !== tabs[key]?.title &&
                   'hover:hover:bg-accent',
               )}
@@ -34,7 +34,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
             >
               <div
                 className={cn(
-                  'rounded-sm px-4 py-3',
+                  'px-4 py-3',
                   activeTab?.title === tabs[key]?.title &&
                     'bg-primary text-primary-foreground',
                 )}
