@@ -1,5 +1,5 @@
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { selectExercisesByWorkoutIdAsMap } from '@/app/core/exercises/exercises-selectors';
+import { selectExercisesByWorkoutIdAsMap } from '@/app/core/exercises/store/exercises-selectors';
 import { selectWorkoutById } from '@/app/core/workouts/workouts-selectors';
 import { PageNotFound } from '@/app/layout/PageNotFound';
 import { FormCard } from '@/app/ui/FormCard';

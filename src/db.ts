@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
-import { restoreExercises } from './app/core/exercises/exercises-slice';
+import { restoreExercises } from './app/core/exercises/store/exercises-slice';
 import { restoreWorkouts } from './app/core/workouts/workouts-slice';
 
 const db = new Dexie('myo-reps') as Dexie & {

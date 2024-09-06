@@ -1,6 +1,7 @@
-import { db } from '@/db';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { listenerMiddleware } from '@/store/middlewareListener';
+import { db } from '@/db';
 
 interface ExercisesState {
   values: ExerciseValue[];
@@ -18,26 +19,21 @@ const exercisesSlice = createSlice({
       state.values = action.payload.toSorted((a, b) => a.position - b.position);
     },
     setExercises(state, action: PayloadAction<ExerciseValue[]>) {
-      const values = updateExercisePositions(action.payload);
-      state.values = values;
-      db.exercises.bulkPut(values);
+      state.values = action.payload;
     },
     addExercise(state, action: PayloadAction<ExerciseValue>) {
       state.values.push(action.payload);
-      db.exercises.add(action.payload);
     },
     deleteExercise(state, action: PayloadAction<string>) {
       state.values = state.values.filter(
         (exercise) => exercise.id !== action.payload,
       );
-      db.exercises.delete(action.payload);
     },
     updateExercise(state, action: PayloadAction<ExerciseValue>) {
       const index = state.values.findIndex(
         (exercise) => exercise.id === action.payload.id,
       );
       state.values[index] = action.payload;
-      db.exercises.update(action.payload.id, action.payload);
     },
   },
 });
@@ -51,9 +47,30 @@ export const {
 } = exercisesSlice.actions;
 export default exercisesSlice.reducer;
 
-function updateExercisePositions(exercises: ExerciseValue[]) {
-  return exercises.map((exercise, idx) => ({
-    ...exercise,
-    position: idx,
-  }));
-}
+listenerMiddleware.startListening({
+  actionCreator: setExercises,
+  effect: (action: PayloadAction<ExerciseValue[]>) => {
+    db.exercises.bulkPut(action.payload);
+  },
+});
+
+listenerMiddleware.startListening({
+  actionCreator: addExercise,
+  effect: (action: PayloadAction<ExerciseValue>) => {
+    db.exercises.add(action.payload);
+  },
+});
+
+listenerMiddleware.startListening({
+  actionCreator: deleteExercise,
+  effect: (action: PayloadAction<string>) => {
+    db.exercises.delete(action.payload);
+  },
+});
+
+listenerMiddleware.startListening({
+  actionCreator: updateExercise,
+  effect: (action: PayloadAction<ExerciseValue>) => {
+    db.exercises.update(action.payload.id, action.payload);
+  },
+});

@@ -4,7 +4,7 @@ import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
 import { FormCard } from '@/app/ui/FormCard';
 import { useSelector } from 'react-redux';
-import { selectExerciseById } from '@/app/core/exercises/exercises-selectors';
+import { selectExerciseById } from '@/app/core/exercises/store/exercises-selectors';
 import {
   UnsavedFormChangesBlocker,
   OnDirtyChange,

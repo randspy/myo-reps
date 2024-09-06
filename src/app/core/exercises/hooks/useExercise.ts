@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectActiveExercises } from '@/app/core/exercises/exercises-selectors';
+import { selectActiveExercises } from '@/app/core/exercises/store/exercises-selectors';
 import { useSelector } from 'react-redux';
 import {
   ExerciseFormValues,
@@ -11,7 +11,7 @@ import {
   deleteExercise,
   setExercises,
   updateExercise,
-} from '../exercises-slice';
+} from '@/app/core/exercises/store/exercises-slice';
 
 export const useExercise = () => {
   const exercises = useAppSelector((state) => state.exercises.values);
@@ -43,7 +43,7 @@ export const useExercise = () => {
   }
 
   function dispatchSet(exercises: ExerciseValue[]) {
-    dispatch(setExercises(exercises));
+    dispatch(setExercises(updateExercisePositions(exercises)));
   }
 
   function dispatchAddUsage({
@@ -110,4 +110,11 @@ function createExerciseFromForm(
     usage: [],
     hidden: false,
   };
+}
+
+function updateExercisePositions(exercises: ExerciseValue[]) {
+  return exercises.map((exercise, idx) => ({
+    ...exercise,
+    position: idx,
+  }));
 }
