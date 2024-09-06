@@ -40,8 +40,6 @@ export const WorkoutForm: React.FC<{
     control: form.control,
   });
 
-  console.log(form.getFieldState('exercises'));
-
   const [active, setActive] = useState(0);
 
   const { exercises, activeExercises } = useExercise();
@@ -51,7 +49,6 @@ export const WorkoutForm: React.FC<{
   } = form;
 
   useEffect(() => {
-    console.log('isDirty', isDirty);
     onDirtyChange(isDirty);
   }, [isDirty]);
 
