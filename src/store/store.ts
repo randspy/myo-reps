@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import exercisesReducer from '@/app/core/exercises/store/exercises-slice';
-import workoutsReducer from '@/app/core/workouts/workouts-slice';
+import workoutsReducer from '@/app/core/workouts/store/workouts-slice';
 import {
   INIT_ACTION_TYPE,
   listenerMiddleware,

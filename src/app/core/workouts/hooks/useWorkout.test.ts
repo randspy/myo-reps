@@ -228,6 +228,29 @@ describe('useWorkout hook', () => {
     expect(exerciseUsage(store, 'exercise-1')).toEqual([]);
     expect(exerciseUsage(store, 'exercise-2')).toEqual([]);
   });
+
+  test('dispatchSet', () => {
+    const { result, store } = renderHookWithProviders(() => useWorkout());
+
+    const workouts = [
+      generateWorkout({
+        id: 'workout-1',
+        position: 1,
+      }),
+      generateWorkout({
+        id: 'workout-2',
+        position: 0,
+      }),
+    ];
+
+    act(() => {
+      result.current.dispatchSet(workouts);
+    });
+
+    expect(store.getState().workouts.values).toEqual(
+      workouts.map((workout, idx) => ({ ...workout, position: idx })),
+    );
+  });
 });
 
 function exerciseUsage(store: EnhancedStore, id: string) {

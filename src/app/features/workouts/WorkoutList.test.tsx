@@ -1,13 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import workoutsReducer from '@/app/core/workouts/workouts-slice';
+import workoutsReducer from '@/app/core/workouts/store/workouts-slice';
+import exercisesReducer from '@/app/core/exercises/store/exercises-slice';
 import { WorkoutList } from './WorkoutList';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 import { generateWorkout } from '@/lib/test-utils';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
-const initialState = {
+const preloadedState = {
+  exercises: {
+    values: [],
+  },
   workouts: {
     values: [
       generateWorkout({
@@ -22,19 +26,12 @@ const initialState = {
 const store = configureStore({
   reducer: {
     workouts: workoutsReducer,
+    exercises: exercisesReducer,
   },
-  preloadedState: initialState,
+  preloadedState,
 });
 
-const editWorkout = vi.fn();
 const deleteWorkout = vi.fn();
-
-vi.mock('@/app/features/workouts/EditWorkoutDialog', () => ({
-  EditWorkoutDialog: ({ workout }: { workout: WorkoutValue }) => {
-    editWorkout(workout);
-    return <div></div>;
-  },
-}));
 
 vi.mock('@/app/features/workouts/DeleteWorkoutDialog', () => ({
   DeleteWorkoutDialog: ({ workout }: { workout: WorkoutValue }) => {
@@ -62,13 +59,15 @@ describe('Workout list', () => {
   });
 
   it('renders the list of workouts', () => {
-    initialState.workouts.values.forEach((workouts) => {
+    preloadedState.workouts.values.forEach((workouts) => {
       expect(screen.getByText(workouts.name)).toBeInTheDocument();
     });
   });
 
   it('pass through workouts to child components', async () => {
-    expect(deleteWorkout).toHaveBeenCalledWith(initialState.workouts.values[0]);
+    expect(deleteWorkout).toHaveBeenCalledWith(
+      preloadedState.workouts.values[0],
+    );
   });
 
   it('redirect to edit page', () => {

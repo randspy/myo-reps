@@ -6,8 +6,9 @@ import {
 import {
   addWorkout,
   deleteWorkout,
+  setWorkouts,
   updateWorkout,
-} from '@/app/core/workouts/workouts-slice';
+} from '@/app/core/workouts/store/workouts-slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -78,15 +79,20 @@ export const useWorkout = () => {
     }
   }
 
+  function dispatchSet(workouts: WorkoutValue[]) {
+    dispatch(setWorkouts(updateWorkoutPositions(workouts)));
+  }
+
   return {
     workouts,
     dispatchAdd,
     dispatchUpdate,
     dispatchDelete,
+    dispatchSet,
   };
 };
 
-export function createWorkoutFromForm(
+function createWorkoutFromForm(
   values: WorkoutFormValues,
   position: number,
 ): WorkoutValue {
@@ -95,4 +101,11 @@ export function createWorkoutFromForm(
     position,
     ...values,
   };
+}
+
+function updateWorkoutPositions(workouts: WorkoutValue[]) {
+  return workouts.map((workout, idx) => ({
+    ...workout,
+    position: idx,
+  }));
 }

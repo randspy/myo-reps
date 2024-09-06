@@ -1,6 +1,5 @@
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { listenerMiddleware } from '@/store/middlewareListener';
 import { db } from '@/db';
 
 interface ExercisesState {
@@ -47,30 +46,29 @@ export const {
 } = exercisesSlice.actions;
 export default exercisesSlice.reducer;
 
-listenerMiddleware.startListening({
-  actionCreator: setExercises,
-  effect: (action: PayloadAction<ExerciseValue[]>) => {
-    db.exercises.bulkPut(action.payload);
+export const exerciseListeners = [
+  {
+    actionCreator: setExercises,
+    effect: (action: PayloadAction<ExerciseValue[]>) => {
+      db.exercises.bulkPut(action.payload);
+    },
   },
-});
-
-listenerMiddleware.startListening({
-  actionCreator: addExercise,
-  effect: (action: PayloadAction<ExerciseValue>) => {
-    db.exercises.add(action.payload);
+  {
+    actionCreator: addExercise,
+    effect: (action: PayloadAction<ExerciseValue>) => {
+      db.exercises.add(action.payload);
+    },
   },
-});
-
-listenerMiddleware.startListening({
-  actionCreator: deleteExercise,
-  effect: (action: PayloadAction<string>) => {
-    db.exercises.delete(action.payload);
+  {
+    actionCreator: deleteExercise,
+    effect: (action: PayloadAction<string>) => {
+      db.exercises.delete(action.payload);
+    },
   },
-});
-
-listenerMiddleware.startListening({
-  actionCreator: updateExercise,
-  effect: (action: PayloadAction<ExerciseValue>) => {
-    db.exercises.update(action.payload.id, action.payload);
+  {
+    actionCreator: updateExercise,
+    effect: (action: PayloadAction<ExerciseValue>) => {
+      db.exercises.update(action.payload.id, action.payload);
+    },
   },
-});
+];

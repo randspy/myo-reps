@@ -26,10 +26,6 @@ export const setupStore = (
 };
 
 describe('exercises slice', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('add exercise', () => {
     it('should add a new exercise to the state', async () => {
       const store = setupStore({ exercises: { values: [] } });
@@ -102,24 +98,20 @@ describe('exercises slice', () => {
 
   describe('set exercises', () => {
     it('should set the exercises in the state', async () => {
+      const store = setupStore();
+
       const exercises = [
         generateExercise({
           id: '1',
-          position: 1,
+          position: 0,
           name: 'Squats',
         }),
         generateExercise({
           id: '2',
-          position: 0,
+          position: 1,
           name: 'Push ups',
         }),
       ];
-
-      const store = setupStore({
-        exercises: {
-          values: [],
-        },
-      });
 
       store.dispatch(setExercises(exercises));
 

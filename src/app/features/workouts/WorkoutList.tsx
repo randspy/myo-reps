@@ -1,21 +1,21 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks';
 import { DeleteWorkoutDialog } from './DeleteWorkoutDialog';
 import { Reorder } from 'framer-motion';
-import { setWorkouts } from '@/app/core/workouts/workouts-slice';
 import { Button } from '@/components/ui/button';
 import { PencilIcon, PlayIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 
 export const WorkoutList: React.FC = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
-  const dispatch = useAppDispatch();
+  const { dispatchSet } = useWorkout();
 
   return (
     <div className="w-full">
       <Reorder.Group
         className="flex flex-col items-center"
         values={workouts}
-        onReorder={(values) => dispatch(setWorkouts(values))}
+        onReorder={(values) => dispatchSet(values)}
       >
         {workouts?.map((workout) => (
           <Reorder.Item

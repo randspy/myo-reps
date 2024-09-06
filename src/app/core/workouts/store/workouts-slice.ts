@@ -1,7 +1,6 @@
 import { db } from '@/db';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { WorkoutValue } from './workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 
 interface WorkoutState {
   values: WorkoutValue[];
@@ -19,26 +18,21 @@ const workoutsSlice = createSlice({
       state.values = action.payload.toSorted((a, b) => a.position - b.position);
     },
     setWorkouts(state, action: PayloadAction<WorkoutValue[]>) {
-      const values = updateWorkoutPositions(action.payload);
-      state.values = values;
-      db.workouts.bulkPut(values);
+      state.values = action.payload;
     },
     addWorkout(state, action: PayloadAction<WorkoutValue>) {
       state.values.push(action.payload);
-      db.workouts.add(action.payload);
     },
     deleteWorkout(state, action: PayloadAction<string>) {
       state.values = state.values.filter(
         (exercise) => exercise.id !== action.payload,
       );
-      db.workouts.delete(action.payload);
     },
     updateWorkout(state, action: PayloadAction<WorkoutValue>) {
       const index = state.values.findIndex(
         (exercise) => exercise.id === action.payload.id,
       );
       state.values[index] = action.payload;
-      db.workouts.update(action.payload.id, action.payload);
     },
   },
 });
@@ -52,9 +46,29 @@ export const {
 } = workoutsSlice.actions;
 export default workoutsSlice.reducer;
 
-function updateWorkoutPositions(workouts: WorkoutValue[]) {
-  return workouts.map((workout, idx) => ({
-    ...workout,
-    position: idx,
-  }));
-}
+export const workoutListeners = [
+  {
+    actionCreator: setWorkouts,
+    effect: (action: PayloadAction<WorkoutValue[]>) => {
+      db.workouts.bulkPut(action.payload);
+    },
+  },
+  {
+    actionCreator: addWorkout,
+    effect: (action: PayloadAction<WorkoutValue>) => {
+      db.workouts.add(action.payload);
+    },
+  },
+  {
+    actionCreator: deleteWorkout,
+    effect: (action: PayloadAction<string>) => {
+      db.workouts.delete(action.payload);
+    },
+  },
+  {
+    actionCreator: updateWorkout,
+    effect: (action: PayloadAction<WorkoutValue>) => {
+      db.workouts.update(action.payload.id, action.payload);
+    },
+  },
+];

@@ -93,15 +93,17 @@ describe('useExercise', () => {
     const { result, store } = renderHookWithProviders(() => useExercise());
 
     const exercises = [
-      generateExercise({ id: 'exercise-1', position: 0 }),
-      generateExercise({ id: 'exercise-2', position: 1 }),
+      generateExercise({ id: 'exercise-1', position: 1 }),
+      generateExercise({ id: 'exercise-2', position: 0 }),
     ];
 
     act(() => {
       result.current.dispatchSet(exercises);
     });
 
-    expect(store.getState().exercises.values).toEqual(exercises);
+    expect(store.getState().exercises.values).toEqual(
+      exercises.map((exercise, idx) => ({ ...exercise, position: idx })),
+    );
   });
 
   describe('delete exercise', () => {
