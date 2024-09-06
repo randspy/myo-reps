@@ -4,7 +4,6 @@ import { exerciseListeners } from '@/app/core/exercises/store/exercises-slice';
 import { workoutListeners } from '@/app/core/workouts/store/workouts-slice';
 
 const INIT_ACTION_TYPE = 'store/init';
-console.log('listenerMiddleware');
 
 const listenerMiddleware = createListenerMiddleware();
 
