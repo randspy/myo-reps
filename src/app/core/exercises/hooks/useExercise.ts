@@ -9,7 +9,6 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   addExercise,
   deleteExercise,
-  hideExercise,
   setExercises,
   updateExercise,
 } from '../exercises-slice';
@@ -37,7 +36,7 @@ export const useExercise = () => {
     }
 
     if (exercise.usage.length > 0) {
-      dispatch(hideExercise(exercise.id));
+      dispatch(updateExercise({ ...exercise, hidden: true }));
     } else {
       dispatch(deleteExercise(id));
     }

@@ -32,21 +32,6 @@ const exercisesSlice = createSlice({
       );
       db.exercises.delete(action.payload);
     },
-    hideExercise(state, action: PayloadAction<string>) {
-      const exercise = state.values.find(
-        (exercise) => exercise.id === action.payload,
-      );
-
-      if (!exercise) {
-        return;
-      }
-
-      exercise.hidden = true;
-      db.exercises.update(action.payload, {
-        ...exercise,
-        usage: exercise.usage.map((item) => ({ ...item })),
-      });
-    },
     updateExercise(state, action: PayloadAction<ExerciseValue>) {
       const index = state.values.findIndex(
         (exercise) => exercise.id === action.payload.id,
@@ -61,7 +46,6 @@ export const {
   addExercise,
   setExercises,
   deleteExercise,
-  hideExercise,
   updateExercise,
   restoreExercises,
 } = exercisesSlice.actions;

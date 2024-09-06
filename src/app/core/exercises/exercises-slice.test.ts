@@ -4,7 +4,6 @@ import reducer, {
   restoreExercises,
   setExercises,
   updateExercise,
-  hideExercise,
 } from '@/app/core/exercises/exercises-slice';
 import { db } from '@/db';
 import { v4 } from 'uuid';
@@ -62,26 +61,6 @@ describe('exercises slice', () => {
 
       expect(nextState.values).toHaveLength(0);
       expect(db.exercises.delete).toHaveBeenCalledWith(id);
-    });
-  });
-
-  describe('hide exercise', () => {
-    it('should hide an exercise in the state', () => {
-      const initialState = {
-        values: [
-          generateExercise({
-            id,
-            name: 'Squats',
-          }),
-        ],
-      };
-
-      const action = hideExercise(id);
-      const nextState = reducer(initialState, action);
-
-      expect(nextState.values).toHaveLength(1);
-      expect(nextState.values[0].hidden).toBe(true);
-      expect(db.exercises.update).toHaveBeenCalledWith(id, nextState.values[0]);
     });
   });
 
