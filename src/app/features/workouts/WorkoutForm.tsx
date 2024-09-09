@@ -17,12 +17,13 @@ import {
   workoutSchema,
 } from '@/app/core/workouts/workouts-schema';
 import { ExerciseComboBox } from '@/app/features/workouts/ExerciseComboBox';
-import { v4 as uuidv4 } from 'uuid';
+
 import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSelectorPopover';
 import { Trash2Icon } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
+import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -30,19 +31,19 @@ export const WorkoutForm: React.FC<{
   onDirtyChange: (isDirty: boolean) => void;
   values?: WorkoutFormValues;
 }> = ({ onSubmit, onCancel, onDirtyChange, values = defaultValues }) => {
+  const { exercises, activeExercises } = useExercise();
+  const { createExerciseForWorkout } = useWorkout();
+
+  const [active, setActive] = useState(0);
+
   const form = useForm<WorkoutFormValues>({
     resolver: zodResolver(workoutSchema),
     values,
   });
-
   const { fields, append, move } = useFieldArray({
     name: 'exercises',
     control: form.control,
   });
-
-  const [active, setActive] = useState(0);
-
-  const { exercises, activeExercises } = useExercise();
 
   const {
     formState: { isDirty },
@@ -58,10 +59,7 @@ export const WorkoutForm: React.FC<{
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(submit)}
-        data-testid="add-new-exercise-form"
-      >
+      <form onSubmit={form.handleSubmit(submit)}>
         <FormField
           control={form.control}
           name="name"
@@ -175,7 +173,7 @@ export const WorkoutForm: React.FC<{
         <Button
           className="mb-4 mt-2 w-full"
           type="button"
-          onClick={() => append({ id: uuidv4(), sets: 1, exerciseId: '' })}
+          onClick={() => append(createExerciseForWorkout())}
         >
           Add Exercise
         </Button>

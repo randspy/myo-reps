@@ -10,7 +10,14 @@ import {
   updateWorkout,
 } from '@/app/core/workouts/store/workouts-slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  createExerciseForWorkout,
+  createWorkoutFromForm,
+  deduplicateExercisesId,
+  findExercisesByWorkoutId,
+  updateWorkoutPositions,
+  updateWorkoutUsageOfExercises,
+} from '@/app/core/workouts/domain/workout.domain';
 
 export const useWorkout = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
@@ -20,13 +27,11 @@ export const useWorkout = () => {
 
   function dispatchAdd(value: WorkoutFormValues) {
     const workout = createWorkoutFromForm(value, workouts.length);
+    const distinctExerciseIds = deduplicateExercisesId(workout.exercises);
+
     dispatch(addWorkout(workout));
 
-    const distinctExercises = new Set(
-      workout.exercises.map((e) => e.exerciseId),
-    );
-
-    for (const exerciseId of distinctExercises) {
+    for (const exerciseId of distinctExerciseIds) {
       dispatchAddUsage({ exerciseId: exerciseId, userId: workout.id });
     }
   }
@@ -34,24 +39,10 @@ export const useWorkout = () => {
   function dispatchUpdate(updatedWorkout: WorkoutValue) {
     dispatch(updateWorkout(updatedWorkout));
 
-    const exercisesFromStore =
-      workouts.find((workout) => workout.id === updatedWorkout.id)?.exercises ||
-      [];
-
-    const addedExercises = updatedWorkout.exercises.filter(
-      (exerciseFromValue) =>
-        !exercisesFromStore.find(
-          (exercise) => exercise.exerciseId === exerciseFromValue.exerciseId,
-        ),
+    const { addedExercises, removedExercises } = updateWorkoutUsageOfExercises(
+      workouts,
+      updatedWorkout,
     );
-
-    const removedExercises = exercisesFromStore.filter((exerciseFromStore) => {
-      return !updatedWorkout.exercises.find((exerciseFromUpdatedWorkout) => {
-        return (
-          exerciseFromStore.exerciseId === exerciseFromUpdatedWorkout.exerciseId
-        );
-      });
-    });
 
     for (const exercise of addedExercises) {
       dispatchAddUsage({
@@ -71,8 +62,7 @@ export const useWorkout = () => {
   function dispatchDelete(id: string) {
     dispatch(deleteWorkout(id));
 
-    const exercises =
-      workouts.find((workout) => workout.id === id)?.exercises || [];
+    const exercises = findExercisesByWorkoutId(workouts, id);
 
     for (const exercise of exercises) {
       dispatchRemoveUsage({ exerciseId: exercise.exerciseId, userId: id });
@@ -89,23 +79,6 @@ export const useWorkout = () => {
     dispatchUpdate,
     dispatchDelete,
     dispatchSet,
+    createExerciseForWorkout,
   };
 };
-
-function createWorkoutFromForm(
-  values: WorkoutFormValues,
-  position: number,
-): WorkoutValue {
-  return {
-    id: uuidv4(),
-    position,
-    ...values,
-  };
-}
-
-function updateWorkoutPositions(workouts: WorkoutValue[]) {
-  return workouts.map((workout, idx) => ({
-    ...workout,
-    position: idx,
-  }));
-}
