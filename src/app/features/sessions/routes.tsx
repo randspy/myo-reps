@@ -15,7 +15,11 @@ export const sessionRoutes = [
       },
       {
         path: 'in-progress',
-        element: <div>In progress</div>,
+        element: (
+          <div className="flex h-full items-center justify-center">
+            <h2 className="text-2xl">TODO</h2>
+          </div>
+        ),
       },
     ],
   },

@@ -6,6 +6,6 @@ describe('Session Page', () => {
   it('should display the correct title', () => {
     render(<SessionsPage />);
 
-    expect(screen.getByText('Sessions: TO BE IMPLEMENTED')).toBeInTheDocument();
+    expect(screen.getByText('TODO')).toBeInTheDocument();
   });
 });
