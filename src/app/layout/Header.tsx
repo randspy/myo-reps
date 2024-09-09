@@ -15,6 +15,10 @@ export function Header() {
 
   const ref = useClickAway(() => setIsSidebarOpen(false));
 
+  const activeSidebarElementPath = sideBarRoutePaths.find((tab) => {
+    return location.pathname.includes(tab.url);
+  })?.title;
+
   return (
     <>
       <header
@@ -33,7 +37,7 @@ export function Header() {
         </div>
 
         <h2 className="truncate text-lg md:ml-4" data-testid="title">
-          {sideBarRoutePaths[location.pathname]?.title}
+          {activeSidebarElementPath}
         </h2>
 
         <div className="ml-auto mr-2">

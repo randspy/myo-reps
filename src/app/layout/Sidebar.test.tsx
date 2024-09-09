@@ -1,12 +1,12 @@
-import { act, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
-import { sideBarRoutePaths } from '../routes';
+import { sideBarRoutePaths } from '@/app/routes';
 
 describe('Sidebar', () => {
   const path = '/workouts';
 
-  it('renders the sidebar with correct tabs', () => {
+  test('renders the sidebar with correct tabs', () => {
     render(
       <MemoryRouter initialEntries={[path]}>
         <Sidebar tabs={sideBarRoutePaths} path={path} close={() => true} />
@@ -31,7 +31,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('renders the sidebar with the correct active tab', () => {
+  test('renders the sidebar with the correct active tab', () => {
     render(
       <MemoryRouter initialEntries={['/exercises']}>
         <Sidebar
@@ -48,7 +48,7 @@ describe('Sidebar', () => {
     );
   });
 
-  it('clicking on a tab calls the close function', () => {
+  test('clicking on a tab calls the close function', () => {
     const close = vi.fn();
 
     render(
@@ -57,10 +57,7 @@ describe('Sidebar', () => {
       </MemoryRouter>,
     );
 
-    const tabElements = screen.getAllByRole('link');
-    act(() => {
-      tabElements[1].click();
-    });
+    fireEvent.click(screen.getAllByRole('link')[1]);
 
     expect(close).toHaveBeenCalled();
   });

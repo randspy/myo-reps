@@ -6,19 +6,22 @@ import { exerciseRoutes } from '@/app/features/exercises/routes';
 import { workoutRoutes } from '@/app/features/workouts/routes';
 import { sessionRoutes } from '@/app/features/sessions/routes';
 
-export type RouteType = Record<string, { title: string }>;
+export type RouteType = { title: string; url: string };
 
-export const sideBarRoutePaths: RouteType = {
-  '/workouts': {
+export const sideBarRoutePaths: RouteType[] = [
+  {
     title: 'Workouts',
+    url: '/workouts',
   },
-  '/exercises': {
+  {
     title: 'Exercises',
+    url: '/exercises',
   },
-  '/sessions': {
+  {
     title: 'Sessions',
+    url: '/sessions',
   },
-};
+];
 
 export const routes = [
   {

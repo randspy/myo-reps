@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { Header } from '@/app/layout/Header';
@@ -78,22 +78,22 @@ describe('Header', () => {
       expect.objectContaining({
         close: expect.any(Function),
         path: '/workouts',
-        tabs: expect.objectContaining({
-          '/exercises': expect.objectContaining({
+        tabs: expect.arrayContaining([
+          expect.objectContaining({
             title: 'Exercises',
           }),
-          '/sessions': expect.objectContaining({
+          expect.objectContaining({
             title: 'Sessions',
           }),
-          '/workouts': expect.objectContaining({
+          expect.objectContaining({
             title: 'Workouts',
           }),
-        }),
+        ]),
       }),
     );
   });
 
-  test('opening and closing of the sidebar', () => {
+  test('opening of the sidebar', () => {
     render(
       <MemoryRouter initialEntries={['/workouts']}>
         <Header />
@@ -108,6 +108,18 @@ describe('Header', () => {
 
     const sidebarElementParent = screen.getByTestId('sidebar-mock').parentNode;
     expect(sidebarElementParent).toHaveClass('translate-x-0');
+  });
+
+  test('closing of the sidebar by clicking outside', () => {
+    render(
+      <MemoryRouter initialEntries={['/workouts']}>
+        <Header />
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByTestId('sidebar-toggle'));
+
+    const sidebarElementParent = screen.getByTestId('sidebar-mock').parentNode;
 
     act(() => {
       document.dispatchEvent(new MouseEvent('mousedown'));
@@ -123,17 +135,11 @@ describe('Header', () => {
       </MemoryRouter>,
     );
 
-    const menuButton = screen.getByTestId('sidebar-toggle');
-
-    act(() => {
-      menuButton.click();
-    });
+    fireEvent.click(screen.getByTestId('sidebar-toggle'));
 
     const sidebarElement = screen.getByTestId('sidebar-mock');
 
-    act(() => {
-      sidebarElement.click();
-    });
+    fireEvent.click(sidebarElement);
 
     expect(sidebarElement.parentNode).not.toHaveClass('translate-x-0');
   });

@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom';
 import { Logo } from '@/app/ui/Logo';
 
 export type SidebarProps = {
-  tabs: RouteType;
+  tabs: RouteType[];
   path: string;
   close: () => void;
 };
 
 export function Sidebar({ tabs, path, close }: SidebarProps) {
-  const matchingTab = Object.keys(tabs).find((tab) => path.includes(tab));
-  const activeTab = matchingTab ? tabs[matchingTab] : null;
+  const activeTab = tabs.find((tab) => path.includes(tab.url));
 
   return (
     <div
@@ -22,25 +21,24 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
         <Logo />
       </div>
       <ul>
-        {Object.keys(tabs).map((key) => (
-          <li key={key}>
+        {tabs.map((tab) => (
+          <li key={tab.url}>
             <Link
-              to={key}
+              to={tab.url}
               className={cn(
                 'my-2 ml-4 block outline-none hover:opacity-90 focus-visible:shadow-outline md:-mr-4',
-                activeTab?.title !== tabs[key]?.title &&
-                  'hover:hover:bg-accent',
+                activeTab?.title !== tab.title && 'hover:hover:bg-accent',
               )}
               onClick={() => close()}
             >
               <div
                 className={cn(
                   'px-4 py-3',
-                  activeTab?.title === tabs[key]?.title &&
+                  activeTab?.title === tab.title &&
                     'bg-primary text-primary-foreground',
                 )}
               >
-                {tabs[key].title}
+                {tab.title}
               </div>
             </Link>
           </li>
