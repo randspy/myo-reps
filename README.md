@@ -24,11 +24,11 @@ npm run dev
 
 # Application's overview
 
-The Application is a fitness app for my person use. It is optimize for using Myo reps protocol (https://www.youtube.com/watch?v=V71TGRQaLRs).
+The Application is a fitness app for my person use. It is optimize for using [Myo reps protocol](https://www.youtube.com/watch?v=V71TGRQaLRs).
 
 # Project structure
 
-The app is eagerly loaded, as for my I didn't need lazy loading, but the application was designed the way that allows lazy loading.
+The app is based on architecture described in [Angular enterprise architecture](https://angularexperts.io/products/ebook-angular-enterprise-architecture).
 
     app
         core - business logic used by multiply features
@@ -36,6 +36,8 @@ The app is eagerly loaded, as for my I didn't need lazy loading, but the applica
         layout - components used for application layout
         pattern - components that modify the application but don't belong to a specific feature
         ui - generic components
-    components - shadcn/ui components
+    components/ui - shadcn/ui components
     lib - utils
     store - redux toolkit wiring
+
+For permanent storage I use IndexedDB as I don't need more, for now at least. The business logic is separated from the store. Influenced by [Modularizing React Applications with Established UI Patterns](https://martinfowler.com/articles/modularizing-react-apps.html) article.
