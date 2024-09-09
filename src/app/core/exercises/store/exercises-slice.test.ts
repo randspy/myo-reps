@@ -27,7 +27,7 @@ export const setupStore = (
 
 describe('exercises slice', () => {
   describe('add exercise', () => {
-    it('should add a new exercise to the state', async () => {
+    test('should add a new exercise to the state', async () => {
       const store = setupStore({ exercises: { values: [] } });
 
       const newExercise = generateExercise({
@@ -48,7 +48,7 @@ describe('exercises slice', () => {
   });
 
   describe('delete exercise', () => {
-    it('should delete an exercise from the state', async () => {
+    test('should delete an exercise from the state', async () => {
       const store = setupStore({
         exercises: {
           values: [
@@ -70,7 +70,7 @@ describe('exercises slice', () => {
   });
 
   describe('update exercise', () => {
-    it('should update an exercise in the state', async () => {
+    test('should update an exercise in the state', async () => {
       const store = setupStore({
         exercises: {
           values: [
@@ -97,7 +97,7 @@ describe('exercises slice', () => {
   });
 
   describe('set exercises', () => {
-    it('should set the exercises in the state', async () => {
+    test('should set the exercises in the state', async () => {
       const store = setupStore();
 
       const exercises = [
@@ -123,7 +123,7 @@ describe('exercises slice', () => {
   });
 
   describe('restore exercises', () => {
-    it('should restore the exercises in the state', () => {
+    test('should restore the exercises in the state', () => {
       const initialState = {
         values: [],
       };

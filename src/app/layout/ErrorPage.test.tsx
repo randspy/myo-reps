@@ -18,7 +18,7 @@ describe('ErrorPage', () => {
     consoleSpy.mockRestore();
   });
 
-  it('should render the unexpected error message when there is no error', () => {
+  test('should render the unexpected error message when there is no error', () => {
     (useRouteError as Mock).mockReturnValue(null);
 
     render(<ErrorPage />);
@@ -31,7 +31,7 @@ describe('ErrorPage', () => {
     expect(screen.queryByText('Message:')).toBeNull();
   });
 
-  it('should render the error details when error object is provided', () => {
+  test('should render the error details when error object is provided', () => {
     const mockError = {
       status: 404,
       statusText: 'Not Found',
@@ -51,7 +51,7 @@ describe('ErrorPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('should render the error details with partial error information', () => {
+  test('should render the error details with partial error information', () => {
     const mockError = {
       status: 500,
     };
@@ -67,7 +67,7 @@ describe('ErrorPage', () => {
     expect(screen.queryByText('Message:')).toBeNull();
   });
 
-  it('should log the error to the console', () => {
+  test('should log the error to the console', () => {
     const mockError = {
       status: 500,
       statusText: 'Internal Server Error',

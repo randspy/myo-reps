@@ -18,7 +18,7 @@ describe('Clear App State', () => {
     originalReload = window.location.reload;
   });
 
-  it('should render the ClearAppState component', () => {
+  test('should render the ClearAppState component', () => {
     render(<ClearAppState />);
     expect(screen.getByRole('button')).toBeInTheDocument();
   });
@@ -27,7 +27,7 @@ describe('Clear App State', () => {
     window.location.reload = originalReload;
   });
 
-  it('should call recreateDB and reload the page when the button is clicked', async () => {
+  test('should call recreateDB and reload the page when the button is clicked', async () => {
     render(<ClearAppState />);
 
     const reloadMock = vi.fn();
@@ -45,7 +45,7 @@ describe('Clear App State', () => {
     });
   });
 
-  it('should close the dialog when the cancel button is clicked', () => {
+  test('should close the dialog when the cancel button is clicked', () => {
     render(<ClearAppState />);
 
     fireEvent.click(screen.getByLabelText("Delete app's state"));

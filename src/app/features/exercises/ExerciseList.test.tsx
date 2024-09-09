@@ -72,24 +72,24 @@ describe('Exercise list', () => {
     ).store;
   });
 
-  it('renders the list of exercises', () => {
+  test('renders the list of exercises', () => {
     initialState.exercises.values.forEach((exercise) => {
       expect(screen.getByText(exercise.name)).toBeInTheDocument();
     });
   });
 
-  it('pass through exercises to child components', async () => {
+  test('pass through exercises to child components', async () => {
     expect(deleteExercise).toHaveBeenCalledWith(
       initialState.exercises.values[0],
     );
   });
 
-  it('redirect to edit page', () => {
+  test('redirect to edit page', () => {
     fireEvent.click(screen.getAllByLabelText('Edit exercise')[0]);
     expect(screen.getByText('Mock Edit Exercise')).toBeInTheDocument();
   });
 
-  it('simulate drag and drop', async () => {
+  test('simulate drag and drop', async () => {
     act(() => {
       onReorder([
         initialState.exercises.values[1],

@@ -18,7 +18,7 @@ describe('useExercise', () => {
     vi.clearAllMocks();
   });
 
-  it('should return exercises and activeExercises', () => {
+  test('should return exercises and activeExercises', () => {
     const initialState = [
       generateExercise({
         id: 'exercise-1',
@@ -48,7 +48,7 @@ describe('useExercise', () => {
     expect(result.current.activeExercises).toEqual([initialState[0]]);
   });
 
-  it('should add exercise', () => {
+  test('should add exercise', () => {
     const id = 'exercise-1';
     vi.mocked(v4).mockImplementation(() => id);
 
@@ -68,7 +68,7 @@ describe('useExercise', () => {
     });
   });
 
-  it('should dispatch updateExercise action', () => {
+  test('should dispatch updateExercise action', () => {
     const { result, store } = renderHookWithProviders(() => useExercise(), {
       preloadedState: {
         exercises: {
@@ -89,7 +89,7 @@ describe('useExercise', () => {
     expect(exercise(store, 'exercise-1')).toEqual(updatedExercise);
   });
 
-  it('should set exercise', () => {
+  test('should set exercise', () => {
     const { result, store } = renderHookWithProviders(() => useExercise());
 
     const exercises = [
@@ -107,7 +107,7 @@ describe('useExercise', () => {
   });
 
   describe('delete exercise', () => {
-    it('should hide if exercise is in use', () => {
+    test('should hide if exercise is in use', () => {
       const { result, store } = renderHookWithProviders(() => useExercise(), {
         preloadedState: {
           exercises: {
@@ -134,7 +134,7 @@ describe('useExercise', () => {
       );
     });
 
-    it('should delete action if exercise is not in use', () => {
+    test('should delete action if exercise is not in use', () => {
       const { result, store } = renderHookWithProviders(() => useExercise(), {
         preloadedState: {
           exercises: {
@@ -156,7 +156,7 @@ describe('useExercise', () => {
     });
   });
 
-  it('should add usage', () => {
+  test('should add usage', () => {
     const { result, store } = renderHookWithProviders(() => useExercise(), {
       preloadedState: {
         exercises: {
@@ -181,7 +181,7 @@ describe('useExercise', () => {
   });
 
   describe('remove usage', () => {
-    it('should remove usage', () => {
+    test('should remove usage', () => {
       const { result, store } = renderHookWithProviders(() => useExercise(), {
         preloadedState: {
           exercises: {
@@ -210,7 +210,7 @@ describe('useExercise', () => {
       );
     });
 
-    it('should delete exercise if exercise is hidden and has no usage outside provided user id', () => {
+    test('should delete exercise if exercise is hidden and has no usage outside provided user id', () => {
       const { result, store } = renderHookWithProviders(() => useExercise(), {
         preloadedState: {
           exercises: {

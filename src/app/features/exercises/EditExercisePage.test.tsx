@@ -73,7 +73,7 @@ const preloadedState = {
 describe('Edit exercise page', () => {
   let store: AppStore;
 
-  it('update exercise', () => {
+  test('update exercise', () => {
     const mockNavigate = vi.fn();
 
     (useNavigate as Mock).mockReturnValue(mockNavigate);
@@ -96,7 +96,7 @@ describe('Edit exercise page', () => {
     expect(store.getState().exercises.values[0].name).toEqual('Mock Push up');
   });
 
-  it('navigate to /exercises on cancel', () => {
+  test('navigate to /exercises on cancel', () => {
     const mockNavigate = vi.fn();
 
     (useNavigate as Mock).mockReturnValue(mockNavigate);
@@ -118,7 +118,7 @@ describe('Edit exercise page', () => {
     expect(store.getState().exercises.values[0].name).toEqual('Push-up');
   });
 
-  it('block unsaved changes', () => {
+  test('block unsaved changes', () => {
     store = renderWithProviders(
       <MemoryRouter initialEntries={['/1']}>
         <Routes>
@@ -135,7 +135,7 @@ describe('Edit exercise page', () => {
     expect(mockOnDirtyChange).toHaveBeenCalledWith(true);
   });
 
-  it('show 404 page when exercise is not found', () => {
+  test('show 404 page when exercise is not found', () => {
     store = renderWithProviders(
       <MemoryRouter initialEntries={['/2']}>
         <Routes>

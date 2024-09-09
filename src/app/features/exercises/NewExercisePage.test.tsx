@@ -57,7 +57,7 @@ vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
 describe('New exercise page', () => {
   let store: AppStore;
 
-  it('call dispatchAdd and navigate on form submission', () => {
+  test('call dispatchAdd and navigate on form submission', () => {
     const mockNavigate = vi.fn();
 
     (useNavigate as Mock).mockReturnValue(mockNavigate);
@@ -75,7 +75,7 @@ describe('New exercise page', () => {
     expect(store.getState().exercises.values[0].name).toEqual('Mock Push up');
   });
 
-  it('navigate to /exercises on cancel', () => {
+  test('navigate to /exercises on cancel', () => {
     const mockNavigate = vi.fn();
 
     (useNavigate as Mock).mockReturnValue(mockNavigate);
@@ -92,7 +92,7 @@ describe('New exercise page', () => {
     expect(store.getState().exercises.values).toEqual([]);
   });
 
-  it('block unsaved changes', () => {
+  test('block unsaved changes', () => {
     store = renderWithProviders(
       <MemoryRouter>
         <NewExercisePage />

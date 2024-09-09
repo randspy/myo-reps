@@ -58,24 +58,24 @@ describe('Workout list', () => {
     );
   });
 
-  it('renders the list of workouts', () => {
+  test('renders the list of workouts', () => {
     preloadedState.workouts.values.forEach((workouts) => {
       expect(screen.getByText(workouts.name)).toBeInTheDocument();
     });
   });
 
-  it('pass through workouts to child components', async () => {
+  test('pass through workouts to child components', async () => {
     expect(deleteWorkout).toHaveBeenCalledWith(
       preloadedState.workouts.values[0],
     );
   });
 
-  it('redirect to edit page', () => {
+  test('redirect to edit page', () => {
     fireEvent.click(screen.getAllByLabelText('Edit workout')[0]);
     expect(screen.getByText('Mock Edit Workout')).toBeInTheDocument();
   });
 
-  it('redirect to new session page for a given workout', () => {
+  test('redirect to new session page for a given workout', () => {
     fireEvent.click(screen.getByLabelText('Start workout'));
     expect(screen.getByText('Mock New Session')).toBeInTheDocument();
   });

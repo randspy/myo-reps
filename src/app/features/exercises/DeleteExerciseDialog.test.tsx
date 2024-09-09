@@ -29,7 +29,7 @@ describe('Delete exercise', () => {
     fireEvent.click(screen.getByLabelText('Delete exercise'));
   });
 
-  it('opens the dialog when the trigger is clicked', () => {
+  test('opens the dialog when the trigger is clicked', () => {
     expect(
       screen.getByRole('heading', {
         name: 'Are you sure you want to delete this exercise?',
@@ -37,7 +37,7 @@ describe('Delete exercise', () => {
     ).toBeInTheDocument();
   });
 
-  it('closes the dialog when the cancel button is clicked', () => {
+  test('closes the dialog when the cancel button is clicked', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(
@@ -47,7 +47,7 @@ describe('Delete exercise', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('calls the deleteExercise function when the confirm button is clicked', async () => {
+  test('calls the deleteExercise function when the confirm button is clicked', async () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {

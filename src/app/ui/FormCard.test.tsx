@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { FormCard } from '@/app/ui/FormCard';
 
 describe('Form card', () => {
-  it('renders component with title and content', () => {
+  test('renders component with title and content', () => {
     render(
       <FormCard title="Form card">
         <div>Form card content</div>
