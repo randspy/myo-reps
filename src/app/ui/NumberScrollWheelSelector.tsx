@@ -40,6 +40,8 @@ export const NumberScrollWheelSelector: React.FC<{
             className="my-1 text-sm"
             onClick={() => onValueChange(number)}
             ref={(el) => (refs.current[index] = el)}
+            // all buttons should have the same width, the width of the widest button,
+            // we need auto width for the button to take the width of the content
             style={{ width: maxWidth ? `${maxWidth}px` : 'auto' }}
           >
             {number}
