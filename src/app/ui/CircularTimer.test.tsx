@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { CircularTimer } from './CircularTimer';
 
 describe('Circular Timer', () => {
@@ -17,7 +17,10 @@ describe('Circular Timer', () => {
 
   test('counts down when active', async () => {
     render(<CircularTimer initialTime={10} isActive={true} />);
-    vi.advanceTimersByTime(1500);
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('9')).toBeInTheDocument();
@@ -29,7 +32,11 @@ describe('Circular Timer', () => {
     render(
       <CircularTimer initialTime={1} isActive={true} onTimeUp={onTimeUp} />,
     );
-    vi.advanceTimersByTime(1500);
+
+    act(() => {
+      vi.advanceTimersByTime(2500);
+    });
+
     await waitFor(() => {
       expect(onTimeUp).toHaveBeenCalled();
     });
@@ -39,7 +46,10 @@ describe('Circular Timer', () => {
     render(
       <CircularTimer initialTime={0} isActive={true} isCountingUp={true} />,
     );
-    vi.advanceTimersByTime(1000);
+
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('1')).toBeInTheDocument();
@@ -60,7 +70,10 @@ describe('Circular Timer', () => {
 
   test('when counting down stop at 0', async () => {
     render(<CircularTimer initialTime={2} isActive={true} />);
-    vi.advanceTimersByTime(5000);
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('0')).toBeInTheDocument();

@@ -13,8 +13,10 @@ listenerMiddleware.startListening({
     listenerApi.cancelActiveListeners();
 
     const stores = await restoreFromDB();
-    for (const store of stores) {
-      listenerApi.dispatch(store);
+    if (stores) {
+      for (const store of stores) {
+        listenerApi.dispatch(store);
+      }
     }
   },
 });

@@ -18,4 +18,6 @@ vi.mock('@/db', () => ({
       bulkPut: vi.fn(),
     },
   },
+  recreateDB: vi.fn(),
+  restoreFromDB: vi.fn(),
 }));
