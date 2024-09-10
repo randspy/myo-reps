@@ -5,13 +5,20 @@ import {
   ExerciseFormValues,
   ExerciseValue,
 } from '@/app/core/exercises/exercises-schema';
-import { v4 as uuidv4 } from 'uuid';
 import {
   addExercise,
   deleteExercise,
   setExercises,
   updateExercise,
 } from '@/app/core/exercises/store/exercises-slice';
+import {
+  addUsageToExercise,
+  createExerciseFromForm,
+  removeUsageFromExercise,
+  removeExerciseFromUserView,
+  updateExercisePositions,
+  ExerciseAction,
+} from '@/app/core/exercises/domain/exercises.domain';
 
 export const useExercise = () => {
   const exercises = useAppSelector((state) => state.exercises.values);
@@ -29,16 +36,14 @@ export const useExercise = () => {
   }
 
   function dispatchDelete(id: string) {
-    const exercise = exercises.find((exercise) => exercise.id === id);
+    const action: ExerciseAction = removeExerciseFromUserView(id, exercises);
 
-    if (!exercise) {
-      return;
-    }
-
-    if (exercise.usage.length > 0) {
-      dispatch(updateExercise({ ...exercise, hidden: true }));
-    } else {
-      dispatch(deleteExercise(id));
+    if (action) {
+      if (action.type === 'update') {
+        dispatch(updateExercise(action.payload));
+      } else if (action.type === 'delete') {
+        dispatch(deleteExercise(action.payload));
+      }
     }
   }
 
@@ -53,12 +58,9 @@ export const useExercise = () => {
     exerciseId: string;
     userId: string;
   }) {
-    const exercise: ExerciseValue | undefined = structuredClone(
-      exercises.find((exercise) => exercise.id === exerciseId),
-    );
+    const exercise = addUsageToExercise(exercises, exerciseId, userId);
 
     if (exercise) {
-      exercise.usage.push({ id: userId });
       dispatch(updateExercise(exercise));
     }
   }
@@ -70,19 +72,17 @@ export const useExercise = () => {
     exerciseId: string;
     userId: string;
   }) {
-    const exercise: ExerciseValue | undefined = structuredClone(
-      exercises.find((exercise) => exercise.id === exerciseId),
+    const action: ExerciseAction = removeUsageFromExercise(
+      exercises,
+      exerciseId,
+      userId,
     );
 
-    if (exercise) {
-      const usage = exercise.usage.filter((item) => item.id !== userId);
-
-      if (!usage.length && exercise.hidden) {
-        dispatch(deleteExercise(exerciseId));
-      } else {
-        exercise.usage = usage;
-
-        dispatch(updateExercise(exercise));
+    if (action) {
+      if (action.type === 'update') {
+        dispatch(updateExercise(action.payload));
+      } else if (action.type === 'delete') {
+        dispatch(deleteExercise(action.payload));
       }
     }
   }
@@ -98,23 +98,3 @@ export const useExercise = () => {
     dispatchRemoveUsage,
   };
 };
-
-function createExerciseFromForm(
-  values: ExerciseFormValues,
-  position: number,
-): ExerciseValue {
-  return {
-    ...values,
-    id: uuidv4(),
-    position,
-    usage: [],
-    hidden: false,
-  };
-}
-
-function updateExercisePositions(exercises: ExerciseValue[]) {
-  return exercises.map((exercise, idx) => ({
-    ...exercise,
-    position: idx,
-  }));
-}
