@@ -1,7 +1,7 @@
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { selectExercisesByWorkoutIdAsMap } from '@/app/core/exercises/store/exercises-selectors';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
-import { PageNotFound } from '@/app/layout/PageNotFound';
+import { PageNotFound } from '@/app/ui/PageNotFound';
 import { FormCard } from '@/app/ui/FormCard';
 import { Button } from '@/components/ui/button';
 import { RootState } from '@/store/store';

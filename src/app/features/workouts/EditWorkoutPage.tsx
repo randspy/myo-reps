@@ -10,7 +10,7 @@ import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
 import { WorkoutForm } from '@/app/features/workouts/WorkoutForm';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
 import { useSelector } from 'react-redux';
-import { PageNotFound } from '@/app/layout/PageNotFound';
+import { PageNotFound } from '@/app/ui/PageNotFound';
 
 export const EditWorkoutPage: React.FC = () => {
   const { dispatchUpdate } = useWorkout();

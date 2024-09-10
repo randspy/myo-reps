@@ -10,7 +10,7 @@ import {
   OnDirtyChange,
   OnSubmit,
 } from '@/app/ui/UnsavedFormChangesBlocker';
-import { PageNotFound } from '@/app/layout/PageNotFound';
+import { PageNotFound } from '@/app/ui/PageNotFound';
 
 export const EditExercisePage: React.FC = () => {
   const { dispatchUpdate } = useExercise();
