@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { ExerciseForm } from './ExerciseForm';
+import { ExerciseForm } from '@/app/features/exercises/ExerciseForm';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
 import { FormCard } from '@/app/ui/FormCard';
@@ -31,7 +31,7 @@ export const EditExercisePage: React.FC = () => {
             onSubmit={(values: ExerciseFormValues) => {
               onSubmit();
               dispatchUpdate({
-                ...exercise!,
+                ...exercise,
                 ...values,
               });
               navigate('/exercises');

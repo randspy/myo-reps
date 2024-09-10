@@ -30,7 +30,7 @@ export const EditWorkoutPage: React.FC = () => {
           <WorkoutForm
             onSubmit={(values: WorkoutFormValues) => {
               onSubmit();
-              dispatchUpdate({ ...workout!, ...values });
+              dispatchUpdate({ ...workout, ...values });
               navigate('/workouts');
             }}
             onCancel={() => navigate('/workouts')}

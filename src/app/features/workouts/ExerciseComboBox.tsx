@@ -49,7 +49,7 @@ export const ExerciseComboBox: React.FC<{
     // there is a mismatch between the fuzzy search libraries and the api provided
     // by the Command component. Command component should provide a way to filter
     // items in one function execution for all items.
-    // Neverless but it's good enough for number of items I will work with
+    // Neverless, it's good enough for number of items I will work with
 
     const matchedItems = fuzzySearch
       .search(searchPrompt)
