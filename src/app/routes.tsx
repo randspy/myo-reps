@@ -1,4 +1,4 @@
-import { App } from '@/App';
+import { App } from '@/app/App';
 import { Navigate } from 'react-router-dom';
 import { PageNotFound } from '@/app/layout/PageNotFound';
 import { ErrorPage } from '@/app/layout/ErrorPage';
