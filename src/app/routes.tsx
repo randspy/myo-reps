@@ -1,7 +1,7 @@
 import { App } from '@/app/App';
 import { Navigate } from 'react-router-dom';
 import { PageNotFound } from '@/app/ui/PageNotFound';
-import { ErrorPage } from '@/app/ui/ErrorPage';
+import { ErrorFallback } from '@/app/ui/ErrorFallback';
 import { exerciseRoutes } from '@/app/features/exercises/routes';
 import { workoutRoutes } from '@/app/features/workouts/routes';
 import { sessionRoutes } from '@/app/features/sessions/routes';
@@ -27,7 +27,7 @@ export const routes = [
   {
     path: '/',
     element: <App />,
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorFallback />,
     children: [
       {
         path: '/',

@@ -5,7 +5,7 @@ interface HttpError extends Error {
   statusText?: string;
 }
 
-export const ErrorPage: React.FC = () => {
+export const ErrorFallback: React.FC = () => {
   const error = useRouteError() as HttpError | null;
   console.error(error);
 

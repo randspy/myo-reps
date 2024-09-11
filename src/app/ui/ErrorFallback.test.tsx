@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { Mock } from 'vitest';
-import { ErrorPage } from './ErrorPage';
+import { ErrorFallback } from './ErrorFallback';
 import { useRouteError } from 'react-router-dom';
 
 vi.mock('react-router-dom', () => ({
   useRouteError: vi.fn(),
 }));
 
-describe('ErrorPage', () => {
+describe('ErrorFallback', () => {
   let consoleSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('ErrorPage', () => {
   test('should render the unexpected error message when there is no error', () => {
     (useRouteError as Mock).mockReturnValue(null);
 
-    render(<ErrorPage />);
+    render(<ErrorFallback />);
 
     expect(
       screen.getByText('Sorry, an unexpected error has occurred.'),
@@ -39,7 +39,7 @@ describe('ErrorPage', () => {
     };
     (useRouteError as Mock).mockReturnValue(mockError);
 
-    render(<ErrorPage />);
+    render(<ErrorFallback />);
 
     expect(
       screen.getByText('Sorry, an unexpected error has occurred.'),
@@ -57,7 +57,7 @@ describe('ErrorPage', () => {
     };
     (useRouteError as Mock).mockReturnValue(mockError);
 
-    render(<ErrorPage />);
+    render(<ErrorFallback />);
 
     expect(
       screen.getByText('Sorry, an unexpected error has occurred.'),
@@ -75,7 +75,7 @@ describe('ErrorPage', () => {
     };
     (useRouteError as Mock).mockReturnValue(mockError);
 
-    render(<ErrorPage />);
+    render(<ErrorFallback />);
 
     expect(consoleSpy).toHaveBeenCalledWith(mockError);
   });
