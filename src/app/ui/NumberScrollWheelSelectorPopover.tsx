@@ -25,7 +25,9 @@ export const NumberScrollWheelSelectorPopover: React.FC<{
   return (
     <Popover modal={true} open={open}>
       <PopoverTrigger asChild>
-        <Button onClick={() => setOpen(true)}>{value}</Button>
+        <Button onClick={() => setOpen(true)} className="min-w-12 text-center">
+          {value}
+        </Button>
       </PopoverTrigger>
 
       <PopoverContent ref={ref} className="w-30 p-0">

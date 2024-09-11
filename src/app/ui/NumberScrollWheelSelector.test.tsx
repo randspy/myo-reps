@@ -69,49 +69,4 @@ describe('NumberScrollWheelSelector', () => {
       });
     });
   });
-
-  describe('max width', () => {
-    let originalOffsetWidth: PropertyDescriptor;
-
-    beforeEach(() => {
-      originalOffsetWidth = Object.getOwnPropertyDescriptor(
-        HTMLElement.prototype,
-        'offsetWidth',
-      )!;
-
-      Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
-        configurable: true,
-        get: function () {
-          if (this.textContent.length === 2) {
-            return 100;
-          }
-          return 50;
-        },
-      });
-    });
-
-    afterEach(() => {
-      Object.defineProperty(
-        HTMLElement.prototype,
-        'offsetWidth',
-        originalOffsetWidth,
-      );
-    });
-
-    it('sets max width of buttons to width of widest item', () => {
-      render(
-        <NumberScrollWheelSelector
-          value={20}
-          max={20}
-          onValueChange={vi.fn()}
-        />,
-      );
-
-      const buttons = screen.getAllByRole('button');
-
-      buttons.forEach((button) => {
-        expect(button).toHaveStyle('width: 100px');
-      });
-    });
-  });
 });

@@ -30,7 +30,7 @@ export const StartSessionPage: React.FC = () => {
           className="my-2 flex items-center justify-between"
         >
           <p className="truncate">{exercises.get(exercise.exerciseId)?.name}</p>
-          <div className="min-w-10 bg-primary p-2 text-center text-primary-foreground">
+          <div className="min-w-12 bg-primary p-2 text-center text-primary-foreground">
             {exercise.sets}
           </div>
         </div>
