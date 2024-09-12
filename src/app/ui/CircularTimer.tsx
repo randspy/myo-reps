@@ -7,18 +7,17 @@ export const CircularTimer: React.FC<{
   initialTime?: number;
   isActive?: boolean;
   isCountingUp?: boolean;
-  onTimeUp?: () => void;
-}> = ({
-  initialTime = 60,
-  isActive = false,
-  isCountingUp = false,
-  onTimeUp,
-}) => {
+  onTick?: (time: number) => void;
+}> = ({ initialTime = 60, isActive = false, isCountingUp = false, onTick }) => {
   const [time, setTime] = useState(initialTime);
 
   useEffect(() => {
     setTime(initialTime);
   }, [initialTime]);
+
+  useEffect(() => {
+    onTick?.(time);
+  }, [time, onTick]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -29,19 +28,16 @@ export const CircularTimer: React.FC<{
           if (isCountingUp) {
             return prevTime + 1;
           } else {
-            if (prevTime === 0) {
-              onTimeUp?.();
-              return 0;
-            }
-
-            return prevTime - 1;
+            return prevTime === 0 ? 0 : prevTime - 1;
           }
         });
       }, 1000);
     }
 
     return () => {
-      if (interval) clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
   }, [isActive, isCountingUp]);
 

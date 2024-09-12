@@ -27,18 +27,16 @@ describe('Circular Timer', () => {
     });
   });
 
-  test('calls onTimeUp when time is up', async () => {
-    const onTimeUp = vi.fn();
-    render(
-      <CircularTimer initialTime={1} isActive={true} onTimeUp={onTimeUp} />,
-    );
+  test('calls onTick every second starting from the init moment', async () => {
+    const onTick = vi.fn();
+    render(<CircularTimer initialTime={1} isActive={true} onTick={onTick} />);
 
     act(() => {
-      vi.advanceTimersByTime(2500);
+      vi.advanceTimersByTime(1000);
     });
 
     await waitFor(() => {
-      expect(onTimeUp).toHaveBeenCalled();
+      expect(onTick).toHaveBeenCalledTimes(2);
     });
   });
 
