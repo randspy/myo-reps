@@ -26,7 +26,7 @@ export function Sidebar({ tabs, path, close }: SidebarProps) {
             <Link
               to={tab.url}
               className={cn(
-                'my-2 ml-4 block outline-none hover:opacity-90 focus-visible:shadow-outline md:-mr-4',
+                'my-2 block outline-none hover:opacity-90 focus-visible:shadow-outline md:-mr-4 md:ml-4',
                 activeTab?.title !== tab.title && 'hover:hover:bg-accent',
               )}
               onClick={() => close()}
