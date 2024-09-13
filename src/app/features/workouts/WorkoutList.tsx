@@ -1,10 +1,11 @@
 import { useAppSelector } from '@/store/hooks';
 import { DeleteWorkoutDialog } from './DeleteWorkoutDialog';
-import { Reorder } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { PencilIcon, PlayIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
+import { DragAndDropList } from '@/app/ui/DragAndDropList';
+import { DragAndDropListItem } from '@/app/ui/DragAndDropListItem';
 
 export const WorkoutList: React.FC = () => {
   const workouts = useAppSelector((state) => state.workouts.values);
@@ -12,17 +13,12 @@ export const WorkoutList: React.FC = () => {
 
   return (
     <div className="w-full">
-      <Reorder.Group
-        className="flex flex-col items-center"
+      <DragAndDropList
         values={workouts}
         onReorder={(values) => dispatchSet(values)}
       >
         {workouts?.map((workout) => (
-          <Reorder.Item
-            key={workout.id}
-            value={workout}
-            className="my-1 flex w-full cursor-grab items-center bg-background-secondary p-5 pr-2 shadow-sm focus-within:shadow-md hover:shadow-md md:w-128"
-          >
+          <DragAndDropListItem key={workout.id} value={workout}>
             <h3 className="mr-auto truncate">{workout.name}</h3>
 
             {workout.exercises.length > 0 && (
@@ -42,9 +38,9 @@ export const WorkoutList: React.FC = () => {
             </Button>
 
             <DeleteWorkoutDialog workout={workout} />
-          </Reorder.Item>
+          </DragAndDropListItem>
         ))}
-      </Reorder.Group>
+      </DragAndDropList>
     </div>
   );
 };
