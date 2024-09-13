@@ -24,21 +24,28 @@ npm run dev
 
 # Application's overview
 
-The Application is a fitness app for my person use. It is optimize for using [Myo reps protocol](https://www.youtube.com/watch?v=V71TGRQaLRs), it's a protocol when timing between sets of given exercise is very precise and short.
+The Application is a fitness app for my person use. It is optimize for using [Myo reps protocol](https://www.youtube.com/watch?v=V71TGRQaLRs), it's a workout protocol when timing between sets of given exercise is very precise and short.
 
-Done:
+MVP:
 
-- light/dark mode
-- deleting the content of application
-- drag/drop lists
-- exercises
-- workouts
+    Done:
 
-TODO:
+    - light/dark mode
+    - deleting the content of application
+    - drag/drop lists
+    - exercises
+    - workouts
 
-- running a session
-- displaying list of past sessions
-- statistics
+    Todo:
+
+    - running a session
+    - displaying list of past sessions
+
+Improvements:
+
+    - multi element deletes from the lists
+    - more info on the lists (extendable items)
+    - workout statistics
 
 # Project structure
 
