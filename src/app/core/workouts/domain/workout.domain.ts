@@ -78,3 +78,6 @@ export const findExercisesByWorkoutId = (
 
 export const deduplicateExercisesId = (exercises: WorkoutExerciseValue[]) =>
   new Set(exercises.map((exercise) => exercise.exerciseId));
+
+export const getNextPosition = (workouts: WorkoutValue[]) =>
+  workouts.length ? workouts[workouts.length - 1].position + 1 : 0;

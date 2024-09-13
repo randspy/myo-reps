@@ -15,6 +15,7 @@ import {
   createWorkoutFromForm,
   deduplicateExercisesId,
   findExercisesByWorkoutId,
+  getNextPosition,
   updateWorkoutPositions,
   updateWorkoutUsageOfExercises,
 } from '@/app/core/workouts/domain/workout.domain';
@@ -26,7 +27,7 @@ export const useWorkout = () => {
   const dispatch = useAppDispatch();
 
   function dispatchAdd(value: WorkoutFormValues) {
-    const workout = createWorkoutFromForm(value, workouts.length);
+    const workout = createWorkoutFromForm(value, getNextPosition(workouts));
     const distinctExerciseIds = deduplicateExercisesId(workout.exercises);
 
     dispatch(addWorkout(workout));

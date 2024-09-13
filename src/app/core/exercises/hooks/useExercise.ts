@@ -18,6 +18,7 @@ import {
   removeExerciseFromUserView,
   updateExercisePositions,
   ExerciseAction,
+  getNextPosition,
 } from '@/app/core/exercises/domain/exercises.domain';
 
 export const useExercise = () => {
@@ -27,7 +28,7 @@ export const useExercise = () => {
   const dispatch = useAppDispatch();
 
   function dispatchAdd(exercise: ExerciseFormValues) {
-    const value = createExerciseFromForm(exercise, exercises.values.length);
+    const value = createExerciseFromForm(exercise, getNextPosition(exercises));
     dispatch(addExercise(value));
   }
 

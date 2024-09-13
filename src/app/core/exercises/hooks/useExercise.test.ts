@@ -68,6 +68,39 @@ describe('useExercise', () => {
     });
   });
 
+  test('should add exercise to existing exercises', () => {
+    const id = 'exercise-2';
+    vi.mocked(v4).mockImplementation(() => id);
+
+    const { result, store } = renderHookWithProviders(() => useExercise(), {
+      preloadedState: {
+        exercises: {
+          values: [
+            generateExercise({
+              id: 'exercise-1',
+              name: 'Push-up',
+              position: 4,
+            }),
+          ],
+        },
+      },
+    });
+
+    const newExercise: ExerciseFormValues = { name: 'added exercise' };
+
+    act(() => {
+      result.current.dispatchAdd(newExercise);
+    });
+
+    expect(store.getState().exercises.values[1]).toEqual({
+      ...newExercise,
+      id,
+      hidden: false,
+      usage: [],
+      position: 5,
+    });
+  });
+
   test('should dispatch updateExercise action', () => {
     const { result, store } = renderHookWithProviders(() => useExercise(), {
       preloadedState: {

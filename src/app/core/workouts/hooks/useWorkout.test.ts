@@ -68,6 +68,40 @@ describe('useWorkout hook', () => {
       expect(exerciseUsage(store, 'exercise-2')).toEqual([{ id: 'workout-1' }]);
     });
 
+    test('add a workout to existing workout', () => {
+      const { result, store } = renderHookWithProviders(() => useWorkout(), {
+        preloadedState: {
+          exercises: {
+            values: [],
+          },
+          workouts: {
+            values: [
+              generateWorkout({
+                id: 'workout-1',
+                name: 'Morning workout',
+                position: 4,
+              }),
+            ],
+          },
+        },
+      });
+
+      const workoutFormValues = {
+        id: 'workout-2',
+        name: 'Evening workout',
+        exercises: [],
+      };
+
+      act(() => {
+        result.current.dispatchAdd(workoutFormValues);
+      });
+
+      expect(workout(store, 'workout-2')).toEqual({
+        ...workoutFormValues,
+        position: 5,
+      });
+    });
+
     test('add a workout with the same exercise twice', () => {
       const { result, store } = renderHookWithProviders(() => useWorkout(), {
         preloadedState: {

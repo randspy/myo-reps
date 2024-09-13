@@ -84,3 +84,6 @@ export const removeUsageFromExercise = (
     return { type: 'update', payload: exercise };
   }
 };
+
+export const getNextPosition = (exercises: ExerciseValue[]) =>
+  exercises.length ? exercises[exercises.length - 1].position + 1 : 0;
