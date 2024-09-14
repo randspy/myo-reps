@@ -15,8 +15,8 @@ export const NewWorkoutPage: React.FC = () => {
 
   return (
     <FormCard title="Add New Workout">
-      <UnsavedFormChangesBlocker
-        render={(onDirtyChange: OnDirtyChange, onSubmit: OnSubmit) => (
+      <UnsavedFormChangesBlocker>
+        {(onDirtyChange: OnDirtyChange, onSubmit: OnSubmit) => (
           <WorkoutForm
             onSubmit={(values: WorkoutFormValues) => {
               onSubmit();
@@ -27,7 +27,7 @@ export const NewWorkoutPage: React.FC = () => {
             onDirtyChange={onDirtyChange}
           />
         )}
-      />
+      </UnsavedFormChangesBlocker>
     </FormCard>
   );
 };

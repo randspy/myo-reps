@@ -4,14 +4,14 @@ import { UnsavedFormChangesDialog } from '@/app/ui/UnsavedFormChangesDialog';
 
 export type OnDirtyChange = (value: boolean) => void;
 export type OnSubmit = () => void;
-export type RenderFunction = (
+export type ChildrenFunction = (
   onDirtyChange: OnDirtyChange,
   onSubmit: OnSubmit,
 ) => JSX.Element;
 
 export const UnsavedFormChangesBlocker: React.FC<{
-  render: RenderFunction;
-}> = ({ render }) => {
+  children: ChildrenFunction;
+}> = ({ children: children }) => {
   const isDirty = useRef(false);
   const isFormSubmitted = useRef(false);
 
@@ -32,7 +32,7 @@ export const UnsavedFormChangesBlocker: React.FC<{
   }
   return (
     <>
-      {render(onDirtyChange, onSubmit)}
+      {children(onDirtyChange, onSubmit)}
       {blocker && (
         <UnsavedFormChangesDialog
           open={blocker.state === 'blocked'}

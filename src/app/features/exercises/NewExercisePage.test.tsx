@@ -4,7 +4,7 @@ import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { NewExercisePage } from './NewExercisePage';
 import { AppStore, renderWithProviders } from '@/lib/test-utils';
 import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
-import { RenderFunction } from '@/app/ui/UnsavedFormChangesBlocker';
+import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -50,8 +50,8 @@ const mockOnDirtyChange = vi.fn();
 const mockOnSubmit = vi.fn();
 
 vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
-  UnsavedFormChangesBlocker: ({ render }: { render: RenderFunction }) =>
-    render(mockOnDirtyChange, mockOnSubmit),
+  UnsavedFormChangesBlocker: ({ children }: { children: ChildrenFunction }) =>
+    children(mockOnDirtyChange, mockOnSubmit),
 }));
 
 describe('New exercise page', () => {

@@ -2,7 +2,7 @@ import { screen, fireEvent } from '@testing-library/react';
 import { Mock } from 'vitest';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { AppStore, renderWithProviders } from '@/lib/test-utils';
-import { RenderFunction } from '@/app/ui/UnsavedFormChangesBlocker';
+import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
 import { NewWorkoutPage } from './NewWorkoutPage';
 
@@ -51,8 +51,8 @@ const mockOnDirtyChange = vi.fn();
 const mockOnSubmit = vi.fn();
 
 vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
-  UnsavedFormChangesBlocker: ({ render }: { render: RenderFunction }) =>
-    render(mockOnDirtyChange, mockOnSubmit),
+  UnsavedFormChangesBlocker: ({ children }: { children: ChildrenFunction }) =>
+    children(mockOnDirtyChange, mockOnSubmit),
 }));
 
 describe('New workout page', () => {

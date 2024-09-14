@@ -6,7 +6,7 @@ import {
   generateWorkout,
   renderWithProviders,
 } from '@/lib/test-utils';
-import { RenderFunction } from '@/app/ui/UnsavedFormChangesBlocker';
+import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
 import { EditWorkoutPage } from './EditWorkoutPage';
 
@@ -55,8 +55,8 @@ const mockOnDirtyChange = vi.fn();
 const mockOnSubmit = vi.fn();
 
 vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
-  UnsavedFormChangesBlocker: ({ render }: { render: RenderFunction }) =>
-    render(mockOnDirtyChange, mockOnSubmit),
+  UnsavedFormChangesBlocker: ({ children }: { children: ChildrenFunction }) =>
+    children(mockOnDirtyChange, mockOnSubmit),
 }));
 
 const preloadedState = {

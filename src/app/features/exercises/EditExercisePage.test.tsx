@@ -7,7 +7,7 @@ import {
   renderWithProviders,
 } from '@/lib/test-utils';
 import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
-import { RenderFunction } from '@/app/ui/UnsavedFormChangesBlocker';
+import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import { EditExercisePage } from './EditExercisePage';
 
 vi.mock('react-router-dom', async () => {
@@ -54,8 +54,8 @@ const mockOnDirtyChange = vi.fn();
 const mockOnSubmit = vi.fn();
 
 vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
-  UnsavedFormChangesBlocker: ({ render }: { render: RenderFunction }) =>
-    render(mockOnDirtyChange, mockOnSubmit),
+  UnsavedFormChangesBlocker: ({ children }: { children: ChildrenFunction }) =>
+    children(mockOnDirtyChange, mockOnSubmit),
 }));
 
 const preloadedState = {

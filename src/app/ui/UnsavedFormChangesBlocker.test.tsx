@@ -12,8 +12,8 @@ const FormWrapper = ({ isDirty }: { isDirty: boolean }) => {
   const navigate = useNavigate();
 
   return (
-    <UnsavedFormChangesBlocker
-      render={(onDirtyChange: OnDirtyChange, onSubmit: OnSubmit) => {
+    <UnsavedFormChangesBlocker>
+      {(onDirtyChange: OnDirtyChange, onSubmit: OnSubmit) => {
         onDirtyChange(isDirty);
         return (
           <form>
@@ -33,7 +33,7 @@ const FormWrapper = ({ isDirty }: { isDirty: boolean }) => {
           </form>
         );
       }}
-    />
+    </UnsavedFormChangesBlocker>
   );
 };
 
