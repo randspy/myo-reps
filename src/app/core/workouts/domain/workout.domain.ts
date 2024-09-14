@@ -81,3 +81,6 @@ export const deduplicateExercisesId = (exercises: WorkoutExerciseValue[]) =>
 
 export const getNextPosition = (workouts: WorkoutValue[]) =>
   workouts.length ? workouts[workouts.length - 1].position + 1 : 0;
+
+export const canStartWorkout = (workout: WorkoutValue) =>
+  workout.exercises.length > 0;

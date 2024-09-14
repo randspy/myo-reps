@@ -1,3 +1,4 @@
+import { generateWorkout } from '@/lib/test-utils';
 import {
   createExerciseForWorkout,
   createWorkoutFromForm,
@@ -5,6 +6,7 @@ import {
   updateWorkoutUsageOfExercises,
   findExercisesByWorkoutId,
   deduplicateExercisesId,
+  canStartWorkout,
 } from './workout.domain';
 import {
   WorkoutFormValues,
@@ -137,6 +139,26 @@ describe('workout.domain', () => {
       const result = deduplicateExercisesId(exercises);
 
       expect(result).toEqual(new Set(['e1', 'e2']));
+    });
+  });
+
+  describe('canStartWorkout', () => {
+    it('should return true if workout can be started', () => {
+      const workout: WorkoutValue = generateWorkout({
+        exercises: [{ exerciseId: 'e1', sets: 1, id: '1' }],
+      });
+
+      const result = canStartWorkout(workout);
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false if workout cannot be started', () => {
+      const workout: WorkoutValue = generateWorkout({});
+
+      const result = canStartWorkout(workout);
+
+      expect(result).toBe(false);
     });
   });
 });

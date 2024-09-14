@@ -1,4 +1,3 @@
-import { useAppSelector } from '@/store/hooks';
 import { DeleteWorkoutDialog } from './DeleteWorkoutDialog';
 import { Button } from '@/components/ui/button';
 import { PencilIcon, PlayIcon } from 'lucide-react';
@@ -6,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 import { DragAndDropList } from '@/app/ui/DragAndDropList';
 import { DragAndDropListItem } from '@/app/ui/DragAndDropListItem';
+import { canStartWorkout } from '@/app/core/workouts/domain/workout.domain';
 
 export const WorkoutList: React.FC = () => {
-  const workouts = useAppSelector((state) => state.workouts.values);
-  const { dispatchSet } = useWorkout();
+  const { workouts, dispatchSet } = useWorkout();
 
   return (
     <div className="w-full">
@@ -21,7 +20,7 @@ export const WorkoutList: React.FC = () => {
           <DragAndDropListItem key={workout.id} value={workout}>
             <h3 className="mr-auto truncate">{workout.name}</h3>
 
-            {workout.exercises.length > 0 && (
+            {canStartWorkout(workout) && (
               <Button asChild variant="icon" size="icon">
                 <Link
                   to={`/sessions/new?workoutId=${workout.id}`}
