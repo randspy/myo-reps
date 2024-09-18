@@ -1,80 +1,50 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { CircularTimer } from './CircularTimer';
 
-describe('Circular Timer', () => {
-  beforeEach(() => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
+describe('CircularTimer', () => {
+  it('renders the time correctly', () => {
+    render(<CircularTimer time={30} />);
+    expect(screen.getByText('30')).toBeInTheDocument();
   });
 
-  afterEach(() => {
-    vi.useRealTimers();
+  it('formats time with minutes and seconds', () => {
+    render(<CircularTimer time={90} />);
+    expect(screen.getByText('1:30')).toBeInTheDocument();
   });
 
-  test('renders with initial time', () => {
-    render(<CircularTimer initialTime={59} />);
-    expect(screen.getByText('59')).toBeInTheDocument();
-  });
-
-  test('counts down when active', async () => {
-    render(<CircularTimer initialTime={10} isActive={true} />);
-
-    act(() => {
-      vi.advanceTimersByTime(1500);
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('9')).toBeInTheDocument();
-    });
-  });
-
-  test('calls onTick every second starting from the init moment', async () => {
-    const onTick = vi.fn();
-    render(<CircularTimer initialTime={1} isActive={true} onTick={onTick} />);
-
-    act(() => {
-      vi.advanceTimersByTime(1000);
-    });
-
-    await waitFor(() => {
-      expect(onTick).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  test('counts up when isCountingUp is true', async () => {
-    render(
-      <CircularTimer initialTime={0} isActive={true} isCountingUp={true} />,
+  it('does not show progress ring when showProgressRing is false', () => {
+    const { container } = render(
+      <CircularTimer time={30} showProgressRing={false} />,
     );
-
-    act(() => {
-      vi.advanceTimersByTime(1000);
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('1')).toBeInTheDocument();
-    });
+    expect(container.querySelectorAll('circle')).toHaveLength(1);
   });
 
-  test('resets time when initialTime changes', () => {
-    const { rerender } = render(<CircularTimer initialTime={30} />);
-
-    rerender(<CircularTimer initialTime={60} />);
-    expect(screen.getByText('1:00')).toBeInTheDocument();
+  it('shows progress ring when showProgressRing is true', () => {
+    const { container } = render(
+      <CircularTimer
+        time={30}
+        showProgressRing={true}
+        startTimeForAnimation={60}
+      />,
+    );
+    expect(container.querySelectorAll('circle')).toHaveLength(2);
   });
 
-  test('displays minutes when time is greater than 60', () => {
-    render(<CircularTimer initialTime={120} />);
-    expect(screen.getByText('2:00')).toBeInTheDocument();
-  });
+  it('calculates stroke dash offset correctly', () => {
+    const { container } = render(
+      <CircularTimer
+        time={30}
+        showProgressRing={true}
+        startTimeForAnimation={60}
+      />,
+    );
+    const progressRing = container.querySelectorAll('circle')[1];
 
-  test('when counting down stop at 0', async () => {
-    render(<CircularTimer initialTime={2} isActive={true} />);
-
-    act(() => {
-      vi.advanceTimersByTime(5000);
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('0')).toBeInTheDocument();
-    });
+    expect(
+      parseFloat(progressRing.getAttribute('stroke-dasharray')!),
+    ).toBeCloseTo(282.74, 2);
+    expect(
+      parseFloat(progressRing.getAttribute('stroke-dashoffset')!),
+    ).toBeCloseTo(141.37, 2);
   });
 });

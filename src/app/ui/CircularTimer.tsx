@@ -1,46 +1,11 @@
-import { useState, useEffect } from 'react';
-
 const Radius = 45;
 const circumference = 2 * Math.PI * Radius;
 
 export const CircularTimer: React.FC<{
-  initialTime?: number;
-  isActive?: boolean;
-  isCountingUp?: boolean;
-  onTick?: (time: number) => void;
-}> = ({ initialTime = 60, isActive = false, isCountingUp = false, onTick }) => {
-  const [time, setTime] = useState(initialTime);
-
-  useEffect(() => {
-    setTime(initialTime);
-  }, [initialTime]);
-
-  useEffect(() => {
-    onTick?.(time);
-  }, [time, onTick]);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (isActive) {
-      interval = setInterval(() => {
-        setTime((prevTime) => {
-          if (isCountingUp) {
-            return prevTime + 1;
-          } else {
-            return prevTime === 0 ? 0 : prevTime - 1;
-          }
-        });
-      }, 1000);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isActive, isCountingUp]);
-
+  time: number;
+  startTimeForAnimation?: number;
+  showProgressRing?: boolean;
+}> = ({ time = 0, startTimeForAnimation = 0, showProgressRing = false }) => {
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -48,7 +13,8 @@ export const CircularTimer: React.FC<{
   };
 
   const calculateStrokeDashoffset = (time: number) => {
-    const progress = ((initialTime - time) / initialTime) * 100;
+    const progress =
+      ((startTimeForAnimation - time) / startTimeForAnimation) * 100;
     return circumference - (progress / 100) * circumference;
   };
 
@@ -66,7 +32,7 @@ export const CircularTimer: React.FC<{
             cy="50"
           />
 
-          {!isCountingUp && (
+          {showProgressRing && (
             <circle
               className="text-primary"
               strokeWidth="5"

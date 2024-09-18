@@ -27,3 +27,12 @@ export const selectExercisesByWorkoutIdAsMap = (
     }
     return exercisesMap;
   });
+
+export const selectExercisesByWorkoutId = (
+  workoutId: string | undefined | null,
+) =>
+  createSelector([selectAllExercises], (exercises) =>
+    exercises.filter((exercise) =>
+      exercise.usage.some((usage) => usage.id === workoutId),
+    ),
+  );

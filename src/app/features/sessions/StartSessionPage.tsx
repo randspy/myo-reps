@@ -36,7 +36,9 @@ export const StartSessionPage: React.FC = () => {
 
       <div className="mt-8 flex flex-col gap-2">
         <Button asChild className="bg-teal-800">
-          <Link to="/sessions/in-progress">Start Session</Link>
+          <Link to={`/sessions/in-progress?workoutId=${workout.id}`}>
+            Start Session
+          </Link>
         </Button>
         <Button asChild variant="outline">
           <Link to="/workouts">Cancel</Link>
