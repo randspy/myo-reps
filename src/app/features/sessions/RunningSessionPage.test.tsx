@@ -21,6 +21,7 @@ const renderRunningSessionPage = (
     <MemoryRouter initialEntries={['/running-session?workoutId=workout-1']}>
       <Routes>
         <Route path="/running-session" element={<RunningSessionPage />} />
+        <Route path="/sessions" element={<div>Sessions Page</div>} />
       </Routes>
     </MemoryRouter>,
     {
@@ -176,6 +177,16 @@ describe('RunningSessionPage', () => {
     expect(
       screen.getByText('Exercise Name : Squats ( 1 / 1 )'),
     ).toBeInTheDocument();
+  });
+
+  test('user finishes the session and navigates to /sessions', async () => {
+    renderRunningSessionPage(exercises, workouts);
+
+    actionsForOneSet();
+
+    fireEvent.click(screen.getByText('Finish session'));
+
+    expect(screen.getByText('Sessions Page')).toBeInTheDocument();
   });
 });
 

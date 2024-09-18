@@ -9,9 +9,11 @@ import { PageNotFound } from '@/app/ui/PageNotFound';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'react-router-dom';
 import { useRunningSession } from './hooks/useRunningSession';
+import { useNavigate } from 'react-router-dom';
 
 export const RunningSessionPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const workoutId = searchParams.get('workoutId');
 
@@ -81,7 +83,7 @@ export const RunningSessionPage: React.FC = () => {
           <Button
             className="mt-8 w-full md:w-fit"
             onClick={() => {
-              console.log('Finish');
+              navigate('/sessions');
             }}
           >
             Finish session
