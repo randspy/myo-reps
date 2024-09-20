@@ -7,9 +7,8 @@ import { FormCard } from '@/app/ui/FormCard';
 import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSelectorPopover';
 import { PageNotFound } from '@/app/ui/PageNotFound';
 import { Button } from '@/components/ui/button';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRunningSession } from './hooks/useRunningSession';
-import { useNavigate } from 'react-router-dom';
 
 export const RunningSessionPage: React.FC = () => {
   const location = useLocation();
@@ -21,7 +20,6 @@ export const RunningSessionPage: React.FC = () => {
     workout,
     time,
     startTime,
-
     isDisplayingNextExercise,
     isCountingUp,
     isSettingRepetitions,

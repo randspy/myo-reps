@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
 import { WorkoutList } from '@/app/features/workouts/WorkoutList';
-import { useAppSelector } from '@/store/hooks';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { selectAllWorkouts } from '@/app/core/workouts/store/workouts-selectors';
 
 export const WorkoutsPage: React.FC = () => {
-  const workouts = useAppSelector((state) => state.workouts.values);
+  const workouts = selectAllWorkouts();
 
   return (
     <div

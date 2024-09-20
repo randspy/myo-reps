@@ -1,8 +1,9 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { WorkoutList } from './WorkoutList';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
-import { generateWorkout, renderWithProviders } from '@/lib/test-utils';
+import { generateWorkout } from '@/lib/test-utils';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 const deleteWorkout = vi.fn();
 
@@ -14,7 +15,8 @@ vi.mock('@/app/features/workouts/DeleteWorkoutDialog', () => ({
 }));
 
 const renderWorkoutList = (workouts: WorkoutValue[]) => {
-  return renderWithProviders(
+  useWorkoutsStore.setState({ workouts });
+  return render(
     <MemoryRouter initialEntries={['/workouts']}>
       <Routes>
         <Route path="/workouts" element={<WorkoutList />} />
@@ -22,13 +24,6 @@ const renderWorkoutList = (workouts: WorkoutValue[]) => {
         <Route path="/sessions/new" element={<div>Mock New Session</div>} />
       </Routes>
     </MemoryRouter>,
-    {
-      preloadedState: {
-        workouts: {
-          values: workouts,
-        },
-      },
-    },
   );
 };
 
@@ -54,7 +49,7 @@ describe('Workout list', () => {
     });
   });
 
-  test('pass through workouts to child components', async () => {
+  test('pass through workouts to child components', () => {
     renderWorkoutList(workouts);
 
     expect(deleteWorkout).toHaveBeenCalledWith(workouts[0]);

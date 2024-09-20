@@ -23,7 +23,7 @@ import { Trash2Icon } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
-import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
+import { createExerciseForWorkout } from '@/app/core/workouts/domain/workout.domain';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -32,7 +32,6 @@ export const WorkoutForm: React.FC<{
   values?: WorkoutFormValues;
 }> = ({ onSubmit, onCancel, onDirtyChange, values = defaultValues }) => {
   const { exercises, activeExercises } = useExercise();
-  const { createExerciseForWorkout } = useWorkout();
 
   const [active, setActive] = useState(0);
 

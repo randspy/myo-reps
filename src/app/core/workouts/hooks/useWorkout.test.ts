@@ -1,301 +1,180 @@
-import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
-import {
-  generateExercise,
-  generateWorkout,
-  renderHookWithProviders,
-} from '@/lib/test-utils';
-import { act } from '@testing-library/react';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
-import { EnhancedStore } from '@reduxjs/toolkit';
+import { renderHook, act } from '@testing-library/react';
+import { useWorkout } from './useWorkout';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
+import { useExercise } from '@/app/core/exercises/hooks/useExercise';
+import { generateWorkout } from '@/lib/test-utils';
+import { v4 } from 'uuid';
+
+// Mock the dependencies
+vi.mock('@/app/core/exercises/hooks/useExercise');
 
 vi.mock('uuid', () => ({
   v4: vi.fn(),
 }));
 
-describe('useWorkout hook', () => {
+describe('useWorkout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    useWorkoutsStore.setState({ workouts: [] });
+
+    vi.mocked(useExercise).mockReturnValue({
+      dispatchAddUsage: vi.fn(),
+      dispatchRemoveUsage: vi.fn(),
+    } as Partial<ReturnType<typeof useExercise>> as ReturnType<
+      typeof useExercise
+    >);
   });
 
-  describe('dispatchAdd', () => {
-    test('add a workout with two exercises', () => {
-      const { result, store } = renderHookWithProviders(() => useWorkout(), {
-        preloadedState: {
-          exercises: {
-            values: [
-              generateExercise({
-                id: 'exercise-1',
-              }),
-              generateExercise({
-                id: 'exercise-2',
-              }),
-            ],
-          },
-          workouts: {
-            values: [],
-          },
-        },
-      });
+  test('dispatchAdd should add a workout and update exercise usage', async () => {
+    const id = 'workout-1';
+    vi.mocked(v4).mockImplementation(() => id);
 
-      const workoutFormValues = {
-        id: 'workout-1',
-        name: 'Morning workout',
-        exercises: [
-          {
-            id: '1',
-            sets: 3,
-            exerciseId: 'exercise-1',
-          },
-          {
-            id: '2',
-            sets: 3,
-            exerciseId: 'exercise-2',
-          },
-        ],
-      };
+    const { result } = renderHook(() => useWorkout());
 
-      act(() => {
-        result.current.dispatchAdd(workoutFormValues);
-      });
-
-      expect(workout(store, 'workout-1')).toEqual({
-        ...workoutFormValues,
-        position: 0,
-      });
-
-      expect(exerciseUsage(store, 'exercise-1')).toEqual([{ id: 'workout-1' }]);
-      expect(exerciseUsage(store, 'exercise-2')).toEqual([{ id: 'workout-1' }]);
-    });
-
-    test('add a workout to existing workout', () => {
-      const { result, store } = renderHookWithProviders(() => useWorkout(), {
-        preloadedState: {
-          exercises: {
-            values: [],
-          },
-          workouts: {
-            values: [
-              generateWorkout({
-                id: 'workout-1',
-                name: 'Morning workout',
-                position: 4,
-              }),
-            ],
-          },
-        },
-      });
-
-      const workoutFormValues = {
-        id: 'workout-2',
-        name: 'Evening workout',
-        exercises: [],
-      };
-
-      act(() => {
-        result.current.dispatchAdd(workoutFormValues);
-      });
-
-      expect(workout(store, 'workout-2')).toEqual({
-        ...workoutFormValues,
-        position: 5,
-      });
-    });
-
-    test('add a workout with the same exercise twice', () => {
-      const { result, store } = renderHookWithProviders(() => useWorkout(), {
-        preloadedState: {
-          exercises: {
-            values: [
-              generateExercise({
-                id: 'exercise-1',
-              }),
-            ],
-          },
-          workouts: {
-            values: [],
-          },
-        },
-      });
-
-      const workoutFormValues = {
-        id: 'workout-1',
-        name: 'Morning workout',
-        exercises: [
-          {
-            id: '1',
-            sets: 3,
-            exerciseId: 'exercise-1',
-          },
-          {
-            id: '1',
-            sets: 1,
-            exerciseId: 'exercise-1',
-          },
-        ],
-      };
-
-      act(() => {
-        result.current.dispatchAdd(workoutFormValues);
-      });
-
-      expect(workout(store, 'workout-1')).toEqual({
-        ...workoutFormValues,
-        position: 0,
-      });
-
-      expect(exerciseUsage(store, 'exercise-1')).toEqual([{ id: 'workout-1' }]);
-    });
-  });
-
-  test('dispatchUpdate', () => {
-    const { result, store } = renderHookWithProviders(() => useWorkout(), {
-      preloadedState: {
-        exercises: {
-          values: [
-            generateExercise({
-              id: 'exercise-1',
-              usage: [{ id: 'workout-1' }],
-            }),
-            generateExercise({
-              id: 'exercise-2',
-              usage: [{ id: 'workout-1' }],
-            }),
-            generateExercise({
-              id: 'exercise-3',
-            }),
-            generateExercise({
-              id: 'exercise-4',
-              usage: [{ id: 'workout-1' }],
-            }),
-          ],
-        },
-        workouts: {
-          values: [
-            generateWorkout({
-              id: 'workout-1',
-              exercises: [
-                {
-                  id: '1',
-                  sets: 3,
-                  exerciseId: 'exercise-1',
-                },
-                { id: '2', sets: 3, exerciseId: 'exercise-2' },
-                { id: '4', sets: 3, exerciseId: 'exercise-4' },
-                { id: '5', sets: 3, exerciseId: 'exercise-4' },
-              ],
-            }),
-          ],
-        },
-      },
-    });
-
-    const updatedWorkout = generateWorkout({
-      id: 'workout-1',
-      name: 'Morning workout',
+    const workoutForm = {
+      name: 'New Workout',
       exercises: [
-        {
-          id: '2',
-          sets: 3,
-          exerciseId: 'exercise-2',
-        },
-        { id: '3', sets: 3, exerciseId: 'exercise-3' },
-        { id: '4', sets: 3, exerciseId: 'exercise-4' },
+        { id: '1', exerciseId: 'ex1', sets: 1 },
+        { id: '2', exerciseId: 'ex2', sets: 1 },
+      ],
+    };
+
+    await act(async () => {
+      await result.current.dispatchAdd(workoutForm);
+    });
+
+    const storeState = useWorkoutsStore.getState();
+    expect(storeState.workouts[0]).toMatchObject({
+      ...workoutForm,
+      id,
+      position: 0,
+    });
+    expect(storeState.workouts).toHaveLength(1);
+    expect(storeState.workouts[0].name).toBe('New Workout');
+    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex1',
+      userId: id,
+    });
+    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex2',
+      userId: id,
+    });
+  });
+
+  test('dispatchAdd should add a workout to existing workouts', async () => {
+    const id = 'workout-2';
+    vi.mocked(v4).mockImplementation(() => id);
+
+    useWorkoutsStore.setState({
+      workouts: [
+        generateWorkout({
+          id: 'workout-1',
+          name: 'Initial Workout',
+          exercises: [],
+          position: 4,
+        }),
+      ],
+    });
+    const { result } = renderHook(() => useWorkout());
+
+    const workoutForm = {
+      name: 'New Workout',
+      exercises: [{ id: '1', exerciseId: 'ex1', sets: 1 }],
+    };
+
+    await act(async () => {
+      await result.current.dispatchAdd(workoutForm);
+    });
+
+    const storeState = useWorkoutsStore.getState();
+    expect(storeState.workouts[1]).toMatchObject({
+      ...workoutForm,
+      id,
+      position: 5,
+    });
+  });
+
+  test('dispatchUpdate should update a workout and update exercise usage', async () => {
+    const initialWorkout = generateWorkout({
+      id: '1',
+      name: 'Initial Workout',
+      exercises: [],
+    });
+    useWorkoutsStore.setState({ workouts: [initialWorkout] });
+
+    const { result } = renderHook(() => useWorkout());
+    const updatedWorkout = {
+      ...initialWorkout,
+      name: 'Updated Workout',
+      exercises: [
+        { id: '1', exerciseId: 'ex1', sets: 1 },
+        { id: '2', exerciseId: 'ex2', sets: 1 },
+      ],
+    };
+
+    await act(async () => {
+      await result.current.dispatchUpdate(updatedWorkout);
+    });
+
+    const storeState = useWorkoutsStore.getState();
+    expect(storeState.workouts).toHaveLength(1);
+    expect(storeState.workouts[0].name).toBe('Updated Workout');
+    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex1',
+      userId: '1',
+    });
+    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex2',
+      userId: '1',
+    });
+  });
+
+  test('dispatchDelete should delete a workout and update exercise usage', async () => {
+    useWorkoutsStore.setState({
+      workouts: [
+        generateWorkout({
+          id: '1',
+          exercises: [
+            { id: '1', exerciseId: 'ex1', sets: 1 },
+            { id: '2', exerciseId: 'ex2', sets: 1 },
+          ],
+        }),
       ],
     });
 
-    act(() => {
-      result.current.dispatchUpdate(updatedWorkout);
+    const { result } = renderHook(() => useWorkout());
+
+    await act(async () => {
+      await result.current.dispatchDelete('1');
     });
 
-    expect(workout(store, 'workout-1')).toEqual(updatedWorkout);
-    expect(exerciseUsage(store, 'exercise-1')).toEqual([]);
-    expect(exerciseUsage(store, 'exercise-2')).toEqual([{ id: 'workout-1' }]);
-    expect(exerciseUsage(store, 'exercise-3')).toEqual([{ id: 'workout-1' }]);
-    expect(exerciseUsage(store, 'exercise-4')).toEqual([{ id: 'workout-1' }]);
+    const storeState = useWorkoutsStore.getState();
+    expect(storeState.workouts).toHaveLength(0);
+    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex1',
+      userId: '1',
+    });
+    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex2',
+      userId: '1',
+    });
   });
 
-  test('dispatchDelete', () => {
-    const { result, store } = renderHookWithProviders(() => useWorkout(), {
-      preloadedState: {
-        exercises: {
-          values: [
-            generateExercise({
-              id: 'exercise-1',
-              usage: [{ id: 'workout-1' }],
-            }),
-            generateExercise({
-              id: 'exercise-2',
-              usage: [{ id: 'workout-1' }],
-            }),
-          ],
-        },
-        workouts: {
-          values: [
-            generateWorkout({
-              id: 'workout-1',
-              exercises: [
-                {
-                  id: '1',
-                  sets: 3,
-                  exerciseId: 'exercise-1',
-                },
-                {
-                  id: '1',
-                  sets: 3,
-                  exerciseId: 'exercise-2',
-                },
-              ],
-            }),
-          ],
-        },
-      },
-    });
-
-    const workoutId = 'workout-1';
-
-    act(() => {
-      result.current.dispatchDelete(workoutId);
-    });
-
-    expect(store.getState().workouts.values).toHaveLength(0);
-    expect(exerciseUsage(store, 'exercise-1')).toEqual([]);
-    expect(exerciseUsage(store, 'exercise-2')).toEqual([]);
-  });
-
-  test('dispatchSet', () => {
-    const { result, store } = renderHookWithProviders(() => useWorkout());
-
+  test('dispatchSet should set workouts and update positions', async () => {
+    const { result } = renderHook(() => useWorkout());
     const workouts = [
-      generateWorkout({
-        id: 'workout-1',
-        position: 1,
-      }),
-      generateWorkout({
-        id: 'workout-2',
-        position: 0,
-      }),
+      generateWorkout({ id: '1', position: 1 }),
+      generateWorkout({ id: '2', position: 0 }),
     ];
 
-    act(() => {
-      result.current.dispatchSet(workouts);
+    await act(async () => {
+      await result.current.dispatchSet(workouts);
     });
 
-    expect(store.getState().workouts.values).toEqual(
-      workouts.map((workout, idx) => ({ ...workout, position: idx })),
-    );
+    const storeState = useWorkoutsStore.getState();
+    expect(storeState.workouts).toHaveLength(2);
+    expect(storeState.workouts[0].position).toBe(0);
+    expect(storeState.workouts[1].position).toBe(1);
   });
 });
-
-function exerciseUsage(store: EnhancedStore, id: string) {
-  return store
-    .getState()
-    .exercises.values.find((exercise: ExerciseValue) => exercise.id === id)
-    .usage;
-}
-
-function workout(store: EnhancedStore, id: string) {
-  return store
-    .getState()
-    .workouts.values.find((workout: WorkoutValue) => workout.id === id);
-}

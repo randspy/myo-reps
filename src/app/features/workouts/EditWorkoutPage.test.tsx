@@ -1,22 +1,13 @@
-import { screen, fireEvent } from '@testing-library/react';
-import { Mock } from 'vitest';
-import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import {
-  AppStore,
-  generateWorkout,
-  renderWithProviders,
-} from '@/lib/test-utils';
+import { screen, fireEvent, render, waitFor } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { generateWorkout } from '@/lib/test-utils';
 import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
-import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
+import {
+  WorkoutFormValues,
+  WorkoutValue,
+} from '@/app/core/workouts/workouts-schema';
 import { EditWorkoutPage } from './EditWorkoutPage';
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: vi.fn(),
-  };
-});
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 vi.mock('@/app/features/workouts/WorkoutForm', () => ({
   WorkoutForm: ({
@@ -59,77 +50,55 @@ vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
     children(mockOnDirtyChange, mockOnSubmit),
 }));
 
-const preloadedState = {
-  workouts: {
-    values: [
+const renderEditWorkoutPage = (id: string = '1') => {
+  return render(
+    <MemoryRouter initialEntries={[`/workouts/${id}`]}>
+      <Routes>
+        <Route path="/workouts/:id" element={<EditWorkoutPage />} />
+        <Route path="/workouts" element={<div>Workouts Page</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+};
+
+describe('Edit workout page', () => {
+  let workouts: WorkoutValue[];
+
+  beforeEach(() => {
+    workouts = [
       generateWorkout({
         id: '1',
         position: 0,
         name: 'Upper body',
       }),
-    ],
-  },
-};
+    ];
+    useWorkoutsStore.setState({ workouts });
+  });
 
-describe('Edit workout page', () => {
-  let store: AppStore;
-
-  test('update workout', () => {
-    const mockNavigate = vi.fn();
-
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-
-    store = renderWithProviders(
-      <MemoryRouter initialEntries={['/1']}>
-        <Routes>
-          <Route path="/:id" element={<EditWorkoutPage />} />
-        </Routes>
-      </MemoryRouter>,
-      {
-        preloadedState,
-      },
-    ).store;
+  test('update workout', async () => {
+    renderEditWorkoutPage();
 
     fireEvent.click(screen.getByText('Save'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/workouts');
-    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
-    expect(store.getState().workouts.values[0].name).toEqual('Mock Upper body');
+    await waitFor(() => {
+      const updatedWorkout = useWorkoutsStore.getState().workouts[0];
+      expect(updatedWorkout.name).toEqual('Mock Upper body');
+      expect(screen.getByText('Workouts Page')).toBeInTheDocument();
+      expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+    });
   });
 
   test('navigate to /exercises on cancel', () => {
-    const mockNavigate = vi.fn();
-
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-
-    store = renderWithProviders(
-      <MemoryRouter initialEntries={['/1']}>
-        <Routes>
-          <Route path="/:id" element={<EditWorkoutPage />} />
-        </Routes>
-      </MemoryRouter>,
-      {
-        preloadedState,
-      },
-    ).store;
+    renderEditWorkoutPage();
 
     fireEvent.click(screen.getByText('Cancel'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/workouts');
-    expect(store.getState().workouts.values[0].name).toEqual('Upper body');
+    expect(screen.getByText('Workouts Page')).toBeInTheDocument();
+    expect(useWorkoutsStore.getState().workouts[0].name).toEqual('Upper body');
   });
 
   test('block unsaved changes', () => {
-    store = renderWithProviders(
-      <MemoryRouter initialEntries={['/1']}>
-        <Routes>
-          <Route path="/:id" element={<EditWorkoutPage />} />
-        </Routes>
-      </MemoryRouter>,
-      {
-        preloadedState,
-      },
-    ).store;
+    renderEditWorkoutPage();
 
     fireEvent.click(screen.getByText('Simulate dirty change'));
 
@@ -137,16 +106,13 @@ describe('Edit workout page', () => {
   });
 
   test('should render 404 page if workout is not found', () => {
-    store = renderWithProviders(
+    render(
       <MemoryRouter initialEntries={['/2']}>
         <Routes>
           <Route path="/:id" element={<EditWorkoutPage />} />
         </Routes>
       </MemoryRouter>,
-      {
-        preloadedState,
-      },
-    ).store;
+    );
 
     expect(screen.getByText('Page not found')).toBeInTheDocument();
   });

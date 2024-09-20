@@ -1,22 +1,16 @@
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { selectExercisesByWorkoutIdAsMap } from '@/app/core/exercises/store/exercises-selectors';
+import { selectExerciseByWorkoutIdAsMap } from '@/app/core/exercises/store/exercises-selectors';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
 import { PageNotFound } from '@/app/ui/PageNotFound';
 import { FormCard } from '@/app/ui/FormCard';
 import { Button } from '@/components/ui/button';
-import { RootState } from '@/store/store';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-
 export const StartSessionPage: React.FC = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const workoutId = searchParams.get('workoutId');
 
-  const workout = useSelector(selectWorkoutById(workoutId));
-  const exercises = useSelector<RootState, Map<string, ExerciseValue>>(
-    selectExercisesByWorkoutIdAsMap(workoutId),
-  );
+  const workout = selectWorkoutById(workoutId);
+  const exercises = selectExerciseByWorkoutIdAsMap(workoutId);
 
   if (!workout) {
     return <PageNotFound />;

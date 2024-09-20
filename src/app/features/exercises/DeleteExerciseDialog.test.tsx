@@ -1,30 +1,23 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { DeleteExerciseDialog } from '@/app/features/exercises/DeleteExerciseDialog';
-import {
-  AppStore,
-  generateExercise,
-  renderWithProviders,
-} from '@/lib/test-utils';
+import { generateExercise } from '@/lib/test-utils';
+import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 
-const initialValue = {
-  exercises: {
-    values: [
-      generateExercise({
-        id: '1',
-        name: 'Push-up',
-      }),
-    ],
-  },
+const renderDeleteExerciseDialog = (exercise: ExerciseValue) => {
+  return render(<DeleteExerciseDialog exercise={exercise} />);
 };
 
 describe('Delete exercise', () => {
-  const exercise = initialValue.exercises.values[0];
-  let store: AppStore;
+  let exercise: ExerciseValue;
 
   beforeEach(() => {
-    store = renderWithProviders(<DeleteExerciseDialog exercise={exercise} />, {
-      preloadedState: initialValue,
-    }).store;
+    exercise = generateExercise({
+      id: '1',
+      name: 'Push-up',
+    });
+
+    renderDeleteExerciseDialog(exercise);
 
     fireEvent.click(screen.getByLabelText('Delete exercise'));
   });
@@ -51,7 +44,7 @@ describe('Delete exercise', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {
-      expect(store.getState().exercises.values.length).toEqual(0);
+      expect(useExercisesStore.getState().exercises.length).toEqual(0);
     });
   });
 });

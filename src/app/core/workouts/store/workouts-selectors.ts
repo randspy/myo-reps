@@ -1,9 +1,13 @@
+import { useWorkoutsStore, WorkoutsState } from './workouts-store';
 import { createSelector } from 'reselect';
-import { RootState } from '@/store/store';
 
-const selectAllWorkouts = (state: RootState) => state.workouts.values;
+export const selectAllWorkouts = () =>
+  useWorkoutsStore((state) => state.workouts);
 
 export const selectWorkoutById = (id: string | undefined | null) =>
-  createSelector([selectAllWorkouts], (workouts) =>
-    workouts.find((workout) => workout.id === id),
+  useWorkoutsStore(
+    createSelector(
+      (state: WorkoutsState) => state.workouts,
+      (workouts) => workouts.find((workout) => workout.id === id),
+    ),
   );

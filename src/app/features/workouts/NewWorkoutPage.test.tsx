@@ -1,18 +1,9 @@
-import { screen, fireEvent } from '@testing-library/react';
-import { Mock } from 'vitest';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
-import { AppStore, renderWithProviders } from '@/lib/test-utils';
+import { screen, fireEvent, waitFor, render } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
 import { NewWorkoutPage } from './NewWorkoutPage';
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: vi.fn(),
-  };
-});
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 vi.mock('@/app/features/workouts/WorkoutForm', () => ({
   WorkoutForm: ({
@@ -55,50 +46,47 @@ vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
     children(mockOnDirtyChange, mockOnSubmit),
 }));
 
+const renderNewWorkoutPage = () => {
+  return render(
+    <MemoryRouter initialEntries={['/workouts/new']}>
+      <Routes>
+        <Route path="/workouts/new" element={<NewWorkoutPage />} />
+        <Route path="/workouts" element={<div>Workouts Page</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+};
+
 describe('New workout page', () => {
-  let store: AppStore;
+  beforeEach(() => {
+    useWorkoutsStore.setState({ workouts: [] });
+  });
 
-  test('call dispatchAdd and navigate on form submission', () => {
-    const mockNavigate = vi.fn();
-
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-
-    store = renderWithProviders(
-      <MemoryRouter>
-        <NewWorkoutPage />
-      </MemoryRouter>,
-    ).store;
+  test('should add workout and navigate on form submission', async () => {
+    renderNewWorkoutPage();
 
     fireEvent.click(screen.getByText('Save'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/workouts');
-    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
-    expect(store.getState().workouts.values[0].name).toEqual('Mock Upper body');
+    await waitFor(() => {
+      const workouts = useWorkoutsStore.getState().workouts;
+      expect(workouts).toHaveLength(1);
+      expect(workouts[0].name).toEqual('Mock Upper body');
+      expect(screen.getByText('Workouts Page')).toBeInTheDocument();
+      expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+    });
   });
 
-  test('navigate to /exercises on cancel', () => {
-    const mockNavigate = vi.fn();
-
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-
-    store = renderWithProviders(
-      <MemoryRouter>
-        <NewWorkoutPage />
-      </MemoryRouter>,
-    ).store;
+  test('should navigate to /workouts on cancel', () => {
+    renderNewWorkoutPage();
 
     fireEvent.click(screen.getByText('Cancel'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/workouts');
-    expect(store.getState().exercises.values).toEqual([]);
+    expect(screen.getByText('Workouts Page')).toBeInTheDocument();
+    expect(useWorkoutsStore.getState().workouts).toHaveLength(0);
   });
 
-  test('block unsaved changes', () => {
-    store = renderWithProviders(
-      <MemoryRouter>
-        <NewWorkoutPage />
-      </MemoryRouter>,
-    ).store;
+  test('should block unsaved changes', () => {
+    renderNewWorkoutPage();
 
     fireEvent.click(screen.getByText('Simulate dirty change'));
 

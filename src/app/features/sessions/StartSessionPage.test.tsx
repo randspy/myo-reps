@@ -1,59 +1,63 @@
-import {
-  generateExercise,
-  generateWorkout,
-  renderWithProviders,
-} from '@/lib/test-utils';
-import { fireEvent, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { StartSessionPage } from './StartSessionPage';
+import { generateExercise, generateWorkout } from '@/lib/test-utils';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
+import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
+import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 
-const preloadedState = {
-  exercises: {
-    values: [
-      generateExercise({
-        id: '1',
-        name: 'Push-up',
-        position: 0,
-        usage: [{ id: '123' }],
-      }),
-      generateExercise({
-        id: '2',
-        name: 'Squats',
-        position: 1,
-        usage: [{ id: '123' }],
-      }),
-    ],
-  },
-  workouts: {
-    values: [
-      generateWorkout({
-        id: '123',
-        name: 'Upper body',
-        exercises: [
-          { id: '1', sets: 3, exerciseId: '1' },
-          { id: '2', sets: 9, exerciseId: '2' },
-        ],
-      }),
-    ],
-  },
+const renderStartSessionPage = () => {
+  return render(
+    <MemoryRouter initialEntries={['/sessions/start?workoutId=123']}>
+      <Routes>
+        <Route path="/sessions/start" element={<StartSessionPage />} />
+        <Route
+          path="/sessions/in-progress"
+          element={<div>Mock In Progress</div>}
+        />
+        <Route path="/workouts" element={<div>Mock Workouts</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
 };
 
 describe('Start Session Page', () => {
   describe('when the workout exists', () => {
+    let exercises: ExerciseValue[];
+    let workouts: WorkoutValue[];
+
     beforeEach(() => {
-      renderWithProviders(
-        <MemoryRouter initialEntries={['/sessions/start?workoutId=123']}>
-          <Routes>
-            <Route path="/sessions/start" element={<StartSessionPage />} />
-            <Route
-              path="/sessions/in-progress"
-              element={<div>Mock In Progress</div>}
-            />
-            <Route path="/workouts" element={<div>Mock Workouts</div>} />
-          </Routes>
-        </MemoryRouter>,
-        { preloadedState },
-      );
+      exercises = [
+        generateExercise({
+          id: '1',
+          name: 'Push-up',
+          position: 0,
+          usage: [{ id: '123' }],
+        }),
+        generateExercise({
+          id: '2',
+          name: 'Squats',
+          position: 1,
+          usage: [{ id: '123' }],
+        }),
+      ];
+
+      workouts = [
+        generateWorkout({
+          id: '123',
+          name: 'Upper body',
+          exercises: [
+            { id: '1', sets: 3, exerciseId: '1' },
+            { id: '2', sets: 9, exerciseId: '2' },
+          ],
+        }),
+      ];
+
+      useExercisesStore.setState({ exercises });
+      useWorkoutsStore.setState({ workouts });
+
+      renderStartSessionPage();
     });
 
     test('should render the StartSessionPage component', () => {
@@ -81,20 +85,8 @@ describe('Start Session Page', () => {
   });
 
   test('should display a 404 page when the workout does not exist', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/sessions/start?workoutId=999']}>
-        <Routes>
-          <Route path="/sessions/start" element={<StartSessionPage />} />
-          <Route
-            path="/sessions/in-progress"
-            element={<div>Mock In Progress</div>}
-          />
-          <Route path="/workouts" element={<div>Mock Workouts</div>} />
-        </Routes>
-      </MemoryRouter>,
-      { preloadedState },
-    );
-
+    useWorkoutsStore.setState({ workouts: [] });
+    renderStartSessionPage();
     expect(screen.getByText('Page not found')).toBeInTheDocument();
   });
 });

@@ -1,36 +1,44 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { WorkoutsPage } from '@/app/features/workouts/WorkoutsPage';
-import { generateWorkout, renderWithProviders } from '@/lib/test-utils';
+import { generateWorkout } from '@/lib/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
+import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 
-const initialState = {
-  workouts: {
-    values: [
-      generateWorkout({
-        id: '1',
-        position: 0,
-        name: 'Upper body',
-      }),
-    ],
-  },
+const renderWorkoutPage = () => {
+  return render(
+    <MemoryRouter initialEntries={['/workouts']}>
+      <Routes>
+        <Route path="/workouts" element={<WorkoutsPage />} />
+        <Route path="/workouts/new" element={<div>New Workout Page</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
 };
 
 describe('Workouts page', () => {
+  beforeEach(() => {
+    useWorkoutsStore.setState({ workouts: [] });
+  });
+
   describe('when there are workouts present', () => {
+    let workouts: WorkoutValue[];
+
     beforeEach(() => {
-      renderWithProviders(
-        <MemoryRouter>
-          <WorkoutsPage />
-        </MemoryRouter>,
-        {
-          preloadedState: initialState,
-        },
-      );
+      workouts = [
+        generateWorkout({
+          id: '1',
+          position: 0,
+          name: 'Upper body',
+        }),
+      ];
+      useWorkoutsStore.setState({ workouts });
+      renderWorkoutPage();
     });
 
     test('renders workouts list component', () => {
-      initialState.workouts.values.forEach((workouts) => {
-        expect(screen.getByText(workouts.name)).toBeInTheDocument();
+      workouts.forEach((workout) => {
+        expect(screen.getByText(workout.name)).toBeInTheDocument();
       });
     });
 
@@ -42,11 +50,7 @@ describe('Workouts page', () => {
   });
 
   test('that it centers the add button when no workouts present', () => {
-    renderWithProviders(
-      <MemoryRouter>
-        <WorkoutsPage />
-      </MemoryRouter>,
-    );
+    renderWorkoutPage();
 
     expect(screen.getByTestId('workouts-page-container')).toHaveClass(
       'justify-center',
@@ -54,14 +58,7 @@ describe('Workouts page', () => {
   });
 
   test('navigates to the new exercise page when the add new exercise button is clicked', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/workouts']}>
-        <Routes>
-          <Route path="/workouts" element={<WorkoutsPage />} />
-          <Route path="/workouts/new" element={<div>New Workout Page</div>} />
-        </Routes>
-      </MemoryRouter>,
-    );
+    renderWorkoutPage();
 
     fireEvent.click(
       screen.getByRole('link', {

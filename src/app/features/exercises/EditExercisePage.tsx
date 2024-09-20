@@ -3,7 +3,6 @@ import { ExerciseForm } from '@/app/features/exercises/ExerciseForm';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
 import { FormCard } from '@/app/ui/FormCard';
-import { useSelector } from 'react-redux';
 import { selectExerciseById } from '@/app/core/exercises/store/exercises-selectors';
 import {
   UnsavedFormChangesBlocker,
@@ -17,7 +16,7 @@ export const EditExercisePage: React.FC = () => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
-  const exercise = useSelector(selectExerciseById(id));
+  const exercise = selectExerciseById(id);
 
   if (!exercise) {
     return <PageNotFound />;
@@ -28,9 +27,9 @@ export const EditExercisePage: React.FC = () => {
       <UnsavedFormChangesBlocker>
         {(onDirtyChange: OnDirtyChange, onSubmit: OnSubmit) => (
           <ExerciseForm
-            onSubmit={(values: ExerciseFormValues) => {
+            onSubmit={async (values: ExerciseFormValues) => {
               onSubmit();
-              dispatchUpdate({
+              await dispatchUpdate({
                 ...exercise,
                 ...values,
               });

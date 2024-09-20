@@ -13,6 +13,9 @@ export const CircularTimer: React.FC<{
   };
 
   const calculateStrokeDashoffset = (time: number) => {
+    if (!startTimeForAnimation) {
+      return 0;
+    }
     const progress =
       ((startTimeForAnimation - time) / startTimeForAnimation) * 100;
     return circumference - (progress / 100) * circumference;

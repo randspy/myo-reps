@@ -1,39 +1,30 @@
-import { screen, fireEvent, act, within } from '@testing-library/react';
+import { screen, fireEvent, act, within, render } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { RunningSessionPage } from './RunningSessionPage';
-import {
-  generateExercise,
-  generateWorkout,
-  renderWithProviders,
-} from '@/lib/test-utils';
+import { generateExercise, generateWorkout } from '@/lib/test-utils';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
 import {
   DefaultRepetitions,
   TimeBetweenExercisesInSeconds,
 } from '@/app/core/exercises/domain/exercises.config';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
+import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 
 const renderRunningSessionPage = (
   exercises: ExerciseValue[],
   workouts: WorkoutValue[],
 ) => {
-  return renderWithProviders(
+  useWorkoutsStore.setState({ workouts });
+  useExercisesStore.setState({ exercises });
+
+  return render(
     <MemoryRouter initialEntries={['/running-session?workoutId=workout-1']}>
       <Routes>
         <Route path="/running-session" element={<RunningSessionPage />} />
         <Route path="/sessions" element={<div>Sessions Page</div>} />
       </Routes>
     </MemoryRouter>,
-    {
-      preloadedState: {
-        exercises: {
-          values: exercises,
-        },
-        workouts: {
-          values: workouts,
-        },
-      },
-    },
   );
 };
 
@@ -179,7 +170,7 @@ describe('RunningSessionPage', () => {
     ).toBeInTheDocument();
   });
 
-  test('user finishes the session and navigates to /sessions', async () => {
+  test('user finishes the session and navigates to /sessions', () => {
     renderRunningSessionPage(exercises, workouts);
 
     actionsForOneSet();

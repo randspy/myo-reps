@@ -1,16 +1,8 @@
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectActiveExercises } from '@/app/core/exercises/store/exercises-selectors';
-import { useSelector } from 'react-redux';
 import {
   ExerciseFormValues,
   ExerciseValue,
 } from '@/app/core/exercises/exercises-schema';
-import {
-  addExercise,
-  deleteExercise,
-  setExercises,
-  updateExercise,
-} from '@/app/core/exercises/store/exercises-slice';
+import { useExerciseActions } from '@/app/core/exercises/hooks/useExerciseActions';
 import {
   addUsageToExercise,
   createExerciseFromForm,
@@ -20,39 +12,43 @@ import {
   ExerciseAction,
   getNextPosition,
 } from '@/app/core/exercises/domain/exercises.domain';
+import {
+  selectActiveExercises,
+  selectAllExercises,
+} from '@/app/core/exercises/store/exercises-selectors';
 
 export const useExercise = () => {
-  const exercises = useAppSelector((state) => state.exercises.values);
-  const activeExercises = useSelector(selectActiveExercises);
+  const exercises = selectAllExercises();
+  const activeExercises = selectActiveExercises();
+  const { addExercise, updateExercise, deleteExercise, setExercises } =
+    useExerciseActions();
 
-  const dispatch = useAppDispatch();
-
-  function dispatchAdd(exercise: ExerciseFormValues) {
+  async function dispatchAdd(exercise: ExerciseFormValues) {
     const value = createExerciseFromForm(exercise, getNextPosition(exercises));
-    dispatch(addExercise(value));
+    await addExercise(value);
   }
 
-  function dispatchUpdate(exercise: ExerciseValue) {
-    dispatch(updateExercise(exercise));
+  async function dispatchUpdate(exercise: ExerciseValue) {
+    await updateExercise(exercise);
   }
 
-  function dispatchDelete(id: string) {
+  async function dispatchDelete(id: string) {
     const action: ExerciseAction = removeExerciseFromUserView(id, exercises);
 
     if (action) {
       if (action.type === 'update') {
-        dispatch(updateExercise(action.payload));
+        await updateExercise(action.payload);
       } else if (action.type === 'delete') {
-        dispatch(deleteExercise(action.payload));
+        await deleteExercise(action.payload);
       }
     }
   }
 
-  function dispatchSet(exercises: ExerciseValue[]) {
-    dispatch(setExercises(updateExercisePositions(exercises)));
+  async function dispatchSet(exercises: ExerciseValue[]) {
+    await setExercises(updateExercisePositions(exercises));
   }
 
-  function dispatchAddUsage({
+  async function dispatchAddUsage({
     exerciseId,
     userId,
   }: {
@@ -62,11 +58,11 @@ export const useExercise = () => {
     const exercise = addUsageToExercise(exercises, exerciseId, userId);
 
     if (exercise) {
-      dispatch(updateExercise(exercise));
+      await updateExercise(exercise);
     }
   }
 
-  function dispatchRemoveUsage({
+  async function dispatchRemoveUsage({
     exerciseId,
     userId,
   }: {
@@ -81,9 +77,9 @@ export const useExercise = () => {
 
     if (action) {
       if (action.type === 'update') {
-        dispatch(updateExercise(action.payload));
+        await updateExercise(action.payload);
       } else if (action.type === 'delete') {
-        dispatch(deleteExercise(action.payload));
+        await deleteExercise(action.payload);
       }
     }
   }

@@ -14,7 +14,7 @@ export const WorkoutList: React.FC = () => {
     <div className="w-full">
       <DragAndDropList
         values={workouts}
-        onReorder={(values) => dispatchSet(values)}
+        onReorder={async (values) => await dispatchSet(values)}
       >
         {workouts?.map((workout) => (
           <DragAndDropListItem key={workout.id} value={workout}>

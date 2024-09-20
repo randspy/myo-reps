@@ -1,10 +1,7 @@
 import { TimeBetweenExercisesInSeconds } from '@/app/core/exercises/domain/exercises.config';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { selectExercisesByWorkoutId } from '@/app/core/exercises/store/exercises-selectors';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
-import { RootState } from '@/store/store';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 export const useRunningSession = (workoutId: string | null) => {
   const [time, setTime] = useState(0);
@@ -21,10 +18,8 @@ export const useRunningSession = (workoutId: string | null) => {
   const [startTime, setStartTime] = useState(0);
   const timeRef = useRef(0);
 
-  const workout = useSelector(selectWorkoutById(workoutId));
-  const exercises = useSelector<RootState, ExerciseValue[]>(
-    selectExercisesByWorkoutId(workoutId),
-  );
+  const workout = selectWorkoutById(workoutId);
+  const exercises = selectExercisesByWorkoutId(workoutId);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;

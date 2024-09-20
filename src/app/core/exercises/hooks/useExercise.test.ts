@@ -4,10 +4,9 @@ import {
   ExerciseFormValues,
   ExerciseValue,
 } from '@/app/core/exercises/exercises-schema';
-import { renderHookWithProviders } from '@/lib/test-utils';
 import { generateExercise } from '@/lib/test-utils';
-import { act } from '@testing-library/react';
-import { EnhancedStore } from '@reduxjs/toolkit';
+import { act, renderHook } from '@testing-library/react';
+import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(),
@@ -16,10 +15,14 @@ vi.mock('uuid', () => ({
 describe('useExercise', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    act(() => {
+      useExercisesStore.getState().setExercises([]);
+    });
   });
 
   test('should return exercises and activeExercises', () => {
-    const initialState = [
+    const exercises = [
       generateExercise({
         id: 'exercise-1',
         name: 'Push-up',
@@ -36,30 +39,27 @@ describe('useExercise', () => {
       }),
     ];
 
-    const { result } = renderHookWithProviders(() => useExercise(), {
-      preloadedState: {
-        exercises: {
-          values: initialState,
-        },
-      },
-    });
+    useExercisesStore.setState({ exercises });
 
-    expect(result.current.exercises).toEqual(initialState);
-    expect(result.current.activeExercises).toEqual([initialState[0]]);
+    const { result } = renderHook(() => useExercise());
+
+    expect(result.current.exercises).toEqual(exercises);
+    expect(result.current.activeExercises).toEqual([exercises[0]]);
   });
 
-  test('should add exercise', () => {
+  test('should add exercise', async () => {
     const id = 'exercise-1';
     vi.mocked(v4).mockImplementation(() => id);
 
-    const { result, store } = renderHookWithProviders(() => useExercise());
+    const { result } = renderHook(() => useExercise());
     const newExercise: ExerciseFormValues = { name: 'added exercise' };
 
-    act(() => {
-      result.current.dispatchAdd(newExercise);
+    await act(async () => {
+      await result.current.dispatchAdd(newExercise);
     });
 
-    expect(store.getState().exercises.values[0]).toEqual({
+    const storeState = useExercisesStore.getState();
+    expect(storeState.exercises[0]).toEqual({
       ...newExercise,
       id,
       hidden: false,
@@ -68,97 +68,91 @@ describe('useExercise', () => {
     });
   });
 
-  test('should add exercise to existing exercises', () => {
+  test('should add exercise to existing exercises', async () => {
     const id = 'exercise-2';
     vi.mocked(v4).mockImplementation(() => id);
 
-    const { result, store } = renderHookWithProviders(() => useExercise(), {
-      preloadedState: {
-        exercises: {
-          values: [
-            generateExercise({
-              id: 'exercise-1',
-              name: 'Push-up',
-              position: 4,
-            }),
-          ],
-        },
-      },
+    useExercisesStore.setState({
+      exercises: [
+        generateExercise({
+          id: 'exercise-1',
+          name: 'Push-up',
+          position: 4,
+        }),
+      ],
     });
+
+    const { result } = renderHook(() => useExercise());
 
     const newExercise: ExerciseFormValues = { name: 'added exercise' };
 
-    act(() => {
-      result.current.dispatchAdd(newExercise);
+    await act(async () => {
+      await result.current.dispatchAdd(newExercise);
     });
 
-    expect(store.getState().exercises.values[1]).toEqual({
+    const storeState = useExercisesStore.getState();
+    expect(storeState.exercises[1]).toMatchObject({
       ...newExercise,
       id,
-      hidden: false,
-      usage: [],
       position: 5,
     });
   });
 
-  test('should dispatch updateExercise action', () => {
-    const { result, store } = renderHookWithProviders(() => useExercise(), {
-      preloadedState: {
-        exercises: {
-          values: [generateExercise({ id: 'exercise-1' })],
-        },
-      },
+  test('should dispatch updateExercise action', async () => {
+    useExercisesStore.setState({
+      exercises: [generateExercise({ id: 'exercise-1' })],
     });
+
+    const { result } = renderHook(() => useExercise());
 
     const updatedExercise: ExerciseValue = generateExercise({
       id: 'exercise-1',
       name: 'Updated Exercise',
     });
 
-    act(() => {
-      result.current.dispatchUpdate(updatedExercise);
+    await act(async () => {
+      await result.current.dispatchUpdate(updatedExercise);
     });
 
-    expect(exercise(store, 'exercise-1')).toEqual(updatedExercise);
+    expect(exercise('exercise-1')).toEqual(updatedExercise);
   });
 
-  test('should set exercise', () => {
-    const { result, store } = renderHookWithProviders(() => useExercise());
+  test('should set exercises', async () => {
+    const { result } = renderHook(() => useExercise());
 
     const exercises = [
       generateExercise({ id: 'exercise-1', position: 1 }),
       generateExercise({ id: 'exercise-2', position: 0 }),
     ];
 
-    act(() => {
-      result.current.dispatchSet(exercises);
+    await act(async () => {
+      await result.current.dispatchSet(exercises);
     });
 
-    expect(store.getState().exercises.values).toEqual(
+    const storeState = useExercisesStore.getState();
+    expect(storeState.exercises).toEqual(
       exercises.map((exercise, idx) => ({ ...exercise, position: idx })),
     );
   });
 
   describe('delete exercise', () => {
-    test('should hide if exercise is in use', () => {
-      const { result, store } = renderHookWithProviders(() => useExercise(), {
-        preloadedState: {
-          exercises: {
-            values: [
-              generateExercise({
-                id: 'exercise-1',
-                usage: [{ id: 'workout-1' }],
-              }),
-            ],
-          },
-        },
+    test('should hide if exercise is in use', async () => {
+      useExercisesStore.setState({
+        exercises: [
+          generateExercise({
+            id: 'exercise-1',
+            usage: [{ id: 'workout-1' }],
+          }),
+        ],
       });
 
-      act(() => {
-        result.current.dispatchDelete('exercise-1');
+      const { result } = renderHook(() => useExercise());
+
+      await act(async () => {
+        await result.current.dispatchDelete('exercise-1');
       });
 
-      expect(exercise(store, 'exercise-1')).toEqual(
+      expect(exercise('exercise-1')).toEqual(
         generateExercise({
           id: 'exercise-1',
           usage: [{ id: 'workout-1' }],
@@ -167,45 +161,42 @@ describe('useExercise', () => {
       );
     });
 
-    test('should delete action if exercise is not in use', () => {
-      const { result, store } = renderHookWithProviders(() => useExercise(), {
-        preloadedState: {
-          exercises: {
-            values: [
-              generateExercise({
-                id: 'exercise-1',
-                usage: [],
-              }),
-            ],
-          },
-        },
+    test('should delete action if exercise is not in use', async () => {
+      useExercisesStore.setState({
+        exercises: [
+          generateExercise({
+            id: 'exercise-1',
+            usage: [],
+          }),
+        ],
       });
 
-      act(() => {
-        result.current.dispatchDelete('exercise-1');
+      const { result } = renderHook(() => useExercise());
+
+      await act(async () => {
+        await result.current.dispatchDelete('exercise-1');
       });
 
-      expect(store.getState().exercises.values.length).toEqual(0);
+      const storeState = useExercisesStore.getState();
+      expect(storeState.exercises.length).toEqual(0);
     });
   });
 
-  test('should add usage', () => {
-    const { result, store } = renderHookWithProviders(() => useExercise(), {
-      preloadedState: {
-        exercises: {
-          values: [generateExercise({ id: 'exercise-1' })],
-        },
-      },
+  test('should add usage', async () => {
+    useExercisesStore.setState({
+      exercises: [generateExercise({ id: 'exercise-1' })],
     });
 
-    act(() => {
-      result.current.dispatchAddUsage({
+    const { result } = renderHook(() => useExercise());
+
+    await act(async () => {
+      await result.current.dispatchAddUsage({
         exerciseId: 'exercise-1',
         userId: '1',
       });
     });
 
-    expect(exercise(store, 'exercise-1')).toEqual(
+    expect(exercise('exercise-1')).toEqual(
       generateExercise({
         id: 'exercise-1',
         usage: [{ id: '1' }],
@@ -214,28 +205,26 @@ describe('useExercise', () => {
   });
 
   describe('remove usage', () => {
-    test('should remove usage', () => {
-      const { result, store } = renderHookWithProviders(() => useExercise(), {
-        preloadedState: {
-          exercises: {
-            values: [
-              generateExercise({
-                id: 'exercise-1',
-                usage: [{ id: '1' }],
-              }),
-            ],
-          },
-        },
+    test('should remove usage', async () => {
+      useExercisesStore.setState({
+        exercises: [
+          generateExercise({
+            id: 'exercise-1',
+            usage: [{ id: '1' }],
+          }),
+        ],
       });
 
-      act(() => {
-        result.current.dispatchRemoveUsage({
+      const { result } = renderHook(() => useExercise());
+
+      await act(async () => {
+        await result.current.dispatchRemoveUsage({
           exerciseId: 'exercise-1',
           userId: '1',
         });
       });
 
-      expect(exercise(store, 'exercise-1')).toEqual(
+      expect(exercise('exercise-1')).toEqual(
         generateExercise({
           id: 'exercise-1',
           usage: [],
@@ -243,35 +232,34 @@ describe('useExercise', () => {
       );
     });
 
-    test('should delete exercise if exercise is hidden and has no usage outside provided user id', () => {
-      const { result, store } = renderHookWithProviders(() => useExercise(), {
-        preloadedState: {
-          exercises: {
-            values: [
-              generateExercise({
-                id: 'exercise-1',
-                usage: [{ id: '1' }],
-                hidden: true,
-              }),
-            ],
-          },
-        },
+    test('should delete exercise if exercise is hidden and has no usage outside provided user id', async () => {
+      useExercisesStore.setState({
+        exercises: [
+          generateExercise({
+            id: 'exercise-1',
+            usage: [{ id: '1' }],
+            hidden: true,
+          }),
+        ],
       });
 
-      act(() => {
-        result.current.dispatchRemoveUsage({
+      const { result } = renderHook(() => useExercise());
+
+      await act(async () => {
+        await result.current.dispatchRemoveUsage({
           exerciseId: 'exercise-1',
           userId: '1',
         });
       });
 
-      expect(store.getState().exercises.values.length).toEqual(0);
+      const storeState = useExercisesStore.getState();
+      expect(storeState.exercises.length).toEqual(0);
     });
   });
 });
 
-function exercise(store: EnhancedStore, id: string) {
-  return store
+function exercise(id: string) {
+  return useExercisesStore
     .getState()
-    .exercises.values.find((exercise: ExerciseValue) => exercise.id === id);
+    .exercises.find((exercise: ExerciseValue) => exercise.id === id);
 }

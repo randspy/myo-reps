@@ -47,4 +47,14 @@ describe('CircularTimer', () => {
       parseFloat(progressRing.getAttribute('stroke-dashoffset')!),
     ).toBeCloseTo(141.37, 2);
   });
+
+  it('does not calculate stroke dash offset when startTimeForAnimation is not provided', () => {
+    const { container } = render(
+      <CircularTimer time={30} showProgressRing={true} />,
+    );
+
+    const progressRing = container.querySelectorAll('circle')[1];
+
+    expect(parseFloat(progressRing.getAttribute('stroke-dashoffset')!)).toBe(0);
+  });
 });

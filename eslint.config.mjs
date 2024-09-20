@@ -27,6 +27,7 @@ export default [
         ...config.rules,
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'off',
+        'require-await': 'error',
       },
     })),
 ];

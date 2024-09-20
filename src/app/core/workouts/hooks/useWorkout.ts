@@ -3,15 +3,8 @@ import {
   WorkoutFormValues,
   WorkoutValue,
 } from '@/app/core/workouts/workouts-schema';
+import { useWorkoutActions } from '@/app/core/workouts/hooks/useWorkoutActions';
 import {
-  addWorkout,
-  deleteWorkout,
-  setWorkouts,
-  updateWorkout,
-} from '@/app/core/workouts/store/workouts-slice';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import {
-  createExerciseForWorkout,
   createWorkoutFromForm,
   deduplicateExercisesId,
   findExercisesByWorkoutId,
@@ -19,26 +12,27 @@ import {
   updateWorkoutPositions,
   updateWorkoutUsageOfExercises,
 } from '@/app/core/workouts/domain/workout.domain';
+import { selectAllWorkouts } from '@/app/core/workouts/store/workouts-selectors';
 
 export const useWorkout = () => {
-  const workouts = useAppSelector((state) => state.workouts.values);
+  const workouts = selectAllWorkouts();
   const { dispatchAddUsage, dispatchRemoveUsage } = useExercise();
+  const { addWorkout, updateWorkout, deleteWorkout, setWorkouts } =
+    useWorkoutActions();
 
-  const dispatch = useAppDispatch();
-
-  function dispatchAdd(value: WorkoutFormValues) {
+  async function dispatchAdd(value: WorkoutFormValues) {
     const workout = createWorkoutFromForm(value, getNextPosition(workouts));
     const distinctExerciseIds = deduplicateExercisesId(workout.exercises);
 
-    dispatch(addWorkout(workout));
+    await addWorkout(workout);
 
     for (const exerciseId of distinctExerciseIds) {
       dispatchAddUsage({ exerciseId: exerciseId, userId: workout.id });
     }
   }
 
-  function dispatchUpdate(updatedWorkout: WorkoutValue) {
-    dispatch(updateWorkout(updatedWorkout));
+  async function dispatchUpdate(updatedWorkout: WorkoutValue) {
+    await updateWorkout(updatedWorkout);
 
     const { addedExercises, removedExercises } = updateWorkoutUsageOfExercises(
       workouts,
@@ -46,32 +40,35 @@ export const useWorkout = () => {
     );
 
     for (const exercise of addedExercises) {
-      dispatchAddUsage({
+      await dispatchAddUsage({
         exerciseId: exercise.exerciseId,
         userId: updatedWorkout.id,
       });
     }
 
     for (const exercise of removedExercises) {
-      dispatchRemoveUsage({
+      await dispatchRemoveUsage({
         exerciseId: exercise.exerciseId,
         userId: updatedWorkout.id,
       });
     }
   }
 
-  function dispatchDelete(id: string) {
-    dispatch(deleteWorkout(id));
+  async function dispatchDelete(id: string) {
+    await deleteWorkout(id);
 
     const exercises = findExercisesByWorkoutId(workouts, id);
 
     for (const exercise of exercises) {
-      dispatchRemoveUsage({ exerciseId: exercise.exerciseId, userId: id });
+      await dispatchRemoveUsage({
+        exerciseId: exercise.exerciseId,
+        userId: id,
+      });
     }
   }
 
-  function dispatchSet(workouts: WorkoutValue[]) {
-    dispatch(setWorkouts(updateWorkoutPositions(workouts)));
+  async function dispatchSet(workouts: WorkoutValue[]) {
+    await setWorkouts(updateWorkoutPositions(workouts));
   }
 
   return {
@@ -80,6 +77,5 @@ export const useWorkout = () => {
     dispatchUpdate,
     dispatchDelete,
     dispatchSet,
-    createExerciseForWorkout,
   };
 };

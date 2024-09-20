@@ -1,114 +1,75 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ExercisesPage } from '@/app/features/exercises/ExercisesPage';
-import { generateExercise, renderWithProviders } from '@/lib/test-utils';
+import { generateExercise } from '@/lib/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
+import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 
-const initialState = {
-  exercises: {
-    values: [
-      generateExercise({
-        id: '1',
-        position: 0,
-        name: 'Push-up',
-      }),
-      generateExercise({
-        id: '2',
-        position: 1,
-        name: 'Squat',
-      }),
-    ],
-  },
+const renderExercisePage = () => {
+  return render(
+    <MemoryRouter initialEntries={['/exercises']}>
+      <Routes>
+        <Route path="/exercises" element={<ExercisesPage />} />
+        <Route path="/exercises/new" element={<div>New Exercise Page</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
 };
 
-describe('Exercise page', () => {
-  test('renders ExerciseList component', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/exercises']}>
-        <ExercisesPage />
-      </MemoryRouter>,
-      {
-        preloadedState: initialState,
-      },
-    );
-
-    initialState.exercises.values.forEach((exercise) => {
-      const exerciseElement = screen.getByText(exercise.name);
-
-      expect(exerciseElement).toBeInTheDocument();
-    });
+describe('Exercises page', () => {
+  beforeEach(() => {
+    useExercisesStore.setState({ exercises: [] });
   });
 
-  test('renders ExerciseList component', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/exercises']}>
-        <ExercisesPage />
-      </MemoryRouter>,
-      {
-        preloadedState: initialState,
-      },
-    );
+  describe('when there are exercises present', () => {
+    let exercises: ExerciseValue[];
 
-    initialState.exercises.values.forEach((exercise) => {
-      const exerciseElement = screen.getByText(exercise.name);
+    beforeEach(() => {
+      exercises = [
+        generateExercise({
+          id: '1',
+          position: 0,
+          name: 'Push-up',
+        }),
+        generateExercise({
+          id: '2',
+          position: 1,
+          name: 'Squat',
+        }),
+      ];
+      useExercisesStore.setState({ exercises });
+      renderExercisePage();
+    });
 
-      expect(exerciseElement).toBeInTheDocument();
+    test('renders exercises list component', () => {
+      exercises.forEach((exercise) => {
+        expect(screen.getByText(exercise.name)).toBeInTheDocument();
+      });
+    });
+
+    test("that it doesn't center the add button when there are exercises present", () => {
+      expect(screen.getByTestId('exercises-page-container')).not.toHaveClass(
+        'justify-center',
+      );
     });
   });
 
   test('that it centers the add button when no exercises present', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/exercises']}>
-        <ExercisesPage />
-      </MemoryRouter>,
+    renderExercisePage();
+
+    expect(screen.getByTestId('exercises-page-container')).toHaveClass(
+      'justify-center',
     );
-
-    const container = screen.getByTestId('exercises-page-container');
-    expect(container).toHaveClass('justify-center');
-  });
-
-  test("that it doesn't centers the add button when there are exercises present", () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/exercises']}>
-        <ExercisesPage />
-      </MemoryRouter>,
-      {
-        preloadedState: initialState,
-      },
-    );
-
-    const container = screen.getByTestId('exercises-page-container');
-    expect(container).not.toHaveClass('justify-center');
-  });
-
-  test('renders the add new exercise button', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/exercises']}>
-        <ExercisesPage />
-      </MemoryRouter>,
-    );
-
-    const addExerciseButton = screen.getByRole('link', {
-      name: 'Add New Exercise',
-    });
-
-    expect(addExerciseButton).toBeInTheDocument();
   });
 
   test('navigates to the new exercise page when the add new exercise button is clicked', () => {
-    renderWithProviders(
-      <MemoryRouter initialEntries={['/exercises']}>
-        <Routes>
-          <Route path="/exercises" element={<ExercisesPage />} />
-          <Route path="/exercises/new" element={<div>New Exercise Page</div>} />
-        </Routes>
-      </MemoryRouter>,
+    renderExercisePage();
+
+    fireEvent.click(
+      screen.getByRole('link', {
+        name: 'Add New Exercise',
+      }),
     );
-
-    const addExerciseButton = screen.getByRole('link', {
-      name: 'Add New Exercise',
-    });
-
-    fireEvent.click(addExerciseButton);
 
     expect(screen.getByText('New Exercise Page')).toBeInTheDocument();
   });

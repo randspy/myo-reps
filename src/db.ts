@@ -1,8 +1,8 @@
 import Dexie, { type EntityTable } from 'dexie';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
-import { restoreExercises } from './app/core/exercises/store/exercises-slice';
-import { restoreWorkouts } from './app/core/workouts/store/workouts-slice';
+import { useExercisesStore } from './app/core/exercises/store/exercises-store';
+import { useWorkoutsStore } from './app/core/workouts/store/workouts-store';
 
 const db = new Dexie('myo-reps') as Dexie & {
   exercises: EntityTable<ExerciseValue, 'id'>;
@@ -22,8 +22,10 @@ async function recreateDB() {
 async function restoreFromDB() {
   const exercises = await db.exercises.toArray();
   const workouts = await db.workouts.toArray();
-
-  return [restoreExercises(exercises), restoreWorkouts(workouts)];
+  useExercisesStore.getState().restoreExercises(exercises);
+  useWorkoutsStore.getState().restoreWorkouts(workouts);
 }
+
+restoreFromDB();
 
 export { db, recreateDB, restoreFromDB };

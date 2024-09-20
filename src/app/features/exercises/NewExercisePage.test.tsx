@@ -1,18 +1,9 @@
-import { screen, fireEvent } from '@testing-library/react';
-import { Mock } from 'vitest';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
+import { screen, fireEvent, waitFor, render } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { NewExercisePage } from './NewExercisePage';
-import { AppStore, renderWithProviders } from '@/lib/test-utils';
 import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
 import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: vi.fn(),
-  };
-});
+import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 
 vi.mock('@/app/features/exercises/ExerciseForm', () => ({
   ExerciseForm: ({
@@ -54,50 +45,49 @@ vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
     children(mockOnDirtyChange, mockOnSubmit),
 }));
 
+const renderNewExercisePage = () => {
+  return render(
+    <MemoryRouter initialEntries={['/exercises/new']}>
+      <Routes>
+        <Route path="/exercises/new" element={<NewExercisePage />} />
+        <Route path="/exercises" element={<div>Exercises Page</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+};
+
 describe('New exercise page', () => {
-  let store: AppStore;
+  beforeEach(() => {
+    useExercisesStore.setState({ exercises: [] });
+  });
 
-  test('call dispatchAdd and navigate on form submission', () => {
-    const mockNavigate = vi.fn();
-
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-
-    store = renderWithProviders(
-      <MemoryRouter>
-        <NewExercisePage />
-      </MemoryRouter>,
-    ).store;
+  test('should add exercise and navigate on form submission', async () => {
+    renderNewExercisePage();
 
     fireEvent.click(screen.getByText('Save'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/exercises');
-    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
-    expect(store.getState().exercises.values[0].name).toEqual('Mock Push up');
+    await waitFor(() => {
+      const exercises = useExercisesStore.getState().exercises;
+      expect(exercises).toHaveLength(1);
+      expect(exercises[0].name).toEqual('Mock Push up');
+      expect(screen.getByText('Exercises Page')).toBeInTheDocument();
+      expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+    });
   });
 
-  test('navigate to /exercises on cancel', () => {
-    const mockNavigate = vi.fn();
-
-    (useNavigate as Mock).mockReturnValue(mockNavigate);
-
-    store = renderWithProviders(
-      <MemoryRouter>
-        <NewExercisePage />
-      </MemoryRouter>,
-    ).store;
+  test('should navigate to /exercises on cancel', async () => {
+    renderNewExercisePage();
 
     fireEvent.click(screen.getByText('Cancel'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/exercises');
-    expect(store.getState().exercises.values).toEqual([]);
+    await waitFor(() => {
+      expect(screen.getByText('Exercises Page')).toBeInTheDocument();
+      expect(useExercisesStore.getState().exercises).toHaveLength(0);
+    });
   });
 
-  test('block unsaved changes', () => {
-    store = renderWithProviders(
-      <MemoryRouter>
-        <NewExercisePage />
-      </MemoryRouter>,
-    ).store;
+  test('should block unsaved changes', () => {
+    renderNewExercisePage();
 
     fireEvent.click(screen.getByText('Simulate dirty change'));
 

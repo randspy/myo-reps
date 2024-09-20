@@ -1,31 +1,24 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { DeleteWorkoutDialog } from '@/app/features/workouts/DeleteWorkoutDialog';
-import {
-  AppStore,
-  generateWorkout,
-  renderWithProviders,
-} from '@/lib/test-utils';
+import { generateWorkout } from '@/lib/test-utils';
+import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
-const initialValue = {
-  workouts: {
-    values: [
-      generateWorkout({
-        id: '1',
-        position: 0,
-        name: 'Upper body',
-      }),
-    ],
-  },
+const renderDeleteWorkoutDialog = (workout: WorkoutValue) => {
+  return render(<DeleteWorkoutDialog workout={workout} />);
 };
 
 describe('Delete workout', () => {
-  const workout = initialValue.workouts.values[0];
-  let store: AppStore;
+  let workout: WorkoutValue;
 
   beforeEach(() => {
-    store = renderWithProviders(<DeleteWorkoutDialog workout={workout} />, {
-      preloadedState: initialValue,
-    }).store;
+    workout = generateWorkout({
+      id: '1',
+      position: 0,
+      name: 'Upper body',
+    });
+
+    renderDeleteWorkoutDialog(workout);
 
     fireEvent.click(screen.getByLabelText('Delete workout'));
   });
@@ -48,11 +41,12 @@ describe('Delete workout', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('calls the deleteWorkout function when the confirm button is clicked', async () => {
+  test('deletes the workout when the confirm button is clicked', async () => {
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => {
-      expect(store.getState().workouts.values.length).toEqual(0);
+      const workouts = useWorkoutsStore.getState().workouts;
+      expect(workouts.length).toBe(0);
     });
   });
 });

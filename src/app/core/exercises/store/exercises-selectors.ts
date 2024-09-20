@@ -1,38 +1,58 @@
+import { ExercisesState, useExercisesStore } from './exercises-store';
+import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { createSelector } from 'reselect';
-import { RootState } from '@/store/store';
 
-const selectAllExercises = (state: RootState) => state.exercises.values;
+export const selectAllExercises = () =>
+  useExercisesStore((state) => state.exercises);
 
-export const selectActiveExercises = createSelector(
-  [selectAllExercises],
-  (exercises) => exercises.filter((exercise) => !exercise.hidden),
-);
-
-export const selectExerciseById = (id: string | undefined) =>
-  createSelector([selectAllExercises], (exercises) =>
-    exercises.find((exercise) => exercise.id === id),
+export const selectActiveExercises = () =>
+  useExercisesStore(
+    createSelector(
+      (state: ExercisesState) => state.exercises,
+      (exercises) =>
+        exercises.filter((exercise: ExerciseValue) => !exercise.hidden),
+    ),
   );
 
-export const selectExercisesByWorkoutIdAsMap = (
+export const selectExerciseById = (id: string | undefined) =>
+  useExercisesStore(
+    createSelector(
+      (state: ExercisesState) => state.exercises,
+      (exercises) =>
+        exercises.find((exercise: ExerciseValue) => exercise.id === id),
+    ),
+  );
+
+export const selectExerciseByWorkoutIdAsMap = (
   workoutId: string | undefined | null,
 ) =>
-  createSelector([selectAllExercises], (exercises) => {
-    const exercisesMap = new Map();
-    for (const exercise of exercises) {
-      for (const usage of exercise.usage) {
-        if (usage.id === workoutId) {
-          exercisesMap.set(exercise.id, exercise);
+  useExercisesStore(
+    createSelector(
+      (state: ExercisesState) => state.exercises,
+      (exercises) => {
+        const exercisesMap = new Map<string, ExerciseValue>();
+        for (const exercise of exercises) {
+          for (const usage of exercise.usage) {
+            if (usage.id === workoutId) {
+              exercisesMap.set(exercise.id, exercise);
+            }
+          }
         }
-      }
-    }
-    return exercisesMap;
-  });
+        return exercisesMap;
+      },
+    ),
+  );
 
 export const selectExercisesByWorkoutId = (
   workoutId: string | undefined | null,
 ) =>
-  createSelector([selectAllExercises], (exercises) =>
-    exercises.filter((exercise) =>
-      exercise.usage.some((usage) => usage.id === workoutId),
+  useExercisesStore(
+    createSelector(
+      (state: ExercisesState) => state.exercises,
+      (exercises) => {
+        return exercises.filter((exercise: ExerciseValue) =>
+          exercise.usage.some((usage) => usage.id === workoutId),
+        );
+      },
     ),
   );
