@@ -29,7 +29,7 @@ export const StartSessionPage: React.FC = () => {
       ))}
 
       <div className="mt-8 flex flex-col gap-2">
-        <Button asChild className="bg-teal-800">
+        <Button asChild className="bg-primary">
           <Link to={`/sessions/in-progress?workoutId=${workout.id}`}>
             Start Session
           </Link>

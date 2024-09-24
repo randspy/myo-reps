@@ -1,0 +1,26 @@
+.scrollbar-gutter {
+  scrollbar-gutter: stable;
+}
+
+.scrollbar-gutter::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-gutter::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-gutter::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 9999px;
+}
+
+.scrollbar-gutter:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+}
+
+@media (pointer: fine) {
+  .scrollbar-gutter::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(156, 163, 175, 0.8);
+  }
+}

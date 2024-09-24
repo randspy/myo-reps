@@ -75,12 +75,14 @@ describe('RunningSessionPage', () => {
 
     advanceTimeInSeconds(2);
 
-    expect(screen.getByText("I'm ready to start")).toBeInTheDocument();
-    expect(screen.getByText('Morning Workout')).toBeInTheDocument();
+    expect(getByTextInTimer('02')).toBeInTheDocument();
+    expect(screen.getByText('Push-up')).toBeInTheDocument();
     expect(
-      screen.getByText('Exercise Name : Push-up ( 1 / 1 )'),
+      screen.getByText('Waiting for user to be ready'),
     ).toBeInTheDocument();
-    expect(getByTextInCircularTimer('2')).toBeInTheDocument();
+    expect(screen.getByText('Morning Workout')).toBeInTheDocument();
+    expect(screen.getByText("I'm ready to start")).toBeInTheDocument();
+    expect(screen.getByText('Cancel')).toBeInTheDocument();
   });
 
   test('user is ready', () => {
@@ -90,27 +92,25 @@ describe('RunningSessionPage', () => {
     fireEvent.click(screen.getByText("I'm ready to start"));
     advanceTimeInSeconds(1);
 
+    expect(getByTextInTimer('09')).toBeInTheDocument();
     expect(screen.queryByText("I'm ready to start")).not.toBeInTheDocument();
-    expect(getByTextInCircularTimer('9')).toBeInTheDocument();
+    expect(
+      screen.getByText('Counting down before starting'),
+    ).toBeInTheDocument();
   });
 
-  test('user is ready after passing the time of the count down', () => {
+  test('user is executing a set', () => {
     renderRunningSessionPage(exercises, workouts);
 
     advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
     fireEvent.click(screen.getByText("I'm ready to start"));
-    advanceTimeInSeconds(1);
+    advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
 
-    expect(screen.queryByText("I'm ready to start")).not.toBeInTheDocument();
-    expect(getByTextInCircularTimer('0')).toBeInTheDocument();
-  });
-
-  test('user execute a repetition', () => {
-    renderRunningSessionPage(exercises, workouts);
-
-    fireEvent.click(screen.getByText("I'm ready to start"));
-    advanceTimeInSeconds(TimeBetweenExercisesInSeconds + 1);
-
+    expect(getByTextInTimer('00')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Counting down before starting'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('Exercise is ongoing')).toBeInTheDocument();
     expect(screen.getByText('Set finished')).toBeInTheDocument();
   });
 
@@ -121,53 +121,19 @@ describe('RunningSessionPage', () => {
     advanceTimeInSeconds(TimeBetweenExercisesInSeconds + 1);
     fireEvent.click(screen.getByText('Set finished'));
 
-    expect(screen.queryByText('Repetition finished')).not.toBeInTheDocument();
-    expect(screen.getByText('Repetitions Done :')).toBeInTheDocument();
-    expect(screen.getByText(DefaultRepetitions)).toBeInTheDocument();
+    expect(screen.queryByText('Exercise is ongoing')).not.toBeInTheDocument();
+    expect(screen.queryByText('Set finished')).not.toBeInTheDocument();
+    expect(screen.getByText('Executed Repetitions')).toBeInTheDocument();
   });
 
-  test('user selected last set of last exercise', () => {
+  test('user is selecting repetitions', () => {
     renderRunningSessionPage(exercises, workouts);
 
     actionsForOneSet();
-    advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
+    advanceTimeInSeconds(1);
 
-    expect(screen.queryByText('Repetitions Done :')).not.toBeInTheDocument();
+    expect(screen.queryByText('Executed Repetitions')).not.toBeInTheDocument();
     expect(screen.getByText('Finish session')).toBeInTheDocument();
-    expect(getByTextInCircularTimer('0')).toBeInTheDocument();
-  });
-
-  test('user does multiply sets of one exercise', () => {
-    workouts[0].exercises[0].sets = 3;
-
-    renderRunningSessionPage(exercises, workouts);
-
-    actionsForOneSet();
-
-    expect(screen.queryByText('Repetitions Done :')).not.toBeInTheDocument();
-    expect(
-      screen.getByText('Exercise Name : Push-up ( 2 / 3 )'),
-    ).toBeInTheDocument();
-    expect(screen.getByText("I'm ready to start")).toBeInTheDocument();
-  });
-
-  test('user does multiply exercises', () => {
-    workouts[0].exercises.push({
-      id: '2',
-      exerciseId: 'exercise-2',
-      sets: 1,
-    });
-
-    exercises[1].usage = [{ id: 'workout-1' }];
-
-    renderRunningSessionPage(exercises, workouts);
-
-    actionsForOneSet();
-
-    expect(screen.queryByText('Repetitions Done :')).not.toBeInTheDocument();
-    expect(
-      screen.getByText('Exercise Name : Squats ( 1 / 1 )'),
-    ).toBeInTheDocument();
   });
 
   test('user finishes the session and navigates to /sessions', () => {
@@ -181,7 +147,7 @@ describe('RunningSessionPage', () => {
   });
 });
 
-function getByTextInCircularTimer(text: string) {
+function getByTextInTimer(text: string) {
   return within(screen.getByTestId('circular-timer')).getByText(text);
 }
 

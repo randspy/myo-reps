@@ -1,31 +1,50 @@
 import { TimeBetweenExercisesInSeconds } from '@/app/core/exercises/domain/exercises.config';
-import { selectExercisesByWorkoutId } from '@/app/core/exercises/store/exercises-selectors';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
+import { WorkoutExerciseValue } from '@/app/core/workouts/workouts-schema';
 import { useEffect, useRef, useState } from 'react';
 
+type RunningSessionEvent = {
+  type:
+    | 'waiting-for-user-to-be-ready'
+    | 'counting-down-when-ready'
+    | 'starting-exercise'
+    | 'finished-set'
+    | 'setting-repetitions'
+    | 'finishing-workout';
+  repetitions?: number;
+};
+
 export const useRunningSession = (workoutId: string | null) => {
+  const [events, setEvents] = useState<RunningSessionEvent[]>([
+    { type: 'waiting-for-user-to-be-ready' },
+  ]);
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(true);
   const [isCountingUp, setIsCountingUp] = useState(true);
-  const [isSettingRepetitions, setIsSettingRepetitions] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-  const [isWorkoutFinished, setIsWorkoutFinished] = useState(false);
-  const [isRepFinished, setIsRepFinished] = useState(false);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [currentSet, setCurrentSet] = useState(0);
-  const [isDisplayingNextExercise, setIsDisplayingNextExercise] =
-    useState(true);
-  const [startTime, setStartTime] = useState(0);
+
   const timeRef = useRef(0);
 
   const workout = selectWorkoutById(workoutId);
-  const exercises = selectExercisesByWorkoutId(workoutId);
+
+  const [exercisesLeftToDo, setExercisesLeftToDo] = useState<
+    WorkoutExerciseValue[]
+  >([]);
+
+  useEffect(() => {
+    if (workout) {
+      setExercisesLeftToDo(workout.exercises);
+    }
+  }, [workout]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
     if (isActive) {
       interval = setInterval(() => {
+        timeRef.current = updateTime(timeRef.current);
+
         if (canStartExercise()) {
           startingExercise();
         }
@@ -41,10 +60,6 @@ export const useRunningSession = (workoutId: string | null) => {
     };
   }, [isActive, isCountingUp]);
 
-  useEffect(() => {
-    timeRef.current = time;
-  }, [time]);
-
   const updateTime = (prevTime: number) => {
     if (isCountingUp) {
       return prevTime + 1;
@@ -54,73 +69,126 @@ export const useRunningSession = (workoutId: string | null) => {
   };
 
   const readyForNextRepetition = () => {
-    setIsReady(true);
     setIsCountingUp(false);
+
+    addEvent({
+      type: 'counting-down-when-ready',
+    });
 
     const countDownTime =
       TimeBetweenExercisesInSeconds <= time
         ? 0
         : TimeBetweenExercisesInSeconds - time;
     setTime(countDownTime);
-    setStartTime(countDownTime);
+    timeRef.current = countDownTime;
   };
 
   const canStartExercise = () => timeRef.current === 0 && !isCountingUp;
 
   const startingExercise = () => {
+    addEvent({
+      type: 'starting-exercise',
+    });
     setIsCountingUp(true);
     setTime(0);
-    setIsRepFinished(true);
   };
 
   const setIsFinished = () => {
+    addEvent({
+      type: 'finished-set',
+    });
     setTime(0);
-    setIsRepFinished(false);
-    setIsSettingRepetitions(true);
   };
 
-  const repetitionsAreSet = () => {
+  const repetitionsAreSet = (repetitions: number) => {
     if (workout) {
-      if (currentSet !== workout.exercises[currentExerciseIndex].sets - 1) {
-        setCurrentSet((prev) => prev + 1);
-        setIsReady(false);
-      } else {
-        if (currentExerciseIndex !== workout.exercises.length - 1) {
-          setCurrentExerciseIndex((prev) => prev + 1);
-          setCurrentSet(0);
-          setIsReady(false);
-        } else {
+      addEvent({
+        type: 'setting-repetitions',
+        repetitions,
+      });
+
+      if (isLastSetForExercise()) {
+        if (isLastExercise()) {
           setIsActive(false);
           setTime(0);
-          setIsWorkoutFinished(true);
-          setIsDisplayingNextExercise(false);
+
+          addEvent({
+            type: 'finishing-workout',
+          });
+          setExercisesLeftToDo([]);
+        } else {
+          addEvent({
+            type: 'waiting-for-user-to-be-ready',
+          });
+          setCurrentExerciseIndex((prev) => prev + 1);
+          setCurrentSet(0);
+
+          removeAlreadyDoneExercise();
         }
+      } else {
+        addEvent({
+          type: 'waiting-for-user-to-be-ready',
+        });
+        setCurrentSet((prev) => prev + 1);
+
+        decreaseNumberOfSetsForExercise();
       }
-      setIsSettingRepetitions(false);
+    }
+
+    function removeAlreadyDoneExercise() {
+      setExercisesLeftToDo((prev) => {
+        return prev?.slice(1);
+      });
+    }
+
+    function decreaseNumberOfSetsForExercise() {
+      setExercisesLeftToDo((prev) => {
+        const [first, ...rest] = prev;
+        return [
+          {
+            ...first,
+            sets: first.sets - 1,
+          },
+          ...rest,
+        ];
+      });
     }
   };
 
-  const exerciseLabel = () => {
-    if (workout) {
-      return `${exercises[currentExerciseIndex].name} ( ${
-        currentSet + 1
-      } / ${workout?.exercises[currentExerciseIndex].sets} )`;
-    }
+  function isLastSetForExercise() {
+    return (
+      workout && currentSet === workout.exercises[currentExerciseIndex].sets - 1
+    );
+  }
+
+  function isLastExercise() {
+    return workout && currentExerciseIndex === workout.exercises.length - 1;
+  }
+
+  const addEvent = (event: RunningSessionEvent) => {
+    setEvents((prev) => [...prev, event]);
   };
+
+  const isWaitingToBeReady =
+    events.at(-1)?.type === 'waiting-for-user-to-be-ready';
+  const isCountingDownBeforeStarting =
+    events.at(-1)?.type === 'counting-down-when-ready';
+  const isExerciseOngoing = events.at(-1)?.type === 'starting-exercise';
+  const isRepFinished = events.at(-1)?.type === 'finished-set';
+  const isWorkoutFinished = events.at(-1)?.type === 'finishing-workout';
 
   return {
     workout,
+    events,
+    exercisesLeftToDo,
     time,
-    startTime,
-    isDisplayingNextExercise,
-    isCountingUp,
-    isSettingRepetitions,
-    isWorkoutFinished,
-    isReady,
-    isRepFinished,
     readyForNextRepetition,
     setIsFinished,
     repetitionsAreSet,
-    exerciseLabel,
+    isWaitingToBeReady,
+    isCountingDownBeforeStarting,
+    isExerciseOngoing,
+    isRepFinished,
+    isWorkoutFinished,
   };
 };

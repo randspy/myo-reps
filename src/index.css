@@ -1,4 +1,5 @@
 @import 'assets/fonts/fonts.css';
+@import 'assets/scroll.css';
 
 @tailwind base;
 @tailwind components;
@@ -18,6 +19,7 @@
     --purple: 242, 48%, 58%;
     --light-purple: 243 100% 82%;
     --red: 4, 88%, 24%;
+    --light-coral-red: 0, 78%, 63%;
     --green: 160, 50%, 32%;
 
     --background: var(--light-grey);
@@ -40,6 +42,7 @@
     --border: var(--light-grey);
     --input: var(--black);
     --ring: var(--light-purple);
+    --ring-secondary: var(--purple);
     --radius: 0.5rem;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -69,6 +72,7 @@
     --border: var(--grey);
     --input: var(--white);
     --ring: var(--very-light-grey);
+    --ring-secondary: var(--purple);
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
