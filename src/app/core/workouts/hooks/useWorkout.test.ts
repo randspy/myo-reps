@@ -99,7 +99,11 @@ describe('useWorkout', () => {
     const initialWorkout = generateWorkout({
       id: '1',
       name: 'Initial Workout',
-      exercises: [],
+      exercises: [
+        { id: '1', exerciseId: 'ex1', sets: 1 },
+        { id: '2', exerciseId: 'ex2', sets: 1 },
+        { id: '3', exerciseId: 'ex3', sets: 1 },
+      ],
     });
     useWorkoutsStore.setState({ workouts: [initialWorkout] });
 
@@ -108,8 +112,9 @@ describe('useWorkout', () => {
       ...initialWorkout,
       name: 'Updated Workout',
       exercises: [
-        { id: '1', exerciseId: 'ex1', sets: 1 },
-        { id: '2', exerciseId: 'ex2', sets: 1 },
+        { id: '3', exerciseId: 'ex3', sets: 1 },
+        { id: '4', exerciseId: 'ex4', sets: 1 },
+        { id: '5', exerciseId: 'ex5', sets: 1 },
       ],
     };
 
@@ -121,43 +126,74 @@ describe('useWorkout', () => {
     expect(storeState.workouts).toHaveLength(1);
     expect(storeState.workouts[0].name).toBe('Updated Workout');
     expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
-      exerciseId: 'ex1',
+      exerciseId: 'ex4',
       userId: '1',
     });
     expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex5',
+      userId: '1',
+    });
+
+    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+      exerciseId: 'ex1',
+      userId: '1',
+    });
+    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
       exerciseId: 'ex2',
       userId: '1',
     });
   });
 
-  test('dispatchDelete should delete a workout and update exercise usage', async () => {
-    useWorkoutsStore.setState({
-      workouts: [
-        generateWorkout({
-          id: '1',
-          exercises: [
-            { id: '1', exerciseId: 'ex1', sets: 1 },
-            { id: '2', exerciseId: 'ex2', sets: 1 },
-          ],
-        }),
-      ],
-    });
+  describe('dispatchDelete', () => {
+    test('dispatchDelete should delete a workout and update exercise usage', async () => {
+      useWorkoutsStore.setState({
+        workouts: [
+          generateWorkout({
+            id: '1',
+            exercises: [
+              { id: '1', exerciseId: 'ex1', sets: 1 },
+              { id: '2', exerciseId: 'ex2', sets: 1 },
+            ],
+          }),
+        ],
+      });
 
-    const { result } = renderHook(() => useWorkout());
+      const { result } = renderHook(() => useWorkout());
 
-    await act(async () => {
-      await result.current.dispatchDelete('1');
-    });
+      await act(async () => {
+        await result.current.dispatchDelete('1');
+      });
 
-    const storeState = useWorkoutsStore.getState();
-    expect(storeState.workouts).toHaveLength(0);
-    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
-      exerciseId: 'ex1',
-      userId: '1',
+      const storeState = useWorkoutsStore.getState();
+      expect(storeState.workouts).toHaveLength(0);
+      expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+        exerciseId: 'ex1',
+        userId: '1',
+      });
+      expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+        exerciseId: 'ex2',
+        userId: '1',
+      });
     });
-    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
-      exerciseId: 'ex2',
-      userId: '1',
+    test('should hide workout if there is usage', async () => {
+      useWorkoutsStore.setState({
+        workouts: [
+          generateWorkout({
+            id: '1',
+            exercises: [{ id: '1', exerciseId: 'ex1', sets: 1 }],
+            usage: [{ id: '3' }],
+          }),
+        ],
+      });
+
+      const { result } = renderHook(() => useWorkout());
+
+      await act(async () => {
+        await result.current.dispatchDelete('1');
+      });
+
+      const storeState = useWorkoutsStore.getState();
+      expect(storeState.workouts[0].hidden).toBe(true);
     });
   });
 
@@ -176,5 +212,53 @@ describe('useWorkout', () => {
     expect(storeState.workouts).toHaveLength(2);
     expect(storeState.workouts[0].position).toBe(0);
     expect(storeState.workouts[1].position).toBe(1);
+  });
+
+  test('should add usage', async () => {
+    useWorkoutsStore.setState({
+      workouts: [generateWorkout({ id: '1', usage: [] })],
+    });
+
+    const { result } = renderHook(() => useWorkout());
+
+    await act(async () => {
+      await result.current.addUsage('1', 'user-1');
+    });
+
+    expect(useWorkoutsStore.getState().workouts[0].usage[0]).toEqual({
+      id: 'user-1',
+    });
+  });
+
+  describe('removeUsage', () => {
+    test('should remove usage', async () => {
+      useWorkoutsStore.setState({
+        workouts: [generateWorkout({ id: '1', usage: [{ id: 'user-1' }] })],
+      });
+
+      const { result } = renderHook(() => useWorkout());
+
+      await act(async () => {
+        await result.current.removeUsage('1', 'user-1');
+      });
+
+      expect(useWorkoutsStore.getState().workouts[0].usage).toHaveLength(0);
+    });
+
+    test('should delete workout if usage is empty and workout is hidden', async () => {
+      useWorkoutsStore.setState({
+        workouts: [
+          generateWorkout({ id: '1', usage: [{ id: 'user-1' }], hidden: true }),
+        ],
+      });
+
+      const { result } = renderHook(() => useWorkout());
+
+      await act(async () => {
+        await result.current.removeUsage('1', 'user-1');
+      });
+
+      expect(useWorkoutsStore.getState().workouts).toHaveLength(0);
+    });
   });
 });

@@ -118,6 +118,12 @@ describe('useRunningSession', () => {
       result.current.repetitionsAreSet(3);
     });
 
+    expect(result.current.events.at(-2)).toEqual({
+      type: 'setting-repetitions',
+      exerciseId: '1',
+      repetitions: 3,
+    });
+
     expect(result.current.events.at(-1)).toEqual({
       type: 'finishing-workout',
     });

@@ -1,4 +1,11 @@
-import { screen, fireEvent, act, within, render } from '@testing-library/react';
+import {
+  screen,
+  fireEvent,
+  act,
+  within,
+  render,
+  waitFor,
+} from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { RunningSessionPage } from './RunningSessionPage';
 import { generateExercise, generateWorkout } from '@/lib/test-utils';
@@ -10,6 +17,12 @@ import {
 } from '@/app/core/exercises/domain/exercises.config';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
+import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
+import { v4 } from 'uuid';
+
+vi.mock('uuid', () => ({
+  v4: vi.fn(),
+}));
 
 const renderRunningSessionPage = (
   exercises: ExerciseValue[],
@@ -17,6 +30,7 @@ const renderRunningSessionPage = (
 ) => {
   useWorkoutsStore.setState({ workouts });
   useExercisesStore.setState({ exercises });
+  useSessionsStore.setState({ sessions: [] });
 
   return render(
     <MemoryRouter initialEntries={['/running-session?workoutId=workout-1']}>
@@ -136,14 +150,38 @@ describe('RunningSessionPage', () => {
     expect(screen.getByText('Finish session')).toBeInTheDocument();
   });
 
-  test('user finishes the session and navigates to /sessions', () => {
+  test('user finishes the session and navigates to /sessions', async () => {
+    const id = 'd6bf796f-f832-40b5-841c-010c244b92b1';
+    vi.mocked(v4).mockImplementation(() => id);
+
     renderRunningSessionPage(exercises, workouts);
 
     actionsForOneSet();
 
     fireEvent.click(screen.getByText('Finish session'));
 
-    expect(screen.getByText('Sessions Page')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Sessions Page')).toBeInTheDocument();
+      expect(useSessionsStore.getState().sessions).toEqual([
+        {
+          events: [
+            { type: 'waiting-for-user-to-be-ready' },
+            { type: 'counting-down-when-ready' },
+            { type: 'starting-exercise' },
+            { type: 'finished-set' },
+            {
+              exerciseId: 'exercise-1',
+              repetitions: 6,
+              type: 'setting-repetitions',
+            },
+            { type: 'finishing-workout' },
+          ],
+          id,
+          startDate: expect.any(Date),
+          workoutId: 'workout-1',
+        },
+      ]);
+    });
   });
 });
 

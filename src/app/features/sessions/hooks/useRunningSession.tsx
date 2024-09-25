@@ -2,20 +2,10 @@ import { TimeBetweenExercisesInSeconds } from '@/app/core/exercises/domain/exerc
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
 import { WorkoutExerciseValue } from '@/app/core/workouts/workouts-schema';
 import { useEffect, useRef, useState } from 'react';
-
-type RunningSessionEvent = {
-  type:
-    | 'waiting-for-user-to-be-ready'
-    | 'counting-down-when-ready'
-    | 'starting-exercise'
-    | 'finished-set'
-    | 'setting-repetitions'
-    | 'finishing-workout';
-  repetitions?: number;
-};
+import { SessionEvent } from '@/app/features/sessions/session-schema';
 
 export const useRunningSession = (workoutId: string | null) => {
-  const [events, setEvents] = useState<RunningSessionEvent[]>([
+  const [events, setEvents] = useState<SessionEvent[]>([
     { type: 'waiting-for-user-to-be-ready' },
   ]);
   const [time, setTime] = useState(0);
@@ -105,6 +95,7 @@ export const useRunningSession = (workoutId: string | null) => {
       addEvent({
         type: 'setting-repetitions',
         repetitions,
+        exerciseId: workout.exercises[currentExerciseIndex].exerciseId,
       });
 
       if (isLastSetForExercise()) {
@@ -165,7 +156,7 @@ export const useRunningSession = (workoutId: string | null) => {
     return workout && currentExerciseIndex === workout.exercises.length - 1;
   }
 
-  const addEvent = (event: RunningSessionEvent) => {
+  const addEvent = (event: SessionEvent) => {
     setEvents((prev) => [...prev, event]);
   };
 

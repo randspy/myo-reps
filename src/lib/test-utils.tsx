@@ -9,6 +9,7 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
+import { SessionValue } from '@/app/features/sessions/session-schema';
 
 interface RenderWithRouterOptions {
   element: ReactElement;
@@ -53,6 +54,20 @@ export const generateWorkout = (
     description: 'Description',
     position: 0,
     exercises: [],
+    usage: [],
+    hidden: false,
+    ...values,
+  };
+};
+
+export const generateSession = (
+  values: Partial<SessionValue> = {},
+): SessionValue => {
+  return {
+    id: uuidv4(),
+    workoutId: uuidv4(),
+    startDate: new Date(),
+    events: [],
     ...values,
   };
 };

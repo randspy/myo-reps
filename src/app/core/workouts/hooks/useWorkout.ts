@@ -5,10 +5,13 @@ import {
 } from '@/app/core/workouts/workouts-schema';
 import { useWorkoutActions } from '@/app/core/workouts/hooks/useWorkoutActions';
 import {
+  addUsageToWorkout,
   createWorkoutFromForm,
   deduplicateExercisesId,
   findExercisesByWorkoutId,
   getNextPosition,
+  removeUsageFromWorkout,
+  removeWorkoutFromUserView,
   updateWorkoutPositions,
   updateWorkoutUsageOfExercises,
 } from '@/app/core/workouts/domain/workout.domain';
@@ -55,20 +58,47 @@ export const useWorkout = () => {
   }
 
   async function dispatchDelete(id: string) {
-    await deleteWorkout(id);
+    const action = removeWorkoutFromUserView(workouts, id);
+    if (action) {
+      if (action.type === 'delete') {
+        await deleteWorkout(action.payload);
+      } else if (action.type === 'update') {
+        await updateWorkout(action.payload);
+      }
 
-    const exercises = findExercisesByWorkoutId(workouts, id);
+      const exercises = findExercisesByWorkoutId(workouts, id);
 
-    for (const exercise of exercises) {
-      await dispatchRemoveUsage({
-        exerciseId: exercise.exerciseId,
-        userId: id,
-      });
+      for (const exercise of exercises) {
+        await dispatchRemoveUsage({
+          exerciseId: exercise.exerciseId,
+          userId: id,
+        });
+      }
     }
   }
 
   async function dispatchSet(workouts: WorkoutValue[]) {
     await setWorkouts(updateWorkoutPositions(workouts));
+  }
+
+  async function addUsage(workoutId: string, userId: string) {
+    const workout = addUsageToWorkout(workouts, workoutId, userId);
+
+    if (workout) {
+      await updateWorkout(workout);
+    }
+  }
+
+  async function removeUsage(workoutId: string, userId: string) {
+    const action = removeUsageFromWorkout(workouts, workoutId, userId);
+
+    if (action) {
+      if (action.type === 'delete') {
+        await deleteWorkout(action.payload);
+      } else if (action.type === 'update') {
+        await updateWorkout(action.payload);
+      }
+    }
   }
 
   return {
@@ -77,5 +107,7 @@ export const useWorkout = () => {
     dispatchUpdate,
     dispatchDelete,
     dispatchSet,
+    addUsage,
+    removeUsage,
   };
 };

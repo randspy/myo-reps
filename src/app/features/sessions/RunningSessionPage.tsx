@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRunningSession } from './hooks/useRunningSession';
 import { selectExerciseByWorkoutIdAsMap } from '@/app/core/exercises/store/exercises-selectors';
+import { useSession } from '@/app/features/sessions/hooks/useSession';
+import { createSession } from './domain/sessions.domain';
 
 export const RunningSessionPage: React.FC = () => {
   const location = useLocation();
@@ -17,8 +19,10 @@ export const RunningSessionPage: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const workoutId = searchParams.get('workoutId');
   const exercises = selectExerciseByWorkoutIdAsMap(workoutId);
+  const { addSession } = useSession();
 
   const {
+    events,
     workout,
     exercisesLeftToDo,
     time,
@@ -97,6 +101,7 @@ export const RunningSessionPage: React.FC = () => {
           <Button
             className="mt-8 w-full"
             onClick={() => {
+              addSession(createSession(workoutId!, events));
               navigate('/sessions');
             }}
           >

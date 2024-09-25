@@ -5,6 +5,11 @@ import {
   WorkoutValue,
 } from '@/app/core/workouts/workouts-schema';
 
+export type WorkoutAction =
+  | { type: 'delete'; payload: string }
+  | { type: 'update'; payload: WorkoutValue }
+  | null;
+
 export const createExerciseForWorkout = () => {
   return { id: uuidv4(), sets: 1, exerciseId: '' };
 };
@@ -15,6 +20,8 @@ export const createWorkoutFromForm = (
 ): WorkoutValue => ({
   id: uuidv4(),
   position,
+  usage: [],
+  hidden: false,
   ...values,
 });
 
@@ -84,3 +91,52 @@ export const getNextPosition = (workouts: WorkoutValue[]) =>
 
 export const canStartWorkout = (workout: WorkoutValue) =>
   workout.exercises.length > 0;
+
+export const addUsageToWorkout = (
+  workouts: WorkoutValue[],
+  workoutId: string,
+  userId: string,
+) => {
+  const workout = workouts.find((workout) => workout.id === workoutId);
+
+  if (workout) {
+    return {
+      ...workout,
+      usage: [...workout.usage, { id: userId }],
+    };
+  }
+  return null;
+};
+
+export const removeUsageFromWorkout = (
+  workouts: WorkoutValue[],
+  workoutId: string,
+  userId: string,
+): WorkoutAction => {
+  const workout = workouts.find((workout) => workout.id === workoutId);
+  if (workout) {
+    const usage = workout.usage.filter((item) => item.id !== userId);
+
+    if (!usage.length && workout.hidden) {
+      return { type: 'delete', payload: workoutId };
+    } else {
+      return { type: 'update', payload: { ...workout, usage: usage } };
+    }
+  }
+  return null;
+};
+
+export const removeWorkoutFromUserView = (
+  workouts: WorkoutValue[],
+  workoutId: string,
+): WorkoutAction => {
+  const workout = workouts.find((workout) => workout.id === workoutId);
+  if (workout) {
+    if (workout.usage.length) {
+      return { type: 'update', payload: { ...workout, hidden: true } };
+    } else {
+      return { type: 'delete', payload: workoutId };
+    }
+  }
+  return null;
+};

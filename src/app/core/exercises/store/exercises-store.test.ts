@@ -6,7 +6,7 @@ import { generateExercise } from '@/lib/test-utils';
 describe('useExercisesStore', () => {
   beforeEach(() => {
     act(() => {
-      useExercisesStore.getState().setExercises([]);
+      useExercisesStore.setState({ exercises: [] });
     });
   });
 

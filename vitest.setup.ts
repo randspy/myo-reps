@@ -17,6 +17,13 @@ vi.mock('@/db', () => ({
       toArray: vi.fn().mockResolvedValue([]),
       bulkPut: vi.fn(),
     },
+    sessions: {
+      add: vi.fn(),
+      delete: vi.fn(),
+      update: vi.fn(),
+      toArray: vi.fn().mockResolvedValue([]),
+      bulkPut: vi.fn(),
+    },
   },
   recreateDB: vi.fn(),
   restoreFromDB: vi.fn(),

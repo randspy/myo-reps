@@ -35,6 +35,8 @@ describe('workout.domain', () => {
         position: 1,
         name: 'Test Workout',
         exercises: [],
+        usage: [],
+        hidden: false,
       });
     });
   });
@@ -42,15 +44,35 @@ describe('workout.domain', () => {
   describe('updateWorkoutPositions', () => {
     it('should update the positions of workouts', () => {
       const workouts: WorkoutValue[] = [
-        { id: '1', position: 1, name: 'Workout 1', exercises: [] },
-        { id: '2', position: 0, name: 'Workout 2', exercises: [] },
+        generateWorkout({
+          id: '1',
+          position: 1,
+          name: 'Workout 1',
+          exercises: [],
+        }),
+        generateWorkout({
+          id: '2',
+          position: 0,
+          name: 'Workout 2',
+          exercises: [],
+        }),
       ];
 
       const updatedWorkouts = updateWorkoutPositions(workouts);
 
       expect(updatedWorkouts).toEqual([
-        { id: '1', position: 0, name: 'Workout 1', exercises: [] },
-        { id: '2', position: 1, name: 'Workout 2', exercises: [] },
+        generateWorkout({
+          id: '1',
+          position: 0,
+          name: 'Workout 1',
+          exercises: [],
+        }),
+        generateWorkout({
+          id: '2',
+          position: 1,
+          name: 'Workout 2',
+          exercises: [],
+        }),
       ]);
     });
   });
@@ -58,7 +80,7 @@ describe('workout.domain', () => {
   describe('updateWorkoutUsageOfExercises', () => {
     it('should identify added and removed exercises', () => {
       const existingWorkouts: WorkoutValue[] = [
-        {
+        generateWorkout({
           id: '1',
           position: 0,
           name: 'Workout 1',
@@ -66,16 +88,16 @@ describe('workout.domain', () => {
             { exerciseId: 'e1', sets: 1, id: '1' },
             { exerciseId: 'e2', sets: 1, id: '2' },
           ],
-        },
-        {
+        }),
+        generateWorkout({
           id: '2',
           position: 1,
           name: 'Workout 2',
           exercises: [],
-        },
+        }),
       ];
 
-      const updatedWorkout: WorkoutValue = {
+      const updatedWorkout: WorkoutValue = generateWorkout({
         id: '1',
         position: 0,
         name: 'Workout 1',
@@ -83,7 +105,7 @@ describe('workout.domain', () => {
           { exerciseId: 'e2', sets: 1, id: '2' },
           { exerciseId: 'e3', sets: 1, id: '3' },
         ],
-      };
+      });
 
       const result = updateWorkoutUsageOfExercises(
         existingWorkouts,
@@ -99,12 +121,12 @@ describe('workout.domain', () => {
   describe('findExercisesByWorkoutId', () => {
     it('should find exercises by workout ID', () => {
       const workouts: WorkoutValue[] = [
-        {
+        generateWorkout({
           id: '1',
           position: 0,
           name: 'Workout 1',
           exercises: [{ exerciseId: 'e1', sets: 1, id: '1' }],
-        },
+        }),
       ];
 
       const result = findExercisesByWorkoutId(workouts, '1');
@@ -114,12 +136,12 @@ describe('workout.domain', () => {
 
     it('should return an empty array if workout ID is not found', () => {
       const workouts: WorkoutValue[] = [
-        {
+        generateWorkout({
           id: '1',
           position: 0,
           name: 'Workout 1',
           exercises: [{ exerciseId: 'e1', sets: 1, id: '1' }],
-        },
+        }),
       ];
 
       const result = findExercisesByWorkoutId(workouts, '2');
