@@ -1,17 +1,9 @@
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { useState } from 'react';
 import { Trash2Icon } from 'lucide-react';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
+import { DeleteConfirmationDialog } from '@/app/ui/DeleteConfirmationDialog';
 
 export const DeleteExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   exercise,
@@ -26,28 +18,16 @@ export const DeleteExerciseDialog: React.FC<{ exercise: ExerciseValue }> = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="icon" size="icon" aria-label="Delete exercise">
-          <Trash2Icon className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>
-            Are you sure you want to delete this exercise?
-          </DialogTitle>
-          <DialogDescription>This action cannot be undone.</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="icon" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button variant="destructive" onClick={deleteById}>
-            Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <DeleteConfirmationDialog
+      open={open}
+      onOpenChange={setOpen}
+      title="Are you sure you want to delete this exercise?"
+      description="This action cannot be undone."
+      onDelete={deleteById}
+    >
+      <Button variant="icon" size="icon" aria-label="Delete exercise">
+        <Trash2Icon className="h-4 w-4" />
+      </Button>
+    </DeleteConfirmationDialog>
   );
 };

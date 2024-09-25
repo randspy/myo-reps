@@ -1,7 +1,6 @@
 import { selectAllSessions } from '@/app/features/sessions/store/sessions-selector';
 import { selectWorkoutsAsMap } from '@/app/core/workouts/store/workouts-selectors';
-import { Trash2Icon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { DeleteSessionDialog } from './DeleteSessionDialog';
 
 export const SessionList: React.FC = () => {
   const sessions = selectAllSessions();
@@ -18,17 +17,10 @@ export const SessionList: React.FC = () => {
           <span className="mt-1 text-xs text-muted-foreground">
             {session.startDate.toLocaleDateString()}
           </span>
-          <span className="mt-1 text-xs text-muted-foreground">
+          <span className="mr-auto mt-1 text-xs text-muted-foreground">
             {session.startDate.toLocaleTimeString()}
           </span>
-          <Button
-            className="ml-auto"
-            variant="icon"
-            size="icon"
-            aria-label="Delete session"
-          >
-            <Trash2Icon className="h-4 w-4" />
-          </Button>
+          <DeleteSessionDialog session={session} />
         </div>
       ))}
       {!sessions.length && (
