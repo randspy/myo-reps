@@ -1,7 +1,9 @@
+import { SessionList } from '@/app/features/sessions/SessionList';
+
 export const SessionsPage: React.FC = () => {
   return (
-    <div className="flex h-full items-center justify-center">
-      <h2 className="text-2xl">TODO</h2>
+    <div className="my-8 flex h-full flex-col items-center px-2">
+      <SessionList />
     </div>
   );
 };
