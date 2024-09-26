@@ -1,5 +1,5 @@
 import { SessionsDbService } from '@/app/features/sessions/services/sessions-db-service';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { useSessionsStore } from '../store/sessions-store';
 
 export const useSessionActions = () => {

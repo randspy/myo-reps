@@ -5,7 +5,7 @@ import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import {
   WorkoutFormValues,
   WorkoutValue,
-} from '@/app/core/workouts/workouts-schema';
+} from '@/app/core/workouts/workouts-types';
 import { EditWorkoutPage } from './EditWorkoutPage';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 

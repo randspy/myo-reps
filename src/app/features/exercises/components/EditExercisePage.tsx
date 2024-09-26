@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ExerciseForm } from '@/app/features/exercises/components/ExerciseForm';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
-import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
+import { ExerciseFormValues } from '@/app/core/exercises/exercises-types';
 import { FormCard } from '@/app/ui/FormCard';
 import { selectExerciseById } from '@/app/core/exercises/store/exercises-selectors';
 import {

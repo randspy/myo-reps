@@ -1,6 +1,6 @@
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 import { WorkoutDbService } from '@/app/core/workouts/services/workout-db-service';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 
 export const useWorkoutActions = () => {
   const { setWorkouts, addWorkout, deleteWorkout, updateWorkout } =

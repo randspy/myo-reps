@@ -3,7 +3,7 @@ import { ExercisesPage } from '@/app/features/exercises/components/ExercisesPage
 import { generateExercise } from '@/lib/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 
 const renderExercisePage = () => {
   return render(

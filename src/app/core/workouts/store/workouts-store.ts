@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { devtools } from 'zustand/middleware';
 
 export interface WorkoutsState {

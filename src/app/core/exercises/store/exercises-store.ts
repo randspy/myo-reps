@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { devtools } from 'zustand/middleware';
 
 export interface ExercisesState {

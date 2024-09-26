@@ -9,12 +9,12 @@ import {
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { RunningSessionPage } from './RunningSessionPage';
 import { generateExercise, generateWorkout } from '@/lib/test-utils';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import {
   DefaultRepetitions,
   TimeBetweenExercisesInSeconds,
-} from '@/app/core/exercises/domain/exercises.config';
+} from '@/app/core/exercises/domain/exercises-config';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';

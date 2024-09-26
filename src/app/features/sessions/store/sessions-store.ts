@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { devtools } from 'zustand/middleware';
-import { sortSessions } from '@/app/features/sessions/domain/sessions.domain';
+import { sortSessions } from '@/app/features/sessions/domain/sessions-domain';
 
 export interface SessionsState {
   sessions: SessionValue[];

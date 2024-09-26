@@ -1,5 +1,5 @@
 import { DeleteConfirmationDialog } from '@/app/ui/DeleteConfirmationDialog';
-import { SessionValue } from '../session-schema';
+import { SessionValue } from '../sessions-types';
 import { Button } from '@/components/ui/button';
 import { Trash2Icon } from 'lucide-react';
 import { useState } from 'react';

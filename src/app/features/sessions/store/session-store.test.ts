@@ -1,7 +1,7 @@
 // Unit tests
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
 import { act, renderHook } from '@testing-library/react';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { generateSession } from '@/lib/test-utils';
 
 describe('useSessionsStore', () => {

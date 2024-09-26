@@ -13,18 +13,23 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  defaultValues,
   exerciseSchema,
   ExerciseFormValues,
-} from '@/app/core/exercises/exercises-schema';
+} from '@/app/core/exercises/exercises-types';
 import { useEffect } from 'react';
+import { defaultExerciseFormValues } from '@/app/core/exercises/domain/exercises-config';
 
 export const ExerciseForm: React.FC<{
   onSubmit: (values: ExerciseFormValues) => void;
   onCancel: () => void;
   onDirtyChange: (isDirty: boolean) => void;
   values?: ExerciseFormValues;
-}> = ({ onSubmit, onCancel, onDirtyChange, values = defaultValues }) => {
+}> = ({
+  onSubmit,
+  onCancel,
+  onDirtyChange,
+  values = defaultExerciseFormValues,
+}) => {
   const form = useForm<ExerciseFormValues>({
     resolver: zodResolver(exerciseSchema),
     values,

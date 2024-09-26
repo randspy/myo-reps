@@ -3,7 +3,7 @@ import { DeleteSessionDialog } from './DeleteSessionDialog';
 import { generateSession, generateWorkout } from '@/lib/test-utils';
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 
 const renderDeleteSessionDialog = (session: SessionValue) => {
   return render(<DeleteSessionDialog session={session} />);

@@ -1,6 +1,6 @@
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { ExerciseDbService } from '@/app/core/exercises/services/exercise-db-service';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 
 export const useExerciseActions = () => {
   const { setExercises, addExercise, deleteExercise, updateExercise } =

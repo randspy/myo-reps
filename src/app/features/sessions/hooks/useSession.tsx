@@ -1,6 +1,6 @@
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 import { useSessionActions } from '@/app/features/sessions/hooks/useSessionActions';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { selectAllSessions } from '@/app/features/sessions/store/sessions-selector';
 
 export const useSession = () => {

@@ -1,20 +1,20 @@
 import {
   ExerciseFormValues,
   ExerciseValue,
-} from '@/app/core/exercises/exercises-schema';
+} from '@/app/core/exercises/exercises-types';
 import {
   createExerciseFromForm,
   updateExercisePositions,
   removeExerciseFromUserView,
   addUsageToExercise,
   removeUsageFromExercise,
-} from './exercises.domain';
+} from './exercises-domain';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(() => 'mock-uuid'),
 }));
 
-describe('exercises.domain', () => {
+describe('exercises-domain', () => {
   describe('createExerciseFromForm', () => {
     test('should create an exercise with the given form values and position', () => {
       const values: ExerciseFormValues = {

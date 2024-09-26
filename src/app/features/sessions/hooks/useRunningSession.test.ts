@@ -3,8 +3,8 @@ import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { act, renderHook } from '@testing-library/react';
 import { generateExercise, generateWorkout } from '@/lib/test-utils';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 
 describe('useRunningSession', () => {
   let exercises: ExerciseValue[];

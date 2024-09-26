@@ -1,7 +1,7 @@
 import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { DeleteWorkoutDialog } from '@/app/features/workouts/components/DeleteWorkoutDialog';
 import { generateWorkout } from '@/lib/test-utils';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 const renderDeleteWorkoutDialog = (workout: WorkoutValue) => {

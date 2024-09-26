@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { useState } from 'react';
 import { Trash2Icon } from 'lucide-react';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';

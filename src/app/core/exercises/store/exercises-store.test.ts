@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { useExercisesStore } from './exercises-store';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { generateExercise } from '@/lib/test-utils';
 
 describe('useExercisesStore', () => {

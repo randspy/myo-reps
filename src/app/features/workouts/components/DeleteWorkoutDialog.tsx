@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Trash2Icon } from 'lucide-react';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 import { DeleteConfirmationDialog } from '@/app/ui/DeleteConfirmationDialog';
 

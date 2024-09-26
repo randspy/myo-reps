@@ -1,5 +1,5 @@
 import { SessionsDbService } from './sessions-db-service';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { db } from '@/db';
 import { generateSession } from '@/lib/test-utils';
 

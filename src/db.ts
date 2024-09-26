@@ -1,9 +1,9 @@
 import Dexie, { type EntityTable } from 'dexie';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { useExercisesStore } from './app/core/exercises/store/exercises-store';
 import { useWorkoutsStore } from './app/core/workouts/store/workouts-store';
-import { SessionValue } from './app/features/sessions/session-schema';
+import { SessionValue } from './app/features/sessions/sessions-types';
 import { useSessionsStore } from './app/features/sessions/store/sessions-store';
 
 const db = new Dexie('myo-reps') as Dexie & {

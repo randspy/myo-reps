@@ -1,4 +1,4 @@
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { generateExercise } from '@/lib/test-utils';
 import {

@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   SessionEvent,
   SessionValue,
-} from '@/app/features/sessions/session-schema';
+} from '@/app/features/sessions/sessions-types';
 
 export const createSession = (
   workoutId: string,

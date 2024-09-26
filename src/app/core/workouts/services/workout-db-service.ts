@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 
 export const WorkoutDbService = {
   bulkPut: async (workouts: WorkoutValue[]) => {

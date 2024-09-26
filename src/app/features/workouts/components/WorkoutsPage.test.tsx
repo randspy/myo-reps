@@ -3,7 +3,7 @@ import { WorkoutsPage } from '@/app/features/workouts/components/WorkoutsPage';
 import { generateWorkout } from '@/lib/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 
 const renderWorkoutPage = () => {
   return render(

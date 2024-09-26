@@ -1,7 +1,7 @@
 import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
-import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
+import { WorkoutFormValues } from '@/app/core/workouts/workouts-types';
 import { NewWorkoutPage } from './NewWorkoutPage';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 

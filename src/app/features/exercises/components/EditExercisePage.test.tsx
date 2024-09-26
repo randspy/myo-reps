@@ -4,7 +4,7 @@ import { generateExercise } from '@/lib/test-utils';
 import {
   ExerciseFormValues,
   ExerciseValue,
-} from '@/app/core/exercises/exercises-schema';
+} from '@/app/core/exercises/exercises-types';
 import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import { EditExercisePage } from './EditExercisePage';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';

@@ -2,7 +2,7 @@ import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import {
   WorkoutFormValues,
   WorkoutValue,
-} from '@/app/core/workouts/workouts-schema';
+} from '@/app/core/workouts/workouts-types';
 import { useWorkoutActions } from '@/app/core/workouts/hooks/useWorkoutActions';
 import {
   addUsageToWorkout,
@@ -14,7 +14,7 @@ import {
   removeWorkoutFromUserView,
   updateWorkoutPositions,
   updateWorkoutUsageOfExercises,
-} from '@/app/core/workouts/domain/workout.domain';
+} from '@/app/core/workouts/domain/workout-domain';
 import { selectAllWorkouts } from '@/app/core/workouts/store/workouts-selectors';
 
 export const useWorkout = () => {

@@ -1,7 +1,7 @@
 import {
   ExerciseFormValues,
   ExerciseValue,
-} from '@/app/core/exercises/exercises-schema';
+} from '@/app/core/exercises/exercises-types';
 import { useExerciseActions } from '@/app/core/exercises/hooks/useExerciseActions';
 import {
   addUsageToExercise,
@@ -11,7 +11,7 @@ import {
   updateExercisePositions,
   ExerciseAction,
   getNextPosition,
-} from '@/app/core/exercises/domain/exercises.domain';
+} from '@/app/core/exercises/domain/exercises-domain';
 import {
   selectActiveExercises,
   selectAllExercises,

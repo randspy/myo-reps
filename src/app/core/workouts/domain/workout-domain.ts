@@ -3,7 +3,7 @@ import {
   WorkoutExerciseValue,
   WorkoutFormValues,
   WorkoutValue,
-} from '@/app/core/workouts/workouts-schema';
+} from '@/app/core/workouts/workouts-types';
 
 export type WorkoutAction =
   | { type: 'delete'; payload: string }

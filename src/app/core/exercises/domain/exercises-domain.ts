@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   ExerciseFormValues,
   ExerciseValue,
-} from '@/app/core/exercises/exercises-schema';
+} from '@/app/core/exercises/exercises-types';
 
 export type ExerciseAction =
   | { type: 'delete'; payload: string }

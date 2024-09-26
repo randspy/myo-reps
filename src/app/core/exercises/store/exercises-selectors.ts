@@ -1,5 +1,5 @@
 import { ExercisesState, useExercisesStore } from './exercises-store';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { createSelector } from 'reselect';
 
 export const selectAllExercises = () =>

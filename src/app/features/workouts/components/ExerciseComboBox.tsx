@@ -18,13 +18,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import {
-  defaultWorkoutExerciseValue,
-  WorkoutExerciseValue,
-} from '@/app/core/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
+import { WorkoutExerciseValue } from '@/app/core/workouts/workouts-types';
 import { useMemo } from 'react';
 import Fuse from 'fuse.js';
+import { defaultWorkoutExerciseFormValue } from '@/app/core/workouts/domain/workouts-config';
 
 export const ExerciseComboBox: React.FC<{
   items: ExerciseValue[];
@@ -34,7 +32,7 @@ export const ExerciseComboBox: React.FC<{
 }> = ({
   items,
   dropdownItems,
-  selected = defaultWorkoutExerciseValue,
+  selected = defaultWorkoutExerciseFormValue,
   onSelect,
 }) => {
   const [open, setOpen] = React.useState(false);

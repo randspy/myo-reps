@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 import {
   ExerciseFormValues,
   ExerciseValue,
-} from '@/app/core/exercises/exercises-schema';
+} from '@/app/core/exercises/exercises-types';
 import { generateExercise } from '@/lib/test-utils';
 import { act, renderHook } from '@testing-library/react';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';

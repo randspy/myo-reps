@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { WorkoutList } from './WorkoutList';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { generateWorkout } from '@/lib/test-utils';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';

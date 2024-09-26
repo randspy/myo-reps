@@ -6,7 +6,7 @@ import {
   UnsavedFormChangesBlocker,
 } from '@/app/ui/UnsavedFormChangesBlocker';
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
-import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
+import { WorkoutFormValues } from '@/app/core/workouts/workouts-types';
 import { WorkoutForm } from '@/app/features/workouts/components/WorkoutForm';
 
 export const NewWorkoutPage: React.FC = () => {

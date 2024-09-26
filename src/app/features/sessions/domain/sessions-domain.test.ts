@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { createSession, sortSessions } from './sessions.domain';
+import { createSession, sortSessions } from './sessions-domain';
 import {
   SessionEvent,
   SessionValue,
-} from '@/app/features/sessions/session-schema';
+} from '@/app/features/sessions/sessions-types';
 
-describe('sessions.domain', () => {
+describe('sessions-domain', () => {
   describe('createSession', () => {
     it('creates a session with the correct properties', () => {
       const workoutId = 'workout123';

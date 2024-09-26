@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { useWorkoutsStore } from './workouts-store';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { generateWorkout } from '@/lib/test-utils';
 
 describe('useWorkoutsStore', () => {

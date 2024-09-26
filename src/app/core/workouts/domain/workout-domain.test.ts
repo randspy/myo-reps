@@ -7,18 +7,18 @@ import {
   findExercisesByWorkoutId,
   deduplicateExercisesId,
   canStartWorkout,
-} from './workout.domain';
+} from './workout-domain';
 import {
   WorkoutFormValues,
   WorkoutValue,
   WorkoutExerciseValue,
-} from '@/app/core/workouts/workouts-schema';
+} from '@/app/core/workouts/workouts-types';
 
 vi.mock('uuid', () => ({
   v4: vi.fn(() => 'mock-uuid'),
 }));
 
-describe('workout.domain', () => {
+describe('workout-domain', () => {
   describe('createExerciseForWorkout', () => {
     it('should create a new exercise with default values', () => {
       const exercise = createExerciseForWorkout();

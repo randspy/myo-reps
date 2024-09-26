@@ -12,10 +12,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  defaultValues,
   WorkoutFormValues,
   workoutSchema,
-} from '@/app/core/workouts/workouts-schema';
+} from '@/app/core/workouts/workouts-types';
 import { ExerciseComboBox } from '@/app/features/workouts/components/ExerciseComboBox';
 
 import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSelectorPopover';
@@ -23,14 +22,20 @@ import { Trash2Icon } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
-import { createExerciseForWorkout } from '@/app/core/workouts/domain/workout.domain';
+import { createExerciseForWorkout } from '@/app/core/workouts/domain/workout-domain';
+import { defaultWorkoutFormValues } from '@/app/core/workouts/domain/workouts-config';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
   onCancel: () => void;
   onDirtyChange: (isDirty: boolean) => void;
   values?: WorkoutFormValues;
-}> = ({ onSubmit, onCancel, onDirtyChange, values = defaultValues }) => {
+}> = ({
+  onSubmit,
+  onCancel,
+  onDirtyChange,
+  values = defaultWorkoutFormValues,
+}) => {
   const { exercises, activeExercises } = useExercise();
 
   const [active, setActive] = useState(0);

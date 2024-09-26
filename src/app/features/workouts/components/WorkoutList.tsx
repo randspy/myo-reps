@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 import { DragAndDropList } from '@/app/ui/DragAndDropList';
 import { DragAndDropListItem } from '@/app/ui/DragAndDropListItem';
-import { canStartWorkout } from '@/app/core/workouts/domain/workout.domain';
+import { canStartWorkout } from '@/app/core/workouts/domain/workout-domain';
 
 export const WorkoutList: React.FC = () => {
   const { workouts, dispatchSet } = useWorkout();

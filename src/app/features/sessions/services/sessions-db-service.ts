@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 
 export const SessionsDbService = {
   add: async (session: SessionValue) => {

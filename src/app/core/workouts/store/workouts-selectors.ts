@@ -1,4 +1,4 @@
-import { WorkoutValue } from '../workouts-schema';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { useWorkoutsStore, WorkoutsState } from './workouts-store';
 import { createSelector } from 'reselect';
 

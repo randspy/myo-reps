@@ -1,8 +1,8 @@
-import { TimeBetweenExercisesInSeconds } from '@/app/core/exercises/domain/exercises.config';
+import { TimeBetweenExercisesInSeconds } from '@/app/core/exercises/domain/exercises-config';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
-import { WorkoutExerciseValue } from '@/app/core/workouts/workouts-schema';
+import { WorkoutExerciseValue } from '@/app/core/workouts/workouts-types';
 import { useEffect, useRef, useState } from 'react';
-import { SessionEvent } from '@/app/features/sessions/session-schema';
+import { SessionEvent } from '@/app/features/sessions/sessions-types';
 
 export const useRunningSession = (workoutId: string | null) => {
   const [events, setEvents] = useState<SessionEvent[]>([

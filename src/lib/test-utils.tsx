@@ -1,5 +1,5 @@
-import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
-import { WorkoutValue } from '@/app/core/workouts/workouts-schema';
+import { ExerciseValue } from '@/app/core/exercises/exercises-types';
+import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactElement } from 'react';
 import { render } from '@testing-library/react';
@@ -9,7 +9,7 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
-import { SessionValue } from '@/app/features/sessions/session-schema';
+import { SessionValue } from '@/app/features/sessions/sessions-types';
 
 interface RenderWithRouterOptions {
   element: ReactElement;
