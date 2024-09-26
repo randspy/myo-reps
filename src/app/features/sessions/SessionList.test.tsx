@@ -10,7 +10,7 @@ import { useSessionsStore } from './store/sessions-store';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 describe('SessionList', () => {
-  it('renders the list of sessions', () => {
+  it('renders the list of sessions from newest to oldest', () => {
     useSessionsStore.setState({
       sessions: [
         generateSession({
@@ -39,14 +39,16 @@ describe('SessionList', () => {
     });
 
     renderWithRouter(<SessionList />);
+    const sessionElements = screen.getAllByRole('heading', { level: 3 });
+    expect(sessionElements).toHaveLength(2);
 
-    expect(screen.getByText('Workout 1')).toBeInTheDocument();
-    expect(screen.getByText('4/1/2023')).toBeInTheDocument();
-    expect(screen.getByText('10:00:00 AM')).toBeInTheDocument();
-
-    expect(screen.getByText('Workout 2')).toBeInTheDocument();
+    expect(sessionElements[0]).toHaveTextContent('Workout 2');
     expect(screen.getByText('4/2/2023')).toBeInTheDocument();
     expect(screen.getByText('11:00:00 AM')).toBeInTheDocument();
+
+    expect(sessionElements[1]).toHaveTextContent('Workout 1');
+    expect(screen.getByText('4/1/2023')).toBeInTheDocument();
+    expect(screen.getByText('10:00:00 AM')).toBeInTheDocument();
   });
 
   it('displays "No sessions" when the list is empty', () => {

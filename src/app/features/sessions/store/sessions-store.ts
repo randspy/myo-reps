@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { SessionValue } from '@/app/features/sessions/session-schema';
 import { devtools } from 'zustand/middleware';
+import { sortSessions } from '@/app/features/sessions/domain/sessions.domain';
 
 export interface SessionsState {
   sessions: SessionValue[];
@@ -17,9 +18,7 @@ export const useSessionsStore = create<
     sessions: [],
     restoreSessions: (sessions: SessionValue[]) => {
       set({
-        sessions: sessions.toSorted(
-          (a, b) => b.startDate.getTime() - a.startDate.getTime(),
-        ),
+        sessions: sortSessions(sessions),
       });
     },
     addSession: (session: SessionValue) => {

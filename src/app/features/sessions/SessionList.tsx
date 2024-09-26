@@ -1,9 +1,9 @@
-import { selectAllSessions } from '@/app/features/sessions/store/sessions-selector';
+import { selectSortedSessions } from '@/app/features/sessions/store/sessions-selector';
 import { selectWorkoutsAsMap } from '@/app/core/workouts/store/workouts-selectors';
 import { DeleteSessionDialog } from './DeleteSessionDialog';
 
 export const SessionList: React.FC = () => {
-  const sessions = selectAllSessions();
+  const sessions = selectSortedSessions();
   const workouts = selectWorkoutsAsMap();
 
   return (

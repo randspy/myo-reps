@@ -15,3 +15,9 @@ export const createSession = (
     events,
   };
 };
+
+export const sortSessions = (sessions: SessionValue[]) => {
+  return sessions.toSorted(
+    (a, b) => b.startDate.getTime() - a.startDate.getTime(),
+  );
+};
