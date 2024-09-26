@@ -1,9 +1,9 @@
 import { DeleteConfirmationDialog } from '@/app/ui/DeleteConfirmationDialog';
-import { SessionValue } from './session-schema';
+import { SessionValue } from '../session-schema';
 import { Button } from '@/components/ui/button';
 import { Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
-import { useSession } from './hooks/useSession';
+import { useSession } from '../hooks/useSession';
 
 export const DeleteSessionDialog: React.FC<{ session: SessionValue }> = ({
   session,

@@ -9,7 +9,7 @@ import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
 import { EditExercisePage } from './EditExercisePage';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 
-vi.mock('@/app/features/exercises/ExerciseForm', () => ({
+vi.mock('@/app/features/exercises/components/ExerciseForm', () => ({
   ExerciseForm: ({
     onSubmit,
     onCancel,

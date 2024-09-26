@@ -7,7 +7,7 @@ import {
 } from '@/app/ui/UnsavedFormChangesBlocker';
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
-import { WorkoutForm } from '@/app/features/workouts/WorkoutForm';
+import { WorkoutForm } from '@/app/features/workouts/components/WorkoutForm';
 import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors';
 import { PageNotFound } from '@/app/ui/PageNotFound';
 

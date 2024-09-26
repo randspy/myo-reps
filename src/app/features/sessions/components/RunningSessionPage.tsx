@@ -8,10 +8,10 @@ import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSele
 import { PageNotFound } from '@/app/ui/PageNotFound';
 import { Button } from '@/components/ui/button';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRunningSession } from './hooks/useRunningSession';
+import { useRunningSession } from '../hooks/useRunningSession';
 import { selectExerciseByWorkoutIdAsMap } from '@/app/core/exercises/store/exercises-selectors';
 import { useSession } from '@/app/features/sessions/hooks/useSession';
-import { createSession } from './domain/sessions.domain';
+import { createSession } from '../domain/sessions.domain';
 
 export const RunningSessionPage: React.FC = () => {
   const location = useLocation();
@@ -110,7 +110,7 @@ export const RunningSessionPage: React.FC = () => {
         )}
 
         <Button
-          className="bg-cancel mt-2 w-full"
+          className="mt-2 w-full bg-cancel"
           onClick={() => {
             navigate('/sessions');
           }}

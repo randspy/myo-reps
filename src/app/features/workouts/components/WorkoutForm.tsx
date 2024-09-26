@@ -16,7 +16,7 @@ import {
   WorkoutFormValues,
   workoutSchema,
 } from '@/app/core/workouts/workouts-schema';
-import { ExerciseComboBox } from '@/app/features/workouts/ExerciseComboBox';
+import { ExerciseComboBox } from '@/app/features/workouts/components/ExerciseComboBox';
 
 import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSelectorPopover';
 import { Trash2Icon } from 'lucide-react';

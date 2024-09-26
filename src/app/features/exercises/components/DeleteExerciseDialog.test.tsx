@@ -1,5 +1,5 @@
 import { screen, fireEvent, waitFor, render } from '@testing-library/react';
-import { DeleteExerciseDialog } from '@/app/features/exercises/DeleteExerciseDialog';
+import { DeleteExerciseDialog } from '@/app/features/exercises/components/DeleteExerciseDialog';
 import { generateExercise } from '@/lib/test-utils';
 import { ExerciseValue } from '@/app/core/exercises/exercises-schema';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';

@@ -1,6 +1,6 @@
-import { EditExercisePage } from '@/app/features/exercises/EditExercisePage';
-import { ExercisesPage } from '@/app/features/exercises/ExercisesPage';
-import { NewExercisePage } from '@/app/features/exercises/NewExercisePage';
+import { EditExercisePage } from '@/app/features/exercises/components/EditExercisePage';
+import { ExercisesPage } from '@/app/features/exercises/components/ExercisesPage';
+import { NewExercisePage } from '@/app/features/exercises/components/NewExercisePage';
 
 export const exerciseRoutes = [
   {

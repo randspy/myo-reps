@@ -13,7 +13,7 @@ import { ExerciseList } from './ExerciseList';
 
 const deleteExercise = vi.fn();
 
-vi.mock('@/app/features/exercises/DeleteExerciseDialog', () => ({
+vi.mock('@/app/features/exercises/components/DeleteExerciseDialog', () => ({
   DeleteExerciseDialog: ({ exercise }: { exercise: ExerciseValue }) => {
     deleteExercise(exercise);
     return <div></div>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DeleteExerciseDialog } from '@/app/features/exercises/DeleteExerciseDialog';
+import { DeleteExerciseDialog } from '@/app/features/exercises/components/DeleteExerciseDialog';
 
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { Link } from 'react-router-dom';

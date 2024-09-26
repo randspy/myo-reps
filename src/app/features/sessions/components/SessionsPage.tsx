@@ -1,4 +1,4 @@
-import { SessionList } from '@/app/features/sessions/SessionList';
+import { SessionList } from '@/app/features/sessions/components/SessionList';
 
 export const SessionsPage: React.FC = () => {
   return (

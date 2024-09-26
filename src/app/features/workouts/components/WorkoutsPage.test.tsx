@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { WorkoutsPage } from '@/app/features/workouts/WorkoutsPage';
+import { WorkoutsPage } from '@/app/features/workouts/components/WorkoutsPage';
 import { generateWorkout } from '@/lib/test-utils';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';

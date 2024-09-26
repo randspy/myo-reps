@@ -1,5 +1,5 @@
 import { screen, fireEvent, waitFor, render } from '@testing-library/react';
-import { WorkoutForm } from '@/app/features/workouts/WorkoutForm';
+import { WorkoutForm } from '@/app/features/workouts/components/WorkoutForm';
 import { generateExercise } from '@/lib/test-utils';
 import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';

@@ -1,6 +1,6 @@
-import { SessionsPage } from '@/app/features/sessions/SessionsPage';
-import { StartSessionPage } from '@/app/features/sessions/StartSessionPage';
-import { RunningSessionPage } from './RunningSessionPage';
+import { SessionsPage } from '@/app/features/sessions/components/SessionsPage';
+import { StartSessionPage } from '@/app/features/sessions/components/StartSessionPage';
+import { RunningSessionPage } from '@/app/features/sessions/components/RunningSessionPage';
 
 export const sessionRoutes = [
   {

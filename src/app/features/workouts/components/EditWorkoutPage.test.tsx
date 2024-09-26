@@ -9,7 +9,7 @@ import {
 import { EditWorkoutPage } from './EditWorkoutPage';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
-vi.mock('@/app/features/workouts/WorkoutForm', () => ({
+vi.mock('@/app/features/workouts/components/WorkoutForm', () => ({
   WorkoutForm: ({
     onSubmit,
     onCancel,

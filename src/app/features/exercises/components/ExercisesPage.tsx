@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ExerciseList } from '@/app/features/exercises/ExerciseList';
+import { ExerciseList } from '@/app/features/exercises/components/ExerciseList';
 import { cn } from '@/lib/utils';
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { Button } from '@/components/ui/button';

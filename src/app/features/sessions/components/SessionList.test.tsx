@@ -6,7 +6,7 @@ import {
   generateWorkout,
   renderWithRouter,
 } from '@/lib/test-utils';
-import { useSessionsStore } from './store/sessions-store';
+import { useSessionsStore } from '../store/sessions-store';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 describe('SessionList', () => {

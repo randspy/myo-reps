@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ExerciseComboBox } from '@/app/features/workouts/ExerciseComboBox';
+import { ExerciseComboBox } from '@/app/features/workouts/components/ExerciseComboBox';
 import { generateExercise } from '@/lib/test-utils';
 
 describe('Exercise selector', () => {

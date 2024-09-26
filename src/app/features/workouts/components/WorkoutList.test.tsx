@@ -7,7 +7,7 @@ import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
 const deleteWorkout = vi.fn();
 
-vi.mock('@/app/features/workouts/DeleteWorkoutDialog', () => ({
+vi.mock('@/app/features/workouts/components/DeleteWorkoutDialog', () => ({
   DeleteWorkoutDialog: ({ workout }: { workout: WorkoutValue }) => {
     deleteWorkout(workout);
     return <div></div>;

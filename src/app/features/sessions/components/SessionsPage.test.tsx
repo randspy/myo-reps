@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { SessionsPage } from './SessionsPage';
-import { useSessionsStore } from './store/sessions-store';
+import { useSessionsStore } from '../store/sessions-store';
 import { generateSession, generateWorkout } from '@/lib/test-utils';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 

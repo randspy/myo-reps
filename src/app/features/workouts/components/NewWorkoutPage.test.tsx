@@ -1,17 +1,17 @@
 import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { NewExercisePage } from './NewExercisePage';
-import { ExerciseFormValues } from '@/app/core/exercises/exercises-schema';
 import { ChildrenFunction } from '@/app/ui/UnsavedFormChangesBlocker';
-import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
+import { WorkoutFormValues } from '@/app/core/workouts/workouts-schema';
+import { NewWorkoutPage } from './NewWorkoutPage';
+import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 
-vi.mock('@/app/features/exercises/ExerciseForm', () => ({
-  ExerciseForm: ({
+vi.mock('@/app/features/workouts/components/WorkoutForm', () => ({
+  WorkoutForm: ({
     onSubmit,
     onCancel,
     onDirtyChange,
   }: {
-    onSubmit: (values: ExerciseFormValues) => void;
+    onSubmit: (values: WorkoutFormValues) => void;
     onCancel: () => void;
     onDirtyChange: (value: boolean) => void;
   }) => (
@@ -19,7 +19,8 @@ vi.mock('@/app/features/exercises/ExerciseForm', () => ({
       <button
         onClick={() =>
           onSubmit({
-            name: 'Mock Push up',
+            name: 'Mock Upper body',
+            exercises: [],
           })
         }
       >
@@ -45,49 +46,47 @@ vi.mock('@/app/ui/UnsavedFormChangesBlocker', () => ({
     children(mockOnDirtyChange, mockOnSubmit),
 }));
 
-const renderNewExercisePage = () => {
+const renderNewWorkoutPage = () => {
   return render(
-    <MemoryRouter initialEntries={['/exercises/new']}>
+    <MemoryRouter initialEntries={['/workouts/new']}>
       <Routes>
-        <Route path="/exercises/new" element={<NewExercisePage />} />
-        <Route path="/exercises" element={<div>Exercises Page</div>} />
+        <Route path="/workouts/new" element={<NewWorkoutPage />} />
+        <Route path="/workouts" element={<div>Workouts Page</div>} />
       </Routes>
     </MemoryRouter>,
   );
 };
 
-describe('New exercise page', () => {
+describe('New workout page', () => {
   beforeEach(() => {
-    useExercisesStore.setState({ exercises: [] });
+    useWorkoutsStore.setState({ workouts: [] });
   });
 
-  test('should add exercise and navigate on form submission', async () => {
-    renderNewExercisePage();
+  test('should add workout and navigate on form submission', async () => {
+    renderNewWorkoutPage();
 
     fireEvent.click(screen.getByText('Save'));
 
     await waitFor(() => {
-      const exercises = useExercisesStore.getState().exercises;
-      expect(exercises).toHaveLength(1);
-      expect(exercises[0].name).toEqual('Mock Push up');
-      expect(screen.getByText('Exercises Page')).toBeInTheDocument();
+      const workouts = useWorkoutsStore.getState().workouts;
+      expect(workouts).toHaveLength(1);
+      expect(workouts[0].name).toEqual('Mock Upper body');
+      expect(screen.getByText('Workouts Page')).toBeInTheDocument();
       expect(mockOnSubmit).toHaveBeenCalledTimes(1);
     });
   });
 
-  test('should navigate to /exercises on cancel', async () => {
-    renderNewExercisePage();
+  test('should navigate to /workouts on cancel', () => {
+    renderNewWorkoutPage();
 
     fireEvent.click(screen.getByText('Cancel'));
 
-    await waitFor(() => {
-      expect(screen.getByText('Exercises Page')).toBeInTheDocument();
-      expect(useExercisesStore.getState().exercises).toHaveLength(0);
-    });
+    expect(screen.getByText('Workouts Page')).toBeInTheDocument();
+    expect(useWorkoutsStore.getState().workouts).toHaveLength(0);
   });
 
   test('should block unsaved changes', () => {
-    renderNewExercisePage();
+    renderNewWorkoutPage();
 
     fireEvent.click(screen.getByText('Simulate dirty change'));
 
