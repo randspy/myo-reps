@@ -26,27 +26,6 @@ npm run dev
 
 The Application is a fitness app for my person use. It is optimize for using [Myo reps protocol](https://www.youtube.com/watch?v=V71TGRQaLRs), it's a workout protocol when timing between sets of given exercise is very precise and short.
 
-MVP:
-
-    Done:
-
-    - light/dark mode
-    - deleting the content of application
-    - drag/drop lists
-    - exercises
-    - workouts
-
-    Todo:
-
-    - running a session
-    - displaying list of past sessions
-
-Improvements:
-
-    - multi element deletes from the lists
-    - more info on the lists (extendable items)
-    - workout statistics
-
 # Project structure
 
 The app is based on architecture described in [Angular enterprise architecture](https://angularexperts.io/products/ebook-angular-enterprise-architecture).
@@ -60,5 +39,7 @@ The app is based on architecture described in [Angular enterprise architecture](
     components/ui - shadcn/ui components
     lib - utils
     store - redux toolkit wiring
+
+The session's store and domain are inside the feature folder as they are only used in the sessions feature.
 
 For permanent storage I use IndexedDB as I don't need more, for now at least. The business logic is separated from the store. Influenced by [Modularizing React Applications with Established UI Patterns](https://martinfowler.com/articles/modularizing-react-apps.html) article.
