@@ -2,11 +2,12 @@ import { act, renderHook } from '@testing-library/react';
 import { useWorkoutsStore } from './workouts-store';
 import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { generateWorkout } from '@/lib/test-utils';
+import { db } from '@/db';
 
 describe('useWorkoutsStore', () => {
   beforeEach(() => {
     act(() => {
-      useWorkoutsStore.setState({ workouts: [] });
+      useWorkoutsStore.setState({ workouts: [], isInitialized: false });
     });
   });
 
@@ -15,16 +16,19 @@ describe('useWorkoutsStore', () => {
     expect(result.current.workouts).toEqual([]);
   });
 
-  test('should restore workouts and sort them', () => {
-    const { result } = renderHook(() => useWorkoutsStore());
+  test('should restore workouts and sort them', async () => {
     const workouts: WorkoutValue[] = [
       generateWorkout({ id: '1', name: 'Workout 1', position: 2 }),
       generateWorkout({ id: '2', name: 'Workout 2', position: 0 }),
       generateWorkout({ id: '3', name: 'Workout 3', position: 1 }),
     ];
 
-    act(() => {
-      result.current.restoreWorkouts(workouts);
+    vi.mocked(db.workouts.toArray).mockResolvedValue(workouts);
+
+    const { result } = renderHook(() => useWorkoutsStore());
+
+    await act(async () => {
+      await result.current.restoreWorkouts();
     });
 
     expect(result.current.workouts).toEqual([

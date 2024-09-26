@@ -2,10 +2,12 @@ import { create } from 'zustand';
 import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { devtools } from 'zustand/middleware';
 import { sortSessions } from '@/app/features/sessions/domain/sessions-domain';
+import { db } from '@/db';
 
 export interface SessionsState {
   sessions: SessionValue[];
-  restoreSessions: (sessions: SessionValue[]) => void;
+  isInitialized: boolean;
+  restoreSessions: () => Promise<void>;
   addSession: (session: SessionValue) => void;
   deleteSession: (id: string) => void;
 }
@@ -16,10 +18,12 @@ export const useSessionsStore = create<
 >(
   devtools((set) => ({
     sessions: [],
-    restoreSessions: (sessions: SessionValue[]) => {
-      set({
-        sessions: sortSessions(sessions),
-      });
+    isInitialized: false,
+    restoreSessions: async () => {
+      if (!useSessionsStore.getState().isInitialized) {
+        const sessions = await db.sessions.toArray();
+        set({ sessions: sortSessions(sessions), isInitialized: true });
+      }
     },
     addSession: (session: SessionValue) => {
       set((state) => ({ sessions: [...state.sessions, session] }));
@@ -31,3 +35,5 @@ export const useSessionsStore = create<
     },
   })),
 );
+
+useSessionsStore.getState().restoreSessions();

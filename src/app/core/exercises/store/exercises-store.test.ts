@@ -2,11 +2,12 @@ import { act, renderHook } from '@testing-library/react';
 import { useExercisesStore } from './exercises-store';
 import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { generateExercise } from '@/lib/test-utils';
+import { db } from '@/db';
 
 describe('useExercisesStore', () => {
   beforeEach(() => {
     act(() => {
-      useExercisesStore.setState({ exercises: [] });
+      useExercisesStore.setState({ exercises: [], isInitialized: false });
     });
   });
 
@@ -15,16 +16,19 @@ describe('useExercisesStore', () => {
     expect(result.current.exercises).toEqual([]);
   });
 
-  test('should restore exercises and sort them', () => {
-    const { result } = renderHook(() => useExercisesStore());
+  test('should restore exercises and sort them', async () => {
     const exercises: ExerciseValue[] = [
       generateExercise({ id: '1', name: 'Exercise 1', position: 2 }),
       generateExercise({ id: '2', name: 'Exercise 2', position: 0 }),
       generateExercise({ id: '3', name: 'Exercise 3', position: 1 }),
     ];
 
-    act(() => {
-      result.current.restoreExercises(exercises);
+    vi.mocked(db.exercises.toArray).mockResolvedValue(exercises);
+
+    const { result } = renderHook(() => useExercisesStore());
+
+    await act(async () => {
+      await result.current.restoreExercises();
     });
 
     expect(result.current.exercises).toEqual([

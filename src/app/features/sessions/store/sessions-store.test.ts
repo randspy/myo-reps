@@ -1,13 +1,13 @@
-// Unit tests
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
 import { act, renderHook } from '@testing-library/react';
 import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { generateSession } from '@/lib/test-utils';
+import { db } from '@/db';
 
 describe('useSessionsStore', () => {
   beforeEach(() => {
     act(() => {
-      useSessionsStore.setState({ sessions: [] });
+      useSessionsStore.setState({ sessions: [], isInitialized: false });
     });
   });
 
@@ -16,8 +16,7 @@ describe('useSessionsStore', () => {
     expect(result.current.sessions).toEqual([]);
   });
 
-  it('should restore sessions and sort them by startDate from newest to oldest', () => {
-    const { result } = renderHook(() => useSessionsStore());
+  it('should restore sessions and sort them by startDate from newest to oldest', async () => {
     const sessions: SessionValue[] = [
       generateSession({
         id: '1',
@@ -39,8 +38,12 @@ describe('useSessionsStore', () => {
       }),
     ];
 
-    act(() => {
-      result.current.restoreSessions(sessions);
+    vi.mocked(db.sessions.toArray).mockResolvedValue(sessions);
+
+    const { result } = renderHook(() => useSessionsStore());
+
+    await act(async () => {
+      await result.current.restoreSessions();
     });
 
     expect(result.current.sessions).toEqual([
@@ -82,7 +85,6 @@ describe('useSessionsStore', () => {
   });
 
   it('should delete a session by id', () => {
-    const { result } = renderHook(() => useSessionsStore());
     const sessions: SessionValue[] = [
       generateSession({
         id: '1',
@@ -98,9 +100,9 @@ describe('useSessionsStore', () => {
       }),
     ];
 
-    act(() => {
-      result.current.restoreSessions(sessions);
-    });
+    useSessionsStore.setState({ sessions });
+
+    const { result } = renderHook(() => useSessionsStore());
 
     act(() => {
       result.current.deleteSession('1');

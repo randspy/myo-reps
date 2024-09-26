@@ -26,5 +26,4 @@ vi.mock('@/db', () => ({
     },
   },
   recreateDB: vi.fn(),
-  restoreFromDB: vi.fn(),
 }));

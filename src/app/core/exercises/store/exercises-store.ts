@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { devtools } from 'zustand/middleware';
+import { db } from '@/db';
 
 export interface ExercisesState {
   exercises: ExerciseValue[];
-  restoreExercises: (exercises: ExerciseValue[]) => void;
+  isInitialized: boolean;
+  restoreExercises: () => Promise<void>;
   setExercises: (exercises: ExerciseValue[]) => void;
   addExercise: (exercise: ExerciseValue) => void;
   deleteExercise: (id: string) => void;
@@ -17,10 +19,15 @@ export const useExercisesStore = create<
 >(
   devtools((set) => ({
     exercises: [],
-    restoreExercises: (exercises) => {
-      set({
-        exercises: exercises.toSorted((a, b) => a.position - b.position),
-      });
+    isInitialized: false,
+    restoreExercises: async () => {
+      if (!useExercisesStore.getState().isInitialized) {
+        const exercises = await db.exercises.toArray();
+        set({
+          exercises: exercises.toSorted((a, b) => a.position - b.position),
+          isInitialized: true,
+        });
+      }
     },
     setExercises: (exercises) => {
       set({ exercises });
@@ -42,3 +49,5 @@ export const useExercisesStore = create<
     },
   })),
 );
+
+useExercisesStore.getState().restoreExercises();
