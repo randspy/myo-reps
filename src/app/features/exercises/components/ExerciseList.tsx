@@ -1,21 +1,22 @@
 import React from 'react';
 import { DeleteExerciseDialog } from '@/app/features/exercises/components/DeleteExerciseDialog';
-
 import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { PencilIcon } from 'lucide-react';
 import { DragAndDropList } from '@/app/ui/DragAndDropList';
 import { DragAndDropListItem } from '@/app/ui/DragAndDropListItem';
+import { selectActiveExercises } from '@/app/core/exercises/store/exercises-selectors';
 
 export const ExerciseList: React.FC = () => {
-  const { activeExercises, dispatchSet } = useExercise();
+  const activeExercises = selectActiveExercises();
+  const { dispatchSetExercises } = useExercise();
 
   return (
     <div className="w-full">
       <DragAndDropList
         values={activeExercises}
-        onReorder={(values) => dispatchSet(values)}
+        onReorder={(values) => dispatchSetExercises(values)}
       >
         {activeExercises?.map((exercise) => (
           <DragAndDropListItem key={exercise.id} value={exercise}>

@@ -21,9 +21,12 @@ import { NumberScrollWheelSelectorPopover } from '@/app/ui/NumberScrollWheelSele
 import { Trash2Icon } from 'lucide-react';
 import { Reorder } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { createExerciseForWorkout } from '@/app/core/workouts/domain/workout-domain';
 import { defaultWorkoutFormValues } from '@/app/core/workouts/domain/workouts-config';
+import {
+  selectActiveExercises,
+  selectAllExercises,
+} from '@/app/core/exercises/store/exercises-selectors';
 
 export const WorkoutForm: React.FC<{
   onSubmit: (values: WorkoutFormValues) => void;
@@ -36,7 +39,8 @@ export const WorkoutForm: React.FC<{
   onDirtyChange,
   values = defaultWorkoutFormValues,
 }) => {
-  const { exercises, activeExercises } = useExercise();
+  const exercises = selectAllExercises();
+  const activeExercises = selectActiveExercises();
 
   const [active, setActive] = useState(0);
 

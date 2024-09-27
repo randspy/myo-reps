@@ -19,7 +19,8 @@ import { selectAllWorkouts } from '@/app/core/workouts/store/workouts-selectors'
 
 export const useWorkout = () => {
   const workouts = selectAllWorkouts();
-  const { dispatchAddUsage, dispatchRemoveUsage } = useExercise();
+  const { dispatchAddUsageExercise, dispatchRemoveUsageExercise } =
+    useExercise();
   const { addWorkout, updateWorkout, deleteWorkout, setWorkouts } =
     useWorkoutActions();
 
@@ -30,7 +31,7 @@ export const useWorkout = () => {
     await addWorkout(workout);
 
     for (const exerciseId of distinctExerciseIds) {
-      dispatchAddUsage({ exerciseId: exerciseId, userId: workout.id });
+      dispatchAddUsageExercise({ exerciseId: exerciseId, userId: workout.id });
     }
   }
 
@@ -43,14 +44,14 @@ export const useWorkout = () => {
     );
 
     for (const exercise of addedExercises) {
-      await dispatchAddUsage({
+      await dispatchAddUsageExercise({
         exerciseId: exercise.exerciseId,
         userId: updatedWorkout.id,
       });
     }
 
     for (const exercise of removedExercises) {
-      await dispatchRemoveUsage({
+      await dispatchRemoveUsageExercise({
         exerciseId: exercise.exerciseId,
         userId: updatedWorkout.id,
       });
@@ -69,7 +70,7 @@ export const useWorkout = () => {
       const exercises = findExercisesByWorkoutId(workouts, id);
 
       for (const exercise of exercises) {
-        await dispatchRemoveUsage({
+        await dispatchRemoveUsageExercise({
           exerciseId: exercise.exerciseId,
           userId: id,
         });

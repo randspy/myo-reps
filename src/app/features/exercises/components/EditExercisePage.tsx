@@ -12,7 +12,7 @@ import {
 import { PageNotFound } from '@/app/ui/PageNotFound';
 
 export const EditExercisePage: React.FC = () => {
-  const { dispatchUpdate } = useExercise();
+  const { dispatchUpdateExercise } = useExercise();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -29,7 +29,7 @@ export const EditExercisePage: React.FC = () => {
           <ExerciseForm
             onSubmit={async (values: ExerciseFormValues) => {
               onSubmit();
-              await dispatchUpdate({
+              await dispatchUpdateExercise({
                 ...exercise,
                 ...values,
               });

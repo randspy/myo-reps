@@ -21,32 +21,6 @@ describe('useExercise', () => {
     });
   });
 
-  test('should return exercises and activeExercises', () => {
-    const exercises = [
-      generateExercise({
-        id: 'exercise-1',
-        name: 'Push-up',
-      }),
-      generateExercise({
-        id: 'exercise-2',
-        name: 'Pull-up',
-        usage: [
-          {
-            id: '1',
-          },
-        ],
-        hidden: true,
-      }),
-    ];
-
-    useExercisesStore.setState({ exercises });
-
-    const { result } = renderHook(() => useExercise());
-
-    expect(result.current.exercises).toEqual(exercises);
-    expect(result.current.activeExercises).toEqual([exercises[0]]);
-  });
-
   test('should add exercise', async () => {
     const id = 'exercise-1';
     vi.mocked(v4).mockImplementation(() => id);
@@ -55,7 +29,7 @@ describe('useExercise', () => {
     const newExercise: ExerciseFormValues = { name: 'added exercise' };
 
     await act(async () => {
-      await result.current.dispatchAdd(newExercise);
+      await result.current.dispatchAddExercise(newExercise);
     });
 
     const storeState = useExercisesStore.getState();
@@ -87,7 +61,7 @@ describe('useExercise', () => {
     const newExercise: ExerciseFormValues = { name: 'added exercise' };
 
     await act(async () => {
-      await result.current.dispatchAdd(newExercise);
+      await result.current.dispatchAddExercise(newExercise);
     });
 
     const storeState = useExercisesStore.getState();
@@ -111,7 +85,7 @@ describe('useExercise', () => {
     });
 
     await act(async () => {
-      await result.current.dispatchUpdate(updatedExercise);
+      await result.current.dispatchUpdateExercise(updatedExercise);
     });
 
     expect(exercise('exercise-1')).toEqual(updatedExercise);
@@ -126,7 +100,7 @@ describe('useExercise', () => {
     ];
 
     await act(async () => {
-      await result.current.dispatchSet(exercises);
+      await result.current.dispatchSetExercises(exercises);
     });
 
     const storeState = useExercisesStore.getState();
@@ -149,7 +123,7 @@ describe('useExercise', () => {
       const { result } = renderHook(() => useExercise());
 
       await act(async () => {
-        await result.current.dispatchDelete('exercise-1');
+        await result.current.dispatchDeleteExercise('exercise-1');
       });
 
       expect(exercise('exercise-1')).toEqual(
@@ -174,7 +148,7 @@ describe('useExercise', () => {
       const { result } = renderHook(() => useExercise());
 
       await act(async () => {
-        await result.current.dispatchDelete('exercise-1');
+        await result.current.dispatchDeleteExercise('exercise-1');
       });
 
       const storeState = useExercisesStore.getState();
@@ -190,7 +164,7 @@ describe('useExercise', () => {
     const { result } = renderHook(() => useExercise());
 
     await act(async () => {
-      await result.current.dispatchAddUsage({
+      await result.current.dispatchAddUsageExercise({
         exerciseId: 'exercise-1',
         userId: '1',
       });
@@ -218,7 +192,7 @@ describe('useExercise', () => {
       const { result } = renderHook(() => useExercise());
 
       await act(async () => {
-        await result.current.dispatchRemoveUsage({
+        await result.current.dispatchRemoveUsageExercise({
           exerciseId: 'exercise-1',
           userId: '1',
         });
@@ -246,7 +220,7 @@ describe('useExercise', () => {
       const { result } = renderHook(() => useExercise());
 
       await act(async () => {
-        await result.current.dispatchRemoveUsage({
+        await result.current.dispatchRemoveUsageExercise({
           exerciseId: 'exercise-1',
           userId: '1',
         });

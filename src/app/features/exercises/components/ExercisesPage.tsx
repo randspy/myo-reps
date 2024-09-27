@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { ExerciseList } from '@/app/features/exercises/components/ExerciseList';
 import { cn } from '@/lib/utils';
-import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { Button } from '@/components/ui/button';
+import { selectAllExercises } from '@/app/core/exercises/store/exercises-selectors';
 
 export const ExercisesPage = () => {
-  const { exercises } = useExercise();
+  const exercises = selectAllExercises();
 
   return (
     <div

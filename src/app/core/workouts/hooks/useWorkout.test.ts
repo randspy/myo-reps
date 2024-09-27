@@ -19,8 +19,8 @@ describe('useWorkout', () => {
     useWorkoutsStore.setState({ workouts: [] });
 
     vi.mocked(useExercise).mockReturnValue({
-      dispatchAddUsage: vi.fn(),
-      dispatchRemoveUsage: vi.fn(),
+      dispatchAddUsageExercise: vi.fn(),
+      dispatchRemoveUsageExercise: vi.fn(),
     } as Partial<ReturnType<typeof useExercise>> as ReturnType<
       typeof useExercise
     >);
@@ -52,11 +52,11 @@ describe('useWorkout', () => {
     });
     expect(storeState.workouts).toHaveLength(1);
     expect(storeState.workouts[0].name).toBe('New Workout');
-    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+    expect(useExercise().dispatchAddUsageExercise).toHaveBeenCalledWith({
       exerciseId: 'ex1',
       userId: id,
     });
-    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+    expect(useExercise().dispatchAddUsageExercise).toHaveBeenCalledWith({
       exerciseId: 'ex2',
       userId: id,
     });
@@ -125,20 +125,20 @@ describe('useWorkout', () => {
     const storeState = useWorkoutsStore.getState();
     expect(storeState.workouts).toHaveLength(1);
     expect(storeState.workouts[0].name).toBe('Updated Workout');
-    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+    expect(useExercise().dispatchAddUsageExercise).toHaveBeenCalledWith({
       exerciseId: 'ex4',
       userId: '1',
     });
-    expect(useExercise().dispatchAddUsage).toHaveBeenCalledWith({
+    expect(useExercise().dispatchAddUsageExercise).toHaveBeenCalledWith({
       exerciseId: 'ex5',
       userId: '1',
     });
 
-    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+    expect(useExercise().dispatchRemoveUsageExercise).toHaveBeenCalledWith({
       exerciseId: 'ex1',
       userId: '1',
     });
-    expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+    expect(useExercise().dispatchRemoveUsageExercise).toHaveBeenCalledWith({
       exerciseId: 'ex2',
       userId: '1',
     });
@@ -166,11 +166,11 @@ describe('useWorkout', () => {
 
       const storeState = useWorkoutsStore.getState();
       expect(storeState.workouts).toHaveLength(0);
-      expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+      expect(useExercise().dispatchRemoveUsageExercise).toHaveBeenCalledWith({
         exerciseId: 'ex1',
         userId: '1',
       });
-      expect(useExercise().dispatchRemoveUsage).toHaveBeenCalledWith({
+      expect(useExercise().dispatchRemoveUsageExercise).toHaveBeenCalledWith({
         exerciseId: 'ex2',
         userId: '1',
       });

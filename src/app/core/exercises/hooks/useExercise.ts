@@ -12,27 +12,23 @@ import {
   ExerciseAction,
   getNextPosition,
 } from '@/app/core/exercises/domain/exercises-domain';
-import {
-  selectActiveExercises,
-  selectAllExercises,
-} from '@/app/core/exercises/store/exercises-selectors';
+import { selectAllExercises } from '@/app/core/exercises/store/exercises-selectors';
 
 export const useExercise = () => {
   const exercises = selectAllExercises();
-  const activeExercises = selectActiveExercises();
   const { addExercise, updateExercise, deleteExercise, setExercises } =
     useExerciseActions();
 
-  async function dispatchAdd(exercise: ExerciseFormValues) {
+  async function dispatchAddExercise(exercise: ExerciseFormValues) {
     const value = createExerciseFromForm(exercise, getNextPosition(exercises));
     await addExercise(value);
   }
 
-  async function dispatchUpdate(exercise: ExerciseValue) {
+  async function dispatchUpdateExercise(exercise: ExerciseValue) {
     await updateExercise(exercise);
   }
 
-  async function dispatchDelete(id: string) {
+  async function dispatchDeleteExercise(id: string) {
     const action: ExerciseAction = removeExerciseFromUserView(id, exercises);
 
     if (action) {
@@ -44,11 +40,11 @@ export const useExercise = () => {
     }
   }
 
-  async function dispatchSet(exercises: ExerciseValue[]) {
+  async function dispatchSetExercises(exercises: ExerciseValue[]) {
     await setExercises(updateExercisePositions(exercises));
   }
 
-  async function dispatchAddUsage({
+  async function dispatchAddUsageExercise({
     exerciseId,
     userId,
   }: {
@@ -62,7 +58,7 @@ export const useExercise = () => {
     }
   }
 
-  async function dispatchRemoveUsage({
+  async function dispatchRemoveUsageExercise({
     exerciseId,
     userId,
   }: {
@@ -85,13 +81,11 @@ export const useExercise = () => {
   }
 
   return {
-    exercises,
-    activeExercises,
-    dispatchAdd,
-    dispatchUpdate,
-    dispatchDelete,
-    dispatchSet,
-    dispatchAddUsage,
-    dispatchRemoveUsage,
+    dispatchAddExercise,
+    dispatchUpdateExercise,
+    dispatchDeleteExercise,
+    dispatchSetExercises,
+    dispatchAddUsageExercise,
+    dispatchRemoveUsageExercise,
   };
 };

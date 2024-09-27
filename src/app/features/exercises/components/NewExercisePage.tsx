@@ -10,7 +10,7 @@ import {
 } from '@/app/ui/UnsavedFormChangesBlocker';
 
 export const NewExercisePage: React.FC = () => {
-  const { dispatchAdd } = useExercise();
+  const { dispatchAddExercise } = useExercise();
   const navigate = useNavigate();
 
   return (
@@ -20,7 +20,7 @@ export const NewExercisePage: React.FC = () => {
           <ExerciseForm
             onSubmit={(values: ExerciseFormValues) => {
               onSubmit();
-              dispatchAdd(values);
+              dispatchAddExercise(values);
               navigate('/exercises');
             }}
             onCancel={() => navigate('/exercises')}
