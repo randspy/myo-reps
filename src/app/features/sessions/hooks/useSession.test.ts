@@ -26,7 +26,7 @@ describe('useSession', () => {
     const newSession = generateSession({ id: '1', workoutId: 'workout1' });
 
     await act(async () => {
-      await result.current.addSession(newSession);
+      await result.current.dispatchAddSession(newSession);
     });
 
     expect(useSessionsStore.getState().sessions).toContain(newSession);
@@ -43,7 +43,7 @@ describe('useSession', () => {
     const { result } = renderHook(() => useSession());
 
     await act(async () => {
-      await result.current.deleteSession(session.id);
+      await result.current.dispatchDeleteSession(session.id);
     });
 
     expect(useSessionsStore.getState().sessions).not.toContain(session);

@@ -25,7 +25,7 @@ export const useSession = () => {
   };
 
   return {
-    addSession: dispatchAddSession,
-    deleteSession: dispatchDeleteSession,
+    dispatchAddSession,
+    dispatchDeleteSession,
   };
 };

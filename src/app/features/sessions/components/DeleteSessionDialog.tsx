@@ -9,10 +9,10 @@ export const DeleteSessionDialog: React.FC<{ session: SessionValue }> = ({
   session,
 }) => {
   const [open, setOpen] = useState(false);
-  const { deleteSession } = useSession();
+  const { dispatchDeleteSession } = useSession();
 
   const deleteById = () => {
-    deleteSession(session.id);
+    dispatchDeleteSession(session.id);
     setOpen(false);
   };
 
