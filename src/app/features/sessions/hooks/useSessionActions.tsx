@@ -1,17 +1,17 @@
-import { SessionsDbService } from '@/app/features/sessions/services/sessions-db-service';
 import { SessionValue } from '@/app/features/sessions/sessions-types';
-import { useSessionsStore } from '../store/sessions-store';
+import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
+import { db } from '@/db';
 
 export const useSessionActions = () => {
   const { addSession, deleteSession } = useSessionsStore();
 
   const addSessionWithPersistence = async (session: SessionValue) => {
-    await SessionsDbService.add(session);
+    await db.sessions.add(session);
     addSession(session);
   };
 
   const deleteSessionWithPersistence = async (id: string) => {
-    await SessionsDbService.delete(id);
+    await db.sessions.delete(id);
     deleteSession(id);
   };
 

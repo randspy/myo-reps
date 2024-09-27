@@ -1,28 +1,28 @@
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
-import { WorkoutDbService } from '@/app/core/workouts/services/workout-db-service';
 import { WorkoutValue } from '@/app/core/workouts/workouts-types';
+import { db } from '@/db';
 
 export const useWorkoutActions = () => {
   const { setWorkouts, addWorkout, deleteWorkout, updateWorkout } =
     useWorkoutsStore();
 
   const setWorkoutsWithPersistence = async (workouts: WorkoutValue[]) => {
-    await WorkoutDbService.bulkPut(workouts);
+    await db.workouts.bulkPut(workouts);
     setWorkouts(workouts);
   };
 
   const addWorkoutWithPersistence = async (workout: WorkoutValue) => {
-    await WorkoutDbService.add(workout);
+    await db.workouts.add(workout);
     addWorkout(workout);
   };
 
   const deleteWorkoutWithPersistence = async (id: string) => {
-    await WorkoutDbService.delete(id);
+    await db.workouts.delete(id);
     deleteWorkout(id);
   };
 
   const updateWorkoutWithPersistence = async (workout: WorkoutValue) => {
-    await WorkoutDbService.update(workout);
+    await db.workouts.update(workout.id, workout);
     updateWorkout(workout);
   };
 

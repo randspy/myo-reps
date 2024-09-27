@@ -1,18 +1,9 @@
 import { act, renderHook } from '@testing-library/react';
 import { useWorkoutActions } from './useWorkoutActions';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
-import { WorkoutDbService } from '@/app/core/workouts/services/workout-db-service';
 import { generateWorkout } from '@/lib/test-utils';
 import { vi, describe, beforeEach, test, expect } from 'vitest';
-
-vi.mock('@/app/core/workouts/services/workout-db-service', () => ({
-  WorkoutDbService: {
-    bulkPut: vi.fn(),
-    add: vi.fn(),
-    delete: vi.fn(),
-    update: vi.fn(),
-  },
-}));
+import { db } from '@/db';
 
 describe('useWorkoutActions', () => {
   beforeEach(() => {
@@ -29,7 +20,7 @@ describe('useWorkoutActions', () => {
     });
 
     expect(useWorkoutsStore.getState().workouts).toEqual(workouts);
-    expect(WorkoutDbService.bulkPut).toHaveBeenCalledWith(workouts);
+    expect(db.workouts.bulkPut).toHaveBeenCalledWith(workouts);
   });
 
   test('addWorkout should update store and call add', async () => {
@@ -41,7 +32,7 @@ describe('useWorkoutActions', () => {
     });
 
     expect(useWorkoutsStore.getState().workouts).toContain(workout);
-    expect(WorkoutDbService.add).toHaveBeenCalledWith(workout);
+    expect(db.workouts.add).toHaveBeenCalledWith(workout);
   });
 
   test('deleteWorkout should update store and call delete', async () => {
@@ -55,7 +46,7 @@ describe('useWorkoutActions', () => {
     });
 
     expect(useWorkoutsStore.getState().workouts).not.toContain(workout);
-    expect(WorkoutDbService.delete).toHaveBeenCalledWith(workout.id);
+    expect(db.workouts.delete).toHaveBeenCalledWith(workout.id);
   });
 
   test('updateWorkout should update store and call update', async () => {
@@ -70,6 +61,9 @@ describe('useWorkoutActions', () => {
     });
 
     expect(useWorkoutsStore.getState().workouts[0]).toEqual(updatedWorkout);
-    expect(WorkoutDbService.update).toHaveBeenCalledWith(updatedWorkout);
+    expect(db.workouts.update).toHaveBeenCalledWith(
+      updatedWorkout.id,
+      updatedWorkout,
+    );
   });
 });

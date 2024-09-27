@@ -1,18 +1,9 @@
 import { act, renderHook } from '@testing-library/react';
 import { useExerciseActions } from './useExerciseActions';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
-import { ExerciseDbService } from '@/app/core/exercises/services/exercise-db-service';
 import { generateExercise } from '@/lib/test-utils';
 import { vi, describe, beforeEach, test, expect } from 'vitest';
-
-vi.mock('@/app/core/exercises/services/exercise-db-service', () => ({
-  ExerciseDbService: {
-    bulkPut: vi.fn(),
-    add: vi.fn(),
-    delete: vi.fn(),
-    update: vi.fn(),
-  },
-}));
+import { db } from '@/db';
 
 describe('useExerciseActions', () => {
   beforeEach(() => {
@@ -29,7 +20,7 @@ describe('useExerciseActions', () => {
     });
 
     expect(useExercisesStore.getState().exercises).toEqual(exercises);
-    expect(ExerciseDbService.bulkPut).toHaveBeenCalledWith(exercises);
+    expect(db.exercises.bulkPut).toHaveBeenCalledWith(exercises);
   });
 
   test('addExercise should update store and call add', async () => {
@@ -41,7 +32,7 @@ describe('useExerciseActions', () => {
     });
 
     expect(useExercisesStore.getState().exercises).toContain(exercise);
-    expect(ExerciseDbService.add).toHaveBeenCalledWith(exercise);
+    expect(db.exercises.add).toHaveBeenCalledWith(exercise);
   });
 
   test('deleteExercise should update store and call delete', async () => {
@@ -55,7 +46,7 @@ describe('useExerciseActions', () => {
     });
 
     expect(useExercisesStore.getState().exercises).not.toContain(exercise);
-    expect(ExerciseDbService.delete).toHaveBeenCalledWith(exercise.id);
+    expect(db.exercises.delete).toHaveBeenCalledWith(exercise.id);
   });
 
   test('updateExercise should update store and call update', async () => {
@@ -70,6 +61,9 @@ describe('useExerciseActions', () => {
     });
 
     expect(useExercisesStore.getState().exercises[0]).toEqual(updatedExercise);
-    expect(ExerciseDbService.update).toHaveBeenCalledWith(updatedExercise);
+    expect(db.exercises.update).toHaveBeenCalledWith(
+      updatedExercise.id,
+      updatedExercise,
+    );
   });
 });

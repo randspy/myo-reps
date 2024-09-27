@@ -1,28 +1,28 @@
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
-import { ExerciseDbService } from '@/app/core/exercises/services/exercise-db-service';
 import { ExerciseValue } from '@/app/core/exercises/exercises-types';
+import { db } from '@/db';
 
 export const useExerciseActions = () => {
   const { setExercises, addExercise, deleteExercise, updateExercise } =
     useExercisesStore();
 
   const setExercisesWithPersistence = async (exercises: ExerciseValue[]) => {
-    await ExerciseDbService.bulkPut(exercises);
+    await db.exercises.bulkPut(exercises);
     setExercises(exercises);
   };
 
   const addExerciseWithPersistence = async (exercise: ExerciseValue) => {
-    await ExerciseDbService.add(exercise);
+    await db.exercises.add(exercise);
     addExercise(exercise);
   };
 
   const deleteExerciseWithPersistence = async (id: string) => {
-    await ExerciseDbService.delete(id);
+    await db.exercises.delete(id);
     deleteExercise(id);
   };
 
   const updateExerciseWithPersistence = async (exercise: ExerciseValue) => {
-    await ExerciseDbService.update(exercise);
+    await db.exercises.update(exercise.id, exercise);
     updateExercise(exercise);
   };
 
