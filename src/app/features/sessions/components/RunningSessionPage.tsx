@@ -19,7 +19,7 @@ export const RunningSessionPage: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const workoutId = searchParams.get('workoutId');
   const exercises = selectExerciseByWorkoutIdAsMap(workoutId);
-  const { addSession } = useSession();
+  const { dispatchAddSession } = useSession();
 
   const {
     events,
@@ -101,7 +101,7 @@ export const RunningSessionPage: React.FC = () => {
           <Button
             className="mt-8 w-full"
             onClick={() => {
-              addSession(createSession(workoutId!, events));
+              dispatchAddSession(createSession(workoutId!, events));
               navigate('/sessions');
             }}
           >
