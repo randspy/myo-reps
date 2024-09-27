@@ -9,10 +9,10 @@ export const DeleteWorkoutDialog: React.FC<{ workout: WorkoutValue }> = ({
   workout,
 }) => {
   const [open, setOpen] = useState(false);
-  const { dispatchDelete } = useWorkout();
+  const { dispatchDeleteWorkout } = useWorkout();
 
   const deleteById = () => {
-    dispatchDelete(workout.id);
+    dispatchDeleteWorkout(workout.id);
     setOpen(false);
   };
 

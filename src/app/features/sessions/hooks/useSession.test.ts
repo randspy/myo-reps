@@ -14,8 +14,8 @@ describe('useSession', () => {
     useWorkoutsStore.setState({ workouts: [] });
 
     vi.mocked(useWorkout).mockReturnValue({
-      addUsage: vi.fn(),
-      removeUsage: vi.fn(),
+      dispatchAddUsageToWorkout: vi.fn(),
+      dispatchRemoveUsageFromWorkout: vi.fn(),
     } as Partial<ReturnType<typeof useWorkout>> as ReturnType<
       typeof useWorkout
     >);
@@ -30,7 +30,10 @@ describe('useSession', () => {
     });
 
     expect(useSessionsStore.getState().sessions).toContain(newSession);
-    expect(useWorkout().addUsage).toHaveBeenCalledWith('workout1', '1');
+    expect(useWorkout().dispatchAddUsageToWorkout).toHaveBeenCalledWith(
+      'workout1',
+      '1',
+    );
   });
 
   test('should delete a session', async () => {
@@ -44,6 +47,9 @@ describe('useSession', () => {
     });
 
     expect(useSessionsStore.getState().sessions).not.toContain(session);
-    expect(useWorkout().removeUsage).toHaveBeenCalledWith('workout1', '1');
+    expect(useWorkout().dispatchRemoveUsageFromWorkout).toHaveBeenCalledWith(
+      'workout1',
+      '1',
+    );
   });
 });

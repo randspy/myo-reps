@@ -41,7 +41,7 @@ describe('useWorkout', () => {
     };
 
     await act(async () => {
-      await result.current.dispatchAdd(workoutForm);
+      await result.current.dispatchAddWorkout(workoutForm);
     });
 
     const storeState = useWorkoutsStore.getState();
@@ -84,7 +84,7 @@ describe('useWorkout', () => {
     };
 
     await act(async () => {
-      await result.current.dispatchAdd(workoutForm);
+      await result.current.dispatchAddWorkout(workoutForm);
     });
 
     const storeState = useWorkoutsStore.getState();
@@ -119,7 +119,7 @@ describe('useWorkout', () => {
     };
 
     await act(async () => {
-      await result.current.dispatchUpdate(updatedWorkout);
+      await result.current.dispatchUpdateWorkout(updatedWorkout);
     });
 
     const storeState = useWorkoutsStore.getState();
@@ -161,7 +161,7 @@ describe('useWorkout', () => {
       const { result } = renderHook(() => useWorkout());
 
       await act(async () => {
-        await result.current.dispatchDelete('1');
+        await result.current.dispatchDeleteWorkout('1');
       });
 
       const storeState = useWorkoutsStore.getState();
@@ -189,7 +189,7 @@ describe('useWorkout', () => {
       const { result } = renderHook(() => useWorkout());
 
       await act(async () => {
-        await result.current.dispatchDelete('1');
+        await result.current.dispatchDeleteWorkout('1');
       });
 
       const storeState = useWorkoutsStore.getState();
@@ -205,7 +205,7 @@ describe('useWorkout', () => {
     ];
 
     await act(async () => {
-      await result.current.dispatchSet(workouts);
+      await result.current.dispatchSetWorkouts(workouts);
     });
 
     const storeState = useWorkoutsStore.getState();
@@ -222,7 +222,7 @@ describe('useWorkout', () => {
     const { result } = renderHook(() => useWorkout());
 
     await act(async () => {
-      await result.current.addUsage('1', 'user-1');
+      await result.current.dispatchAddUsageToWorkout('1', 'user-1');
     });
 
     expect(useWorkoutsStore.getState().workouts[0].usage[0]).toEqual({
@@ -239,7 +239,7 @@ describe('useWorkout', () => {
       const { result } = renderHook(() => useWorkout());
 
       await act(async () => {
-        await result.current.removeUsage('1', 'user-1');
+        await result.current.dispatchRemoveUsageFromWorkout('1', 'user-1');
       });
 
       expect(useWorkoutsStore.getState().workouts[0].usage).toHaveLength(0);
@@ -255,7 +255,7 @@ describe('useWorkout', () => {
       const { result } = renderHook(() => useWorkout());
 
       await act(async () => {
-        await result.current.removeUsage('1', 'user-1');
+        await result.current.dispatchRemoveUsageFromWorkout('1', 'user-1');
       });
 
       expect(useWorkoutsStore.getState().workouts).toHaveLength(0);

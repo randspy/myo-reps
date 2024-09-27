@@ -5,12 +5,13 @@ import { selectAllSessions } from '@/app/features/sessions/store/sessions-select
 
 export const useSession = () => {
   const { addSession, deleteSession } = useSessionActions();
-  const { addUsage, removeUsage } = useWorkout();
+  const { dispatchAddUsageToWorkout, dispatchRemoveUsageFromWorkout } =
+    useWorkout();
   const sessions = selectAllSessions();
 
   const dispatchAddSession = async (session: SessionValue) => {
     await addSession(session);
-    await addUsage(session.workoutId, session.id);
+    await dispatchAddUsageToWorkout(session.workoutId, session.id);
   };
 
   const dispatchDeleteSession = async (id: string) => {
@@ -19,7 +20,7 @@ export const useSession = () => {
     const session = sessions.find((session) => session.id === id);
 
     if (session) {
-      await removeUsage(session.workoutId, id);
+      await dispatchRemoveUsageFromWorkout(session.workoutId, id);
     }
   };
 

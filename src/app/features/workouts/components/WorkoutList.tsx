@@ -6,15 +6,17 @@ import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
 import { DragAndDropList } from '@/app/ui/DragAndDropList';
 import { DragAndDropListItem } from '@/app/ui/DragAndDropListItem';
 import { canStartWorkout } from '@/app/core/workouts/domain/workout-domain';
+import { selectAllWorkouts } from '@/app/core/workouts/store/workouts-selectors';
 
 export const WorkoutList: React.FC = () => {
-  const { workouts, dispatchSet } = useWorkout();
+  const workouts = selectAllWorkouts();
+  const { dispatchSetWorkouts } = useWorkout();
 
   return (
     <div className="w-full">
       <DragAndDropList
         values={workouts}
-        onReorder={async (values) => await dispatchSet(values)}
+        onReorder={async (values) => await dispatchSetWorkouts(values)}
       >
         {workouts?.map((workout) => (
           <DragAndDropListItem key={workout.id} value={workout}>

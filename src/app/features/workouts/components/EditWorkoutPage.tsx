@@ -12,7 +12,7 @@ import { selectWorkoutById } from '@/app/core/workouts/store/workouts-selectors'
 import { PageNotFound } from '@/app/ui/PageNotFound';
 
 export const EditWorkoutPage: React.FC = () => {
-  const { dispatchUpdate } = useWorkout();
+  const { dispatchUpdateWorkout } = useWorkout();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -29,7 +29,7 @@ export const EditWorkoutPage: React.FC = () => {
           <WorkoutForm
             onSubmit={async (values: WorkoutFormValues) => {
               onSubmit();
-              await dispatchUpdate({ ...workout, ...values });
+              await dispatchUpdateWorkout({ ...workout, ...values });
               navigate('/workouts');
             }}
             onCancel={() => navigate('/workouts')}

@@ -24,7 +24,7 @@ export const useWorkout = () => {
   const { addWorkout, updateWorkout, deleteWorkout, setWorkouts } =
     useWorkoutActions();
 
-  async function dispatchAdd(value: WorkoutFormValues) {
+  async function dispatchAddWorkout(value: WorkoutFormValues) {
     const workout = createWorkoutFromForm(value, getNextPosition(workouts));
     const distinctExerciseIds = deduplicateExercisesId(workout.exercises);
 
@@ -35,7 +35,7 @@ export const useWorkout = () => {
     }
   }
 
-  async function dispatchUpdate(updatedWorkout: WorkoutValue) {
+  async function dispatchUpdateWorkout(updatedWorkout: WorkoutValue) {
     await updateWorkout(updatedWorkout);
 
     const { addedExercises, removedExercises } = updateWorkoutUsageOfExercises(
@@ -58,7 +58,7 @@ export const useWorkout = () => {
     }
   }
 
-  async function dispatchDelete(id: string) {
+  async function dispatchDeleteWorkout(id: string) {
     const action = removeWorkoutFromUserView(workouts, id);
     if (action) {
       if (action.type === 'delete') {
@@ -78,11 +78,11 @@ export const useWorkout = () => {
     }
   }
 
-  async function dispatchSet(workouts: WorkoutValue[]) {
+  async function dispatchSetWorkouts(workouts: WorkoutValue[]) {
     await setWorkouts(updateWorkoutPositions(workouts));
   }
 
-  async function addUsage(workoutId: string, userId: string) {
+  async function dispatchAddUsageToWorkout(workoutId: string, userId: string) {
     const workout = addUsageToWorkout(workouts, workoutId, userId);
 
     if (workout) {
@@ -90,7 +90,10 @@ export const useWorkout = () => {
     }
   }
 
-  async function removeUsage(workoutId: string, userId: string) {
+  async function dispatchRemoveUsageFromWorkout(
+    workoutId: string,
+    userId: string,
+  ) {
     const action = removeUsageFromWorkout(workouts, workoutId, userId);
 
     if (action) {
@@ -103,12 +106,11 @@ export const useWorkout = () => {
   }
 
   return {
-    workouts,
-    dispatchAdd,
-    dispatchUpdate,
-    dispatchDelete,
-    dispatchSet,
-    addUsage,
-    removeUsage,
+    dispatchAddWorkout,
+    dispatchUpdateWorkout,
+    dispatchDeleteWorkout,
+    dispatchSetWorkouts,
+    dispatchAddUsageToWorkout,
+    dispatchRemoveUsageFromWorkout,
   };
 };

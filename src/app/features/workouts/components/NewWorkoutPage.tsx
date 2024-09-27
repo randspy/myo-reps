@@ -10,7 +10,7 @@ import { WorkoutFormValues } from '@/app/core/workouts/workouts-types';
 import { WorkoutForm } from '@/app/features/workouts/components/WorkoutForm';
 
 export const NewWorkoutPage: React.FC = () => {
-  const { dispatchAdd } = useWorkout();
+  const { dispatchAddWorkout } = useWorkout();
   const navigate = useNavigate();
 
   return (
@@ -20,7 +20,7 @@ export const NewWorkoutPage: React.FC = () => {
           <WorkoutForm
             onSubmit={(values: WorkoutFormValues) => {
               onSubmit();
-              dispatchAdd(values);
+              dispatchAddWorkout(values);
               navigate('/workouts');
             }}
             onCancel={() => navigate('/workouts')}
