@@ -24,7 +24,7 @@ npm run dev
 
 # Application's overview
 
-The Application is a fitness app for my person use. It is optimize for using [Myo reps protocol](https://www.youtube.com/watch?v=V71TGRQaLRs), it's a workout protocol when timing between sets of given exercise is very precise and short. Application is also a playground for me to try out new technologies and ideas. And it not finished yet.
+The Application is a fitness app for my person use. It is optimize for using [Myo reps protocol](https://www.youtube.com/watch?v=V71TGRQaLRs), it's a workout protocol when timing between sets of given exercise is very precise and short. Application is also a playground for me to try out new technologies and ideas. **And it not finished yet.**
 
 # Project structure
 
@@ -38,7 +38,6 @@ The app is based on architecture described in [Angular enterprise architecture](
         ui - generic components
     components/ui - shadcn/ui components
     lib - utils
-    store - redux toolkit wiring
 
 The session's store and domain are inside the feature folder as they are only used in the sessions feature.
 
@@ -54,3 +53,4 @@ For permanent storage I use IndexedDB as I don't need more, for now at least. Th
 - Zustand
 - TailwindCSS
 - Shadcn/ui
+- Zod
