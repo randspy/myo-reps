@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { useWorkoutActions } from './useWorkoutActions';
+import { useWorkoutPersistence } from './useWorkoutPersistence';
 import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 import { generateWorkout } from '@/lib/test-utils';
 import { vi, describe, beforeEach, test, expect } from 'vitest';
@@ -12,7 +12,7 @@ describe('useWorkoutActions', () => {
   });
 
   test('setWorkouts should update store and call bulkPut', async () => {
-    const { result } = renderHook(() => useWorkoutActions());
+    const { result } = renderHook(() => useWorkoutPersistence());
     const workouts = [generateWorkout(), generateWorkout()];
 
     await act(async () => {
@@ -24,7 +24,7 @@ describe('useWorkoutActions', () => {
   });
 
   test('addWorkout should update store and call add', async () => {
-    const { result } = renderHook(() => useWorkoutActions());
+    const { result } = renderHook(() => useWorkoutPersistence());
     const workout = generateWorkout();
 
     await act(async () => {
@@ -39,7 +39,7 @@ describe('useWorkoutActions', () => {
     const workout = generateWorkout();
     useWorkoutsStore.setState({ workouts: [workout] });
 
-    const { result } = renderHook(() => useWorkoutActions());
+    const { result } = renderHook(() => useWorkoutPersistence());
 
     await act(async () => {
       await result.current.deleteWorkout(workout.id);
@@ -52,7 +52,7 @@ describe('useWorkoutActions', () => {
   test('updateWorkout should update store and call update', async () => {
     const workout = generateWorkout();
     useWorkoutsStore.setState({ workouts: [workout] });
-    const { result } = renderHook(() => useWorkoutActions());
+    const { result } = renderHook(() => useWorkoutPersistence());
 
     const updatedWorkout = { ...workout, name: 'Updated Workout' };
 

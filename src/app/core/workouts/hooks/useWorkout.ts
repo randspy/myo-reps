@@ -3,7 +3,7 @@ import {
   WorkoutFormValues,
   WorkoutValue,
 } from '@/app/core/workouts/workouts-types';
-import { useWorkoutActions } from '@/app/core/workouts/hooks/useWorkoutActions';
+import { useWorkoutPersistence } from '@/app/core/workouts/hooks/useWorkoutPersistence';
 import {
   addUsageToWorkout,
   createWorkoutFromForm,
@@ -22,7 +22,7 @@ export const useWorkout = () => {
   const { dispatchAddUsageExercise, dispatchRemoveUsageExercise } =
     useExercise();
   const { addWorkout, updateWorkout, deleteWorkout, setWorkouts } =
-    useWorkoutActions();
+    useWorkoutPersistence();
 
   async function dispatchAddWorkout(value: WorkoutFormValues) {
     const workout = createWorkoutFromForm(value, getNextPosition(workouts));

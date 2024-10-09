@@ -2,7 +2,7 @@ import {
   ExerciseFormValues,
   ExerciseValue,
 } from '@/app/core/exercises/exercises-types';
-import { useExerciseActions } from '@/app/core/exercises/hooks/useExerciseActions';
+import { useExercisePersistence } from '@/app/core/exercises/hooks/useExercisePersistence';
 import {
   addUsageToExercise,
   createExerciseFromForm,
@@ -17,7 +17,7 @@ import { selectAllExercises } from '@/app/core/exercises/store/exercises-selecto
 export const useExercise = () => {
   const exercises = selectAllExercises();
   const { addExercise, updateExercise, deleteExercise, setExercises } =
-    useExerciseActions();
+    useExercisePersistence();
 
   async function dispatchAddExercise(exercise: ExerciseFormValues) {
     const value = createExerciseFromForm(exercise, getNextPosition(exercises));

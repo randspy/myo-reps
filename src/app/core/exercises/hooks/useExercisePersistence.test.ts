@@ -1,18 +1,18 @@
 import { act, renderHook } from '@testing-library/react';
-import { useExerciseActions } from './useExerciseActions';
+import { useExercisePersistence } from './useExercisePersistence';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { generateExercise } from '@/lib/test-utils';
 import { vi, describe, beforeEach, test, expect } from 'vitest';
 import { db } from '@/db';
 
-describe('useExerciseActions', () => {
+describe('useExercisePersistence', () => {
   beforeEach(() => {
     useExercisesStore.getState().setExercises([]);
     vi.clearAllMocks();
   });
 
   test('setExercises should update store and call bulkPut', async () => {
-    const { result } = renderHook(() => useExerciseActions());
+    const { result } = renderHook(() => useExercisePersistence());
     const exercises = [generateExercise(), generateExercise()];
 
     await act(async () => {
@@ -24,7 +24,7 @@ describe('useExerciseActions', () => {
   });
 
   test('addExercise should update store and call add', async () => {
-    const { result } = renderHook(() => useExerciseActions());
+    const { result } = renderHook(() => useExercisePersistence());
     const exercise = generateExercise();
 
     await act(async () => {
@@ -39,7 +39,7 @@ describe('useExerciseActions', () => {
     const exercise = generateExercise();
     useExercisesStore.setState({ exercises: [exercise] });
 
-    const { result } = renderHook(() => useExerciseActions());
+    const { result } = renderHook(() => useExercisePersistence());
 
     await act(async () => {
       await result.current.deleteExercise(exercise.id);
@@ -52,7 +52,7 @@ describe('useExerciseActions', () => {
   test('updateExercise should update store and call update', async () => {
     const exercise = generateExercise();
     useExercisesStore.setState({ exercises: [exercise] });
-    const { result } = renderHook(() => useExerciseActions());
+    const { result } = renderHook(() => useExercisePersistence());
 
     const updatedExercise = { ...exercise, name: 'Updated Exercise' };
 

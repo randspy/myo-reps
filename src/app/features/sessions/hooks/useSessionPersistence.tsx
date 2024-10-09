@@ -2,7 +2,7 @@ import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
 import { db } from '@/db';
 
-export const useSessionActions = () => {
+export const useSessionPersistence = () => {
   const { addSession, deleteSession } = useSessionsStore();
 
   const addSessionWithPersistence = async (session: SessionValue) => {

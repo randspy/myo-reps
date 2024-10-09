@@ -1,17 +1,17 @@
 import { renderHook, act } from '@testing-library/react';
-import { useSessionActions } from './useSessionActions';
+import { useSessionPersistence } from './useSessionPersistence';
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
 import { generateSession } from '@/lib/test-utils';
 import { db } from '@/db';
 
-describe('useSessionActions', () => {
+describe('useSessionPersistence', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useSessionsStore.setState({ sessions: [] });
   });
 
   test('should add a session', async () => {
-    const { result } = renderHook(() => useSessionActions());
+    const { result } = renderHook(() => useSessionPersistence());
     const newSession = generateSession({ id: '1', workoutId: 'workout1' });
 
     await act(async () => {
@@ -26,7 +26,7 @@ describe('useSessionActions', () => {
     const session = generateSession({ id: '1', workoutId: 'workout1' });
     useSessionsStore.setState({ sessions: [session] });
 
-    const { result } = renderHook(() => useSessionActions());
+    const { result } = renderHook(() => useSessionPersistence());
 
     await act(async () => {
       await result.current.deleteSession(session.id);

@@ -2,7 +2,7 @@ import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { db } from '@/db';
 
-export const useExerciseActions = () => {
+export const useExercisePersistence = () => {
   const { setExercises, addExercise, deleteExercise, updateExercise } =
     useExercisesStore();
 

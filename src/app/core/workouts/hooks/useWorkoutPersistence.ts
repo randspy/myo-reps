@@ -2,7 +2,7 @@ import { useWorkoutsStore } from '@/app/core/workouts/store/workouts-store';
 import { WorkoutValue } from '@/app/core/workouts/workouts-types';
 import { db } from '@/db';
 
-export const useWorkoutActions = () => {
+export const useWorkoutPersistence = () => {
   const { setWorkouts, addWorkout, deleteWorkout, updateWorkout } =
     useWorkoutsStore();
 

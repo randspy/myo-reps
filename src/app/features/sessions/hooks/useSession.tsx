@@ -1,10 +1,10 @@
 import { useWorkout } from '@/app/core/workouts/hooks/useWorkout';
-import { useSessionActions } from '@/app/features/sessions/hooks/useSessionActions';
+import { useSessionPersistence } from '@/app/features/sessions/hooks/useSessionPersistence';
 import { SessionValue } from '@/app/features/sessions/sessions-types';
 import { selectAllSessions } from '@/app/features/sessions/store/sessions-selector';
 
 export const useSession = () => {
-  const { addSession, deleteSession } = useSessionActions();
+  const { addSession, deleteSession } = useSessionPersistence();
   const { dispatchAddUsageToWorkout, dispatchRemoveUsageFromWorkout } =
     useWorkout();
   const sessions = selectAllSessions();
