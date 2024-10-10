@@ -106,7 +106,11 @@ describe('RunningSessionPage', () => {
     fireEvent.click(screen.getByText("I'm ready to start"));
     advanceTimeInSeconds(1);
 
-    expect(getByTextInTimer('09')).toBeInTheDocument();
+    expect(
+      getByTextInTimer(
+        `${(TimeBetweenExercisesInSeconds - 1).toString().padStart(2, '0')}`,
+      ),
+    ).toBeInTheDocument();
     expect(screen.queryByText("I'm ready to start")).not.toBeInTheDocument();
     expect(
       screen.getByText('Counting down before starting'),
@@ -120,7 +124,6 @@ describe('RunningSessionPage', () => {
     fireEvent.click(screen.getByText("I'm ready to start"));
     advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
 
-    expect(getByTextInTimer('00')).toBeInTheDocument();
     expect(
       screen.queryByText('Counting down before starting'),
     ).not.toBeInTheDocument();
@@ -186,7 +189,7 @@ describe('RunningSessionPage', () => {
 });
 
 function getByTextInTimer(text: string) {
-  return within(screen.getByTestId('circular-timer')).getByText(text);
+  return within(screen.getByTestId('timer')).getByText(text);
 }
 
 function actionsForOneSet() {

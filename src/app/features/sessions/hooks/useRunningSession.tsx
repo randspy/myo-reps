@@ -65,10 +65,16 @@ export const useRunningSession = (workoutId: string | null) => {
       type: 'counting-down-when-ready',
     });
 
-    const countDownTime =
-      TimeBetweenExercisesInSeconds <= time
-        ? 0
-        : TimeBetweenExercisesInSeconds - time;
+    let countDownTime = 0;
+
+    if (currentSet > 0) {
+      countDownTime =
+        TimeBetweenExercisesInSeconds <= time
+          ? 0
+          : TimeBetweenExercisesInSeconds - time;
+    } else {
+      countDownTime = TimeBetweenExercisesInSeconds;
+    }
     setTime(countDownTime);
     timeRef.current = countDownTime;
   };

@@ -5,6 +5,7 @@ import { act, renderHook } from '@testing-library/react';
 import { generateExercise, generateWorkout } from '@/lib/test-utils';
 import { ExerciseValue } from '@/app/core/exercises/exercises-types';
 import { WorkoutValue } from '@/app/core/workouts/workouts-types';
+import { TimeBetweenExercisesInSeconds } from '@/app/core/exercises/domain/exercises-config';
 
 describe('useRunningSession', () => {
   let exercises: ExerciseValue[];
@@ -64,7 +65,7 @@ describe('useRunningSession', () => {
       result.current.readyForNextRepetition();
     });
 
-    expect(result.current.time).toBe(12);
+    expect(result.current.time).toBe(TimeBetweenExercisesInSeconds);
     expect(result.current.events).toEqual([
       { type: 'waiting-for-user-to-be-ready' },
       { type: 'counting-down-when-ready' },
@@ -80,7 +81,7 @@ describe('useRunningSession', () => {
       result.current.readyForNextRepetition();
     });
 
-    advanceTimeInSeconds(12);
+    advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
 
     expect(result.current.time).toBe(0);
     expect(result.current.events.at(-1)).toEqual({
@@ -128,6 +129,54 @@ describe('useRunningSession', () => {
       type: 'finishing-workout',
     });
     expect(result.current.exercisesLeftToDo).toEqual([]);
+  });
+
+  test('should start counting down when user is ready for consecutive sets', () => {
+    workouts[0].exercises[0].sets = 2;
+
+    const { result } = renderHook(() => useRunningSession('1'));
+    act(() => {
+      result.current.readyForNextRepetition();
+    });
+
+    advanceTimeInSeconds(TimeBetweenExercisesInSeconds + 1);
+
+    act(() => {
+      result.current.setIsFinished();
+      result.current.repetitionsAreSet(3);
+    });
+
+    advanceTimeInSeconds(1);
+
+    act(() => {
+      result.current.readyForNextRepetition();
+    });
+
+    expect(result.current.time).toBe(TimeBetweenExercisesInSeconds - 1);
+  });
+
+  test('should start counting from 0 when default time is reached', () => {
+    workouts[0].exercises[0].sets = 2;
+
+    const { result } = renderHook(() => useRunningSession('1'));
+    act(() => {
+      result.current.readyForNextRepetition();
+    });
+
+    advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
+
+    act(() => {
+      result.current.setIsFinished();
+      result.current.repetitionsAreSet(3);
+    });
+
+    advanceTimeInSeconds(TimeBetweenExercisesInSeconds + 1);
+
+    act(() => {
+      result.current.readyForNextRepetition();
+    });
+
+    expect(result.current.time).toBe(0);
   });
 
   test('should decrease number of sets in exercisesLeftToDo when set is finished', () => {

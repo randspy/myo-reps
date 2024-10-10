@@ -43,7 +43,7 @@ export const RunningSessionPage: React.FC = () => {
   return (
     <FormCard title={workout.name}>
       <div className="flex flex-col items-center">
-        <div data-testid="circular-timer">
+        <div data-testid="timer">
           <Timer time={time} />
         </div>
 
