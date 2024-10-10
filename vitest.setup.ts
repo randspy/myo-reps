@@ -27,3 +27,7 @@ vi.mock('@/db', () => ({
   },
   recreateDB: vi.fn(),
 }));
+
+vi.mock('uuid', () => ({
+  v4: vi.fn(),
+}));

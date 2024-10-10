@@ -8,10 +8,6 @@ import { generateExercise } from '@/lib/test-utils';
 import { act, renderHook } from '@testing-library/react';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 
-vi.mock('uuid', () => ({
-  v4: vi.fn(),
-}));
-
 describe('useExercise', () => {
   beforeEach(() => {
     vi.clearAllMocks();

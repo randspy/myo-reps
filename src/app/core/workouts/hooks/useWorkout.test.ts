@@ -5,12 +5,7 @@ import { useExercise } from '@/app/core/exercises/hooks/useExercise';
 import { generateWorkout } from '@/lib/test-utils';
 import { v4 } from 'uuid';
 
-// Mock the dependencies
 vi.mock('@/app/core/exercises/hooks/useExercise');
-
-vi.mock('uuid', () => ({
-  v4: vi.fn(),
-}));
 
 describe('useWorkout', () => {
   beforeEach(() => {

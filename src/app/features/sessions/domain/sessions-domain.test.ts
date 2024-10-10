@@ -1,34 +1,26 @@
 import { describe, it, expect } from 'vitest';
 import { createSession, sortSessions } from './sessions-domain';
-import {
-  SessionEvent,
-  SessionValue,
-} from '@/app/features/sessions/sessions-types';
-
+import { SessionValue } from '@/app/features/sessions/sessions-types';
+import { v4 } from 'uuid';
 describe('sessions-domain', () => {
   describe('createSession', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('creates a session with the correct properties', () => {
+      vi.mocked(v4).mockImplementation(() => 'mock-uuid');
       const workoutId = 'workout123';
       const events = [{ type: 'waiting-for-user-to-be-ready' as const }];
 
       const session = createSession(workoutId, events);
 
       expect(session).toEqual({
-        id: expect.any(String),
+        id: 'mock-uuid',
         workoutId,
         startDate: expect.any(Date),
         events,
       });
-    });
-
-    it('generates a unique id for each session', () => {
-      const workoutId = 'workout123';
-      const events: SessionEvent[] = [];
-
-      const session1 = createSession(workoutId, events);
-      const session2 = createSession(workoutId, events);
-
-      expect(session1.id).not.toBe(session2.id);
     });
   });
 

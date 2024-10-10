@@ -20,10 +20,6 @@ import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { useSessionsStore } from '@/app/features/sessions/store/sessions-store';
 import { v4 } from 'uuid';
 
-vi.mock('uuid', () => ({
-  v4: vi.fn(),
-}));
-
 const renderRunningSessionPage = (
   exercises: ExerciseValue[],
   workouts: WorkoutValue[],
@@ -186,6 +182,16 @@ describe('RunningSessionPage', () => {
         },
       ]);
     });
+  });
+
+  test('user cancels the session and navigates to /sessions', () => {
+    renderRunningSessionPage(exercises, workouts);
+
+    fireEvent.click(screen.getByText("I'm ready to start"));
+    advanceTimeInSeconds(TimeBetweenExercisesInSeconds);
+    fireEvent.click(screen.getByText('Cancel'));
+
+    expect(screen.getByText('Sessions Page')).toBeInTheDocument();
   });
 });
 

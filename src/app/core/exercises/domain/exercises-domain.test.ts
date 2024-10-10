@@ -9,14 +9,17 @@ import {
   addUsageToExercise,
   removeUsageFromExercise,
 } from './exercises-domain';
-
-vi.mock('uuid', () => ({
-  v4: vi.fn(() => 'mock-uuid'),
-}));
+import { v4 } from 'uuid';
 
 describe('exercises-domain', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('createExerciseFromForm', () => {
     test('should create an exercise with the given form values and position', () => {
+      vi.mocked(v4).mockImplementation(() => 'mock-uuid');
+
       const values: ExerciseFormValues = {
         name: 'Squat',
         description: 'Leg exercise',

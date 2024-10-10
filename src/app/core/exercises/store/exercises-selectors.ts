@@ -42,17 +42,3 @@ export const selectExerciseByWorkoutIdAsMap = (
       },
     ),
   );
-
-export const selectExercisesByWorkoutId = (
-  workoutId: string | undefined | null,
-) =>
-  useExercisesStore(
-    createSelector(
-      (state: ExercisesState) => state.exercises,
-      (exercises) => {
-        return exercises.filter((exercise: ExerciseValue) =>
-          exercise.usage.some((usage) => usage.id === workoutId),
-        );
-      },
-    ),
-  );

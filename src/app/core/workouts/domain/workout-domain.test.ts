@@ -13,14 +13,17 @@ import {
   WorkoutValue,
   WorkoutExerciseValue,
 } from '@/app/core/workouts/workouts-types';
-
-vi.mock('uuid', () => ({
-  v4: vi.fn(() => 'mock-uuid'),
-}));
+import { v4 } from 'uuid';
 
 describe('workout-domain', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('createExerciseForWorkout', () => {
     it('should create a new exercise with default values', () => {
+      vi.mocked(v4).mockImplementation(() => 'mock-uuid');
+
       const exercise = createExerciseForWorkout();
       expect(exercise).toEqual({ id: 'mock-uuid', sets: 1, exerciseId: '' });
     });
@@ -28,6 +31,8 @@ describe('workout-domain', () => {
 
   describe('createWorkoutFromForm', () => {
     it('should create a new workout from form values', () => {
+      vi.mocked(v4).mockImplementation(() => 'mock-uuid');
+
       const values: WorkoutFormValues = { name: 'Test Workout', exercises: [] };
       const workout = createWorkoutFromForm(values, 1);
       expect(workout).toEqual({

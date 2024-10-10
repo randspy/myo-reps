@@ -12,11 +12,3 @@ export const selectSortedSessions = () =>
       (sessions) => sortSessions(sessions),
     ),
   );
-
-export const selectSessionById = (id: string | undefined | null) =>
-  useSessionsStore(
-    createSelector(
-      (state: SessionsState) => state.sessions,
-      (sessions) => sessions.find((session) => session.id === id),
-    ),
-  );

@@ -5,10 +5,6 @@ import { WorkoutFormValues } from '@/app/core/workouts/workouts-types';
 import { useExercisesStore } from '@/app/core/exercises/store/exercises-store';
 import { v4 } from 'uuid';
 
-vi.mock('uuid', () => ({
-  v4: vi.fn(),
-}));
-
 const mockOnSubmit = vi.fn();
 const mockOnCancel = vi.fn();
 const mockOnDirtyChange = vi.fn();
