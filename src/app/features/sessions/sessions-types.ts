@@ -15,4 +15,5 @@ export type SessionEvent = {
     | 'finishing-workout';
   repetitions?: number;
   exerciseId?: string;
+  time?: number;
 };

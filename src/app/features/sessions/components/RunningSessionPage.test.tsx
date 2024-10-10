@@ -168,16 +168,17 @@ describe('RunningSessionPage', () => {
       expect(useSessionsStore.getState().sessions).toEqual([
         {
           events: [
-            { type: 'waiting-for-user-to-be-ready' },
-            { type: 'counting-down-when-ready' },
-            { type: 'starting-exercise' },
-            { type: 'finished-set' },
+            { type: 'waiting-for-user-to-be-ready', time: 0 },
+            { type: 'counting-down-when-ready', time: 0 },
+            { type: 'starting-exercise', time: 15 },
+            { type: 'finished-set', time: 16 },
             {
               exerciseId: 'exercise-1',
               repetitions: 6,
               type: 'setting-repetitions',
+              time: 16,
             },
-            { type: 'finishing-workout' },
+            { type: 'finishing-workout', time: 16 },
           ],
           id,
           startDate: expect.any(Date),

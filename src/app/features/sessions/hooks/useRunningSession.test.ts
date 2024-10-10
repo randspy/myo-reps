@@ -48,7 +48,7 @@ describe('useRunningSession', () => {
 
     expect(result.current.time).toBe(3);
     expect(result.current.events).toEqual([
-      { type: 'waiting-for-user-to-be-ready' },
+      { type: 'waiting-for-user-to-be-ready', time: 0 },
     ]);
 
     expect(result.current.exercisesLeftToDo).toEqual([
@@ -67,8 +67,8 @@ describe('useRunningSession', () => {
 
     expect(result.current.time).toBe(TimeBetweenExercisesInSeconds);
     expect(result.current.events).toEqual([
-      { type: 'waiting-for-user-to-be-ready' },
-      { type: 'counting-down-when-ready' },
+      { type: 'waiting-for-user-to-be-ready', time: 0 },
+      { type: 'counting-down-when-ready', time: 3 },
     ]);
   });
 
@@ -86,6 +86,7 @@ describe('useRunningSession', () => {
     expect(result.current.time).toBe(0);
     expect(result.current.events.at(-1)).toEqual({
       type: 'starting-exercise',
+      time: 18,
     });
   });
 
@@ -103,6 +104,7 @@ describe('useRunningSession', () => {
 
     expect(result.current.events.at(-1)).toEqual({
       type: 'finished-set',
+      time: 20,
     });
   });
 
@@ -123,10 +125,12 @@ describe('useRunningSession', () => {
       type: 'setting-repetitions',
       exerciseId: '1',
       repetitions: 3,
+      time: 20,
     });
 
     expect(result.current.events.at(-1)).toEqual({
       type: 'finishing-workout',
+      time: 20,
     });
     expect(result.current.exercisesLeftToDo).toEqual([]);
   });
@@ -196,6 +200,7 @@ describe('useRunningSession', () => {
 
     expect(result.current.events.at(-1)).toEqual({
       type: 'waiting-for-user-to-be-ready',
+      time: 20,
     });
     expect(result.current.exercisesLeftToDo).toEqual([
       { id: '1', exerciseId: '1', sets: 1 },
@@ -222,6 +227,7 @@ describe('useRunningSession', () => {
 
     expect(result.current.events.at(-1)).toEqual({
       type: 'waiting-for-user-to-be-ready',
+      time: 20,
     });
     expect(result.current.exercisesLeftToDo).toEqual([
       { id: '2', exerciseId: '2', sets: 1 },

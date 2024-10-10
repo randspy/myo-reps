@@ -6,7 +6,7 @@ import { SessionEvent } from '@/app/features/sessions/sessions-types';
 
 export const useRunningSession = (workoutId: string | null) => {
   const [events, setEvents] = useState<SessionEvent[]>([
-    { type: 'waiting-for-user-to-be-ready' },
+    { type: 'waiting-for-user-to-be-ready', time: 0 },
   ]);
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(true);
@@ -15,6 +15,7 @@ export const useRunningSession = (workoutId: string | null) => {
   const [currentSet, setCurrentSet] = useState(0);
 
   const timeRef = useRef(0);
+  const timeFromStartRef = useRef(0);
 
   const workout = selectWorkoutById(workoutId);
 
@@ -34,6 +35,7 @@ export const useRunningSession = (workoutId: string | null) => {
     if (isActive) {
       interval = setInterval(() => {
         timeRef.current = updateTime(timeRef.current);
+        timeFromStartRef.current++;
 
         if (canStartExercise()) {
           startingExercise();
@@ -163,7 +165,10 @@ export const useRunningSession = (workoutId: string | null) => {
   }
 
   const addEvent = (event: SessionEvent) => {
-    setEvents((prev) => [...prev, event]);
+    setEvents((prev) => [
+      ...prev,
+      { ...event, time: timeFromStartRef.current },
+    ]);
   };
 
   const isWaitingToBeReady =
